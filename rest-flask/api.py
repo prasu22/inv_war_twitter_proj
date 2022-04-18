@@ -18,6 +18,72 @@ def hello_world():
         return json.dumps(x, default=json_util.default)
     except Exception as e:
         return json.dumps(e)
+# ======================================================================================================================
+@app.route('/overall_tweet/<keyword>/<country>/<date>')
+def overall_tweet_based_on_keyword(keyword,country,date):
+    """overall number of tweets on coronavirus per country in the last n months
+       :param
+       coll = store the collection details
+       count = used to store the count of data returned by the query
+    """
+    try:
+        coll = connect_with_collection_data()
+        count = 0
+        for row in coll.aggregate( [{'$match': { '$text': { '$search': keyword },'country':{'$regex':country,'$options' : 'i'}, 'date': {'$gte': datetime.strptime(date,'%Y-%m-%d')}}},{'$project':{'tweet':1,'country':1,'date':1}}]):
+            count+=1
+        return {'total_number':count}
+    except Exception as e:
+        print('some error occured ',e)
+        return "error"
+# ======================================================================================================================
+
+# ======================================================================================================================
+@app.route('/number_of_tweet_per_country/<country>/<date>')
+def overall_per_country(country,date):
+    """overall number of tweets per country on a daily basis
+       :param
+       coll = store the collection details
+       count = used to store the count of data returned by the query
+    """
+    try:
+        coll = connect_with_collection_data()
+        count = 0
+        for row in coll.aggregate([{'$match':{'country':{'$regex':country,'$options' : 'i'},'$expr': {'$eq': [date, { '$dateToString': {'date': "$date", 'format': "%Y-%m-%d"}}]}}},{'$project':{'tweet':1,'country':1,'date':1}}]):
+            count+=1
+        return {"total_tweet":count}
+    except Exception as e:
+        print("some error occured",e)
+        return "error"
+# ======================================================================================================================
+
+# ======================================================================================================================
+@app.route('/top_100_word')
+def top_100_word_occuring():
+    """top 100 words occurring on tweets involving coronavirus first fetch data from mongodb and
+    clean the data and retrun reponse in json format
+    :param
+        coll = store the collection details
+        words = dictionary to store the data returned by the query
+        sorted_d = sorted ordered dictionary to store dictionary data
+        top_100_word = store top 100 most frequent word from the tweet
+    """
+    try:
+        coll = connect_with_collection_data()
+        words = {}
+        for row in coll.aggregate([{'$match': { '$text': { '$search': "coronavirus"}}},{'$project':{'tweet':1}}]):
+            for word in clean_tweet(row['tweet']).split(" "):
+                if word not in words:
+                    words[word] = 1
+                else:
+                    words[word] += 1
+        sorted_d = OrderedDict(sorted(words.items(), key=lambda x:-x[1]))
+        top_100_word = {k: sorted_d[k] for k in list(sorted_d.keys())[:100]}
+        return json.dumps(top_100_word)
+    except Exception as e:
+        print("some error occured ",e)
+        return "404"
+# ======================================================================================================================
+
 
 
 @app.route('/tweet/<string:country>')

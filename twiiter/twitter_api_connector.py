@@ -22,9 +22,8 @@ def connect_with_twitter():
 
 
 def collect_with_keyword(api,query):
-
     n = 200
-    tweets = tweepy.Cursor(api.search_tweets, q="#covid", lang="en", tweet_mode="extended").items(n)
+    tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en", tweet_mode="extended").items(n)
     return tweets
 
 

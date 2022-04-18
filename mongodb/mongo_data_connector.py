@@ -8,7 +8,7 @@ from json import dumps, loads
 from pymongo import MongoClient
 from pymongo.errors import CollectionInvalid
 import urllib
-from twiiter.elevated_account_testing import *
+from twiiter.twitter_api_connector import *
 from datetime import datetime
 
 # ======================================================================================================================
