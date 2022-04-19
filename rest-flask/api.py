@@ -87,7 +87,7 @@ def top_100_word_occuring():
 # query 4
 
 @app.route('/top_100_word_all_countries')
-def top_100_word_occuring():
+def top_100_word_occuring_all_countries():
 
     try:
         coll = connect_with_collection_data()
