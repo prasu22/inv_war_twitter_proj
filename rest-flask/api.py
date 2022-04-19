@@ -90,7 +90,7 @@ def top_100_word_occuring():
 def top_100_word_occuring():
 
     try:
-        coll = create_database()
+        coll = connect_with_collection_data()
         words = {}
         answer = []   # creating the empty list to store all the answers(dictionaries)
         for row in coll.aggregate([{'$match': {'tweet': {'$regex': 'corona.*|covid.*'}}},
@@ -141,7 +141,7 @@ def top_100_word_occuring_with_country(country):
     ''' enter the country name and get the top 100 words used in the tweet by the users in that country'''
 
     try:
-        coll = create_database()
+        coll = connect_with_collection_data()
         words = {}
         top_100_word = {}
         for row in coll.aggregate([{'$match': {'$and': [{'country': country}, {'tweet': {'$regex': 'corona.*|covid.*'}}]}},
@@ -187,7 +187,7 @@ def top_10_preventions(country):
     try:
         list = ['wear mask','use sanitiser','stay home','social distancing','wash hands']
         answers = []
-        collection = create_database()
+        collection = connect_with_collection_data()
         for word in list:
             count = 0
             ans = {}
@@ -227,7 +227,7 @@ def top_10_preventions_country_wise():
         list = ['wear mask','use sanitiser','stay home','social distancing','wash hands']
         answers = []
         final_answer = {}
-        collection = create_database()
+        collection = connect_with_collection_data()
         for word in list:
             for row in collection.aggregate([
                 {'$match': {'$and': [{'tweet': {'$regex': 'prevent.*|precaut.*', '$options': 'i'}},
@@ -279,7 +279,7 @@ def top_10_preventions_country_wise():
 def total_no_donations_with_country_name(country):
     try:
         # matching with the country and look for the certain keywords
-        collection = create_database()
+        collection = connect_with_collection_data()
         ans = {}
         for row in collection.aggregate([
             {'$match': {'$and': [{'country': {'$regex':country , '$options':'i'}},
@@ -303,7 +303,7 @@ def total_no_donations_with_country_name(country):
 def total_no_donations_all_countries():
     try:
         # giving total_donations by all the countries
-        collection = create_database()
+        collection = connect_with_collection_data()
         answers = []
         for row in collection.aggregate([
                     {'$match': {'$and':[{'tweet': {'$regex': 'contribut.*|donat.','$options': 'i'}},{'tweet': {'$regex': 'corona.*|covid.*','$options':'i'}},{'tweet': {'$regex': '[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\d[0-9,.]+)'}}]}},
