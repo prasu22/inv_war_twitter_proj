@@ -364,6 +364,55 @@ def search_date():
         return json.dumps(e)
 
 
+# query 8
+@app.route('/tweet/analysis/<string:country>', methods=['POST'])
+def impact_analysis(country):
+    request_payload = request.json
+    trend = request_payload['trend']
+    # keyword = 'covid'
+    # trend = 'economy'
+
+    covid_keys = ['death', 'hospitalisation', 'medicine', ]
+    economy_keys = ['GDP', 'unemployment', 'employment', 'layoffs', 'market', 'stock', 'index']
+
+    try:
+        db = connect_with_collection_data()
+        list_country = []
+        if trend == 'covid':
+            for e in covid_keys:
+                x = list(db.aggregate([
+                    {"$match": {'$and': [{'$text': {'$search': e}}, {'country': {'$regex': country}}]}},
+                    {"$group": {"_id": {"country": "$country"}, "numTweets": {"$sum": 1}}}
+                ]))
+                for i in x:
+                    ans = {'country': i['_id']['country'], 'count': i['numTweets']}
+                    for j in list_country:
+                        if j == ans:
+                            j['country'] += i['_id']['country']
+                            j['count'] += i['numTweets']
+                            continue
+                    list_country.append(ans)
+        else:
+            for e in economy_keys:
+                x = list(db.aggregate([
+                    {"$match": {'$and': [{'$text': {'$search': e}}, {'country': {'$regex': country}}]}},
+                    {"$group": {"_id": {"country": "$country"}, "numTweets": {"$sum": 1}}}
+                ]))
+                for i in x:
+                    ans = {'country': i['_id']['country'], 'count': i['numTweets']}
+                    for j in list_country:
+                        if j == ans:
+                            j['country'] += i['_id']['country']
+                            j['count'] += i['numTweets']
+                            continue
+                    list_country.append(ans)
+
+        return json.dumps(list_country, default=json_util.default)
+    except Exception as e:
+        return json.dumps(e)
+
+    
+    
 
 
 
