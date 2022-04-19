@@ -84,6 +84,245 @@ def top_100_word_occuring():
         return "404"
 # ======================================================================================================================
 
+# query 4
+
+@app.route('/top_100_word_all_countries')
+def top_100_word_occuring():
+
+    try:
+        coll = create_database()
+        words = {}
+        answer = []   # creating the empty list to store all the answers(dictionaries)
+        for row in coll.aggregate([{'$match': {'tweet': {'$regex': 'corona.*|covid.*'}}},
+                                   {'$group': {'_id': {'country':'$country'},'country': {'$first': '$country'},'tweet': {'$first': '$tweet'}}},
+                                   {'$project':{'tweet':1,'country':1}}]):
+
+            # extracting the country name for future purpose
+            country_name = row['country']
+
+            # clean the tweets and extracting only the useful words
+            for word in clean_tweet(row['tweet']).split(" "):
+                if word not in words:
+                    words[word] = 1
+                else:
+                    words[word] += 1
+
+
+            top_100_words = {}  # empty dictionary to store top words for every country one by one
+
+            # sort the list of words in descending order
+
+            sorted_d = OrderedDict(sorted(words.items(), key=lambda x:-x[1]))
+
+            # get the top 100 words by frequency from it
+
+            top_100_words = {k: sorted_d[k] for k in list(sorted_d.keys())[:100]}
+
+            # adding country name along with the words for that country
+            top_100_words['country'] = country_name
+
+            # append the result to the list
+            answer.append(top_100_words)
+
+        if len(answer):
+            return json.dumps(answer)
+        else:
+            # incase no results found this is going to print
+            return "NO RECORD FOUND"
+
+    except Exception as e:
+        print("some error occured ",e)
+        return "404"
+
+
+@app.route('/top_100_word/<country>')
+def top_100_word_occuring_with_country(country):
+
+    ''' enter the country name and get the top 100 words used in the tweet by the users in that country'''
+
+    try:
+        coll = create_database()
+        words = {}
+        top_100_word = {}
+        for row in coll.aggregate([{'$match': {'$and': [{'country': country}, {'tweet': {'$regex': 'corona.*|covid.*'}}]}},
+                                   {'$project': {'tweet': 1, 'country': 1}}]):
+
+            # clean the tweets and extracting only the useful words
+
+            for word in clean_tweet(row['tweet']).split(" "):
+                if word not in words:
+                    words[word] = 1
+                else:
+                    words[word] += 1
+
+            # sort the list of words in descending order
+            sorted_d = OrderedDict(sorted(words.items(), key=lambda x: -x[1]))
+
+            # get the top 100 words only from the dictionary
+            top_100_word = {k: sorted_d[k] for k in list(sorted_d.keys())[:100]}
+
+            # adding the name of country in the dictionary
+            top_100_word['country'] = country
+
+        if len(top_100_word):
+            # returning the result to user
+            return json.dumps(top_100_word)
+        else:
+            # no record match with the following country
+            return "NO RECORD FOUND"
+
+    except Exception as e:
+        # error occured with doing the above task
+        print("some error occured ", e)
+        return "404"
+
+############################################################################################
+
+# query 5
+
+@app.route('/top_10_preventions/<country>')
+
+def top_10_preventions(country):
+
+    try:
+        list = ['wear mask','use sanitiser','stay home','social distancing','wash hands']
+        answers = []
+        collection = create_database()
+        for word in list:
+            count = 0
+            ans = {}
+            ans['word'] = word
+            for row in collection.aggregate([
+                {'$match': {'$and': [{'country': {'$regex':country,'$options':'i'}},
+                                     {'tweet': {'$regex': 'prevent.*|precaut.*', '$options': 'i'}},
+                                     {'tweet': {'$regex': '.*who.*', '$options': 'i'}},
+                                     {'$text':{'$search':word}}]}}
+                ]):
+                count += 1
+            ans['count'] = count
+            answers.append(ans)
+
+        if len(answers):
+            print(answers)
+            answers = sorted(answers, key=lambda i: i['count'],reverse = True)
+            new_dict = [value['word'] for value in answers ]
+
+            # if highest value is zero then print no result found need to implement this
+
+            return json.dumps(answers[:10])
+
+            # return json.dumps(new_dict[:10])
+        else:
+            return "NO RECORD FOUND"
+
+    except Exception as e:
+        print("error",e)
+        return json.dumps(e)
+
+
+@app.route('/top_10_preventions')
+def top_10_preventions_country_wise():
+
+    try:
+        list = ['wear mask','use sanitiser','stay home','social distancing','wash hands']
+        answers = []
+        final_answer = {}
+        collection = create_database()
+        for word in list:
+            for row in collection.aggregate([
+                {'$match': {'$and': [{'tweet': {'$regex': 'prevent.*|precaut.*', '$options': 'i'}},
+                                     {'tweet': {'$regex': '.*who.*', '$options': 'i'}},
+                                     {'tweet': {'$regex': word,'$options':'i'}}]}},
+                                     {'$group': {'_id': {'country': '$country'}, 'total_appearance': {'$sum':1},'country': {'$first': '$country'}}},
+                {'$project': {'_id':0}}
+
+                ]):
+                ans = row
+                # print(row)
+                # if row['total_appearance']:
+                #     ans["country"] = row["country"]
+                #     print(word,ans)
+                # else:
+                #     print(word)
+                ans['word'] = word
+
+                if row['country'] in final_answer:
+                    final_answer[ans['country']].append({'word':ans['word'],'total_appearance':ans['total_appearance']})
+                else:
+                    final_answer[ans['country']] = [{'word':ans['word'],'total_appearance':ans['total_appearance']}]
+
+
+            answers.append(final_answer)
+        if len(answers):
+            final_output = []
+            for key in answers[0]:
+                answers[0][key] = sorted(answers[0][key], key=lambda i: i['total_appearance'], reverse=True)
+                dict =[]
+                for aditya in answers[0][key]:
+                    dict.append(aditya['word'])
+                final_output.append({key: dict})
+            print(final_output)
+
+            return json.dumps(final_output)
+        else:
+            return "NO RECORD FOUND"
+
+    except Exception as e:
+        print("error",e)
+        return json.dumps(e)
+
+##################################################################################
+
+# query 6
+
+@app.route('/total_no_donations/<country>')
+def total_no_donations_with_country_name(country):
+    try:
+        # matching with the country and look for the certain keywords
+        collection = create_database()
+        ans = {}
+        for row in collection.aggregate([
+            {'$match': {'$and': [{'country': {'$regex':country , '$options':'i'}},
+                                 {'tweet': {'$regex': 'donat.*|contribut.*', '$options': 'i'}},
+                                 {'tweet': {'$regex': 'covid.*|corona.*','$options':'i'}},
+                                 {'tweet': {'$regex': '[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\d[0-9,.]+)'}}]}},
+                                {'$count': "total donations "}
+            ]):
+            ans = row
+            ans['country'] = country
+
+        if ans:
+            return json.dumps(ans)
+        else:
+            return "NO RECORD FOUND"
+    except Exception as e:
+        print(e)
+        return 'something went wrong'
+
+@app.route('/total_no_donations')
+def total_no_donations_all_countries():
+    try:
+        # giving total_donations by all the countries
+        collection = create_database()
+        answers = []
+        for row in collection.aggregate([
+                    {'$match': {'$and':[{'tweet': {'$regex': 'contribut.*|donat.','$options': 'i'}},{'tweet': {'$regex': 'corona.*|covid.*','$options':'i'}},{'tweet': {'$regex': '[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\d[0-9,.]+)'}}]}},
+                    {'$group': {'_id': {'country':'$country'},'total donations':{'$sum':1},'country': {'$first': '$country'}}},
+                    {'$project': {'_id':0,'country':1,'total donations':1}},
+                    {'$sort': {'total donations': -1}}]):
+            ans = row
+            answers.append(ans)
+
+        if answers:
+            return json.dumps(answers)
+        else:
+            return "NO RECORDS FOUND"
+    except Exception as e:
+        print(e)
+        return "Something wrong happened"
+
+##########################################################################
+
 
 
 @app.route('/tweet/<string:country>')
@@ -123,6 +362,9 @@ def search_date():
 
     except Exception as e:
         return json.dumps(e)
+
+
+
 
 
 
