@@ -1,4 +1,4 @@
-class StreamListener:
+class TweetCrawler:
     def __init__(self, config):
         self.config = config
 
