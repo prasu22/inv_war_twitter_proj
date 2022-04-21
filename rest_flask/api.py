@@ -2,7 +2,7 @@ from collections import OrderedDict
 from datetime import datetime
 from flask import Flask, request
 import json
-from mongodb.mongo_data_connector import connect_with_collection_data
+from mongodb.mongo_data_connector import connect_with_collection_data, mongodb_connection
 from data_cleaning import *
 from bson import json_util
 
@@ -35,6 +35,7 @@ def overall_tweet_based_on_keyword(keyword,country,date):
     except Exception as e:
         print('some error occured ',e)
         return "error"
+
 # ======================================================================================================================
 
 # ======================================================================================================================
