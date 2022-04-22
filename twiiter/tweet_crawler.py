@@ -99,7 +99,7 @@ class TweetCrawler:
             print("DONT CALL WAIT FOR ", int(900 - difference_time))
 
     def fetch_tweets_from_archive_api(self, keywords1, last_time_for_search_30_api, start_date=None, end_date=None):
-git
+        
         query = keywords1 + " lang:en"
         current_time = datetime.now()
         difference_time = 0
