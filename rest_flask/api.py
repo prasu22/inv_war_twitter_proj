@@ -1,13 +1,16 @@
 from collections import OrderedDict
 from datetime import datetime
+import time
 from flask import Flask, request
 import json
+# import logging
 from mongodb.mongo_data_connector import connect_with_collection_data, mongodb_connection
 from data_cleaning import *
 from bson import json_util
 
 app = Flask(__name__)
 
+# logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def hello_world():
@@ -19,22 +22,43 @@ def hello_world():
     except Exception as e:
         return json.dumps(e)
 # ======================================================================================================================
-@app.route('/overall_tweet/<keyword>/<country>/<date>')
-def overall_tweet_based_on_keyword(keyword,country,date):
-    """overall number of tweets on coronavirus per country in the last n months
+@app.route('/overall_tweet/<country>/<date>')
+def overall_tweet_based_on_keyword(country,date):
+    # write down the required comment here
+    """Find the total number of tweet per country in last n months
+       :passing parameter in query
+         country= name of country it is case insensitive
+         date =  date in yyyy-mm-dd format, date from which you want to fetch data
+       example:
+            http://127.0.0.1:5000/overall_tweet/India/2022-04-22
+            output: { overall_tweet_per_country: 23}
        :param
        coll = store the collection details
        count = used to store the count of data returned by the query
+       :return
+        total number of tweet in last n month  per country
     """
+   # not perfect
     try:
-        coll = connect_with_collection_data()
-        count = 0
-        for row in coll.aggregate( [{'$match': { '$text': { '$search': keyword },'country':{'$regex':country,'$options' : 'i'}, 'date': {'$gte': datetime.strptime(date,'%Y-%m-%d')}}},{'$project':{'tweet':1,'country':1,'date':1}}]):
-            count+=1
-        return {'total_number':count}
+        st1 = time.time()
+        conn = mongodb_connection()
+        en1 = time.time()
+        # logging.debug("execution time",st1,en1,en1-st1)
+        print("execution time",st1,en1,en1-st1)
+        st2=time.time()
+        db = conn['tweet_db']
+        coll = db['overall_tweet_per_country']
+        month = datetime.strptime(date,'%Y-%m-%d').month
+        row = list(coll.aggregate([{'$match':{'country':{"$regex":country,"$options":'i'},"month":{"$gte":month}}},{'$project':{"_id":1,"count":1,"country":1,"month":1}},{"$group":{"_id":{"country":country},"total_tweet":{"$sum":"$count"}}}]))
+        en2 = time.time()
+        print("execution time2", st2, en2, en2 - st2)
+        if len(row)>0:
+            return {"total_tweet_last_n_month":row[0]['total_tweet']}
+        else:
+            return {"total_tweet_last_n_month":0}
     except Exception as e:
         print('some error occured ',e)
-        return "error"
+        return {"error":e}
 
 # ======================================================================================================================
 
@@ -42,47 +66,78 @@ def overall_tweet_based_on_keyword(keyword,country,date):
 @app.route('/number_of_tweet_per_country/<country>/<date>')
 def overall_per_country(country,date):
     """overall number of tweets per country on a daily basis
+        :passing parameter in query
+         country= name of country it is case insensitive
+         date =  date in yyyy-mm-dd format, fetch data of particular date
+        example:
+            http://127.0.0.1:5000/overall_tweet/India/2022-04-22
+            output: { tweet_per_country_on_daily_basis: 10}
        :param
        coll = store the collection details
        count = used to store the count of data returned by the query
+       :return
+        return the total tweet on particular date in particular country
     """
     try:
-        coll = connect_with_collection_data()
-        count = 0
-        for row in coll.aggregate([{'$match':{'country':{'$regex':country,'$options' : 'i'},'$expr': {'$eq': [date, { '$dateToString': {'date': "$date", 'format': "%Y-%m-%d"}}]}}},{'$project':{'tweet':1,'country':1,'date':1}}]):
-            count+=1
-        return {"total_tweet":count}
+        st1 = time.time()
+        conn = mongodb_connection()
+        en1 = time.time()
+        print("execution time", st1, en1, en1 - st1)
+        st2 = time.time()
+        db = conn['tweet_db']
+        coll = db['overall_tweet_per_country_on_daily_basis']
+        data = list(coll.aggregate([{'$match':{"country":{"$regex":country,"$options":"i"},"date":date}}]))
+        en2 = time.time()
+        print("execution time2",st2,en2,en2-st2)
+        if len(data)>0:
+            # print(data[0]['count'])
+            return {"tweet_per_country_on_daily_basis":data[0]['count']}
+        else:
+            return {"tweet_per_country_on_daily_basis":0}
     except Exception as e:
         print("some error occured",e)
-        return "error"
+        return {"error":e}
 # ======================================================================================================================
 
 # ======================================================================================================================
 @app.route('/top_100_word')
 def top_100_word_occuring():
-    """top 100 words occurring on tweets involving coronavirus first fetch data from mongodb and
-    clean the data and retrun reponse in json format
+    """top 100 words occurring on tweets involving coronavirus all over world
+    Example:
+        http://127.0.0.1:5000/top_100_word
+        output:{
+                "covid": 90,
+                "total": 84,
+                "cases": 68,
+                "coronavirus": 48,
+                "deaths": 43,
+                .....}
     :param
         coll = store the collection details
         words = dictionary to store the data returned by the query
         sorted_d = sorted ordered dictionary to store dictionary data
         top_100_word = store top 100 most frequent word from the tweet
+    :return
+       return the top 100 word with there coresponding frequency in output as shown in example above
     """
     try:
-        coll = connect_with_collection_data()
-        words = {}
-        for row in coll.aggregate([{'$match': { '$text': { '$search': "coronavirus"}}},{'$project':{'tweet':1}}]):
-            for word in clean_tweet(row['tweet']).split(" "):
-                if word not in words:
-                    words[word] = 1
-                else:
-                    words[word] += 1
-        sorted_d = OrderedDict(sorted(words.items(), key=lambda x:-x[1]))
-        top_100_word = {k: sorted_d[k] for k in list(sorted_d.keys())[:100]}
-        return json.dumps(top_100_word)
+        st1 = time.time()
+        conn = mongodb_connection()
+        db = conn['tweet_db']
+        coll = db['top_100_words']
+        en1 = time.time()
+        print("execution time",st1,en1,en1-st1)
+        st2 = time.time()
+        word_count_list = list(coll.aggregate([{'$project':{"count":1,"word":1}},{"$group":{"_id":"$word","count":{"$sum":"$count"}}},{"$sort":{"count":-1}},{"$limit":100}]))
+        en2 = time.time()
+        print("execution time",st2,en2,en2-st2)
+        word_dict = {}
+        for word in word_count_list:
+            word_dict[word['_id']]=word['count']
+        return json.dumps(word_dict)
     except Exception as e:
         print("some error occured ",e)
-        return "404"
+        return {"error":e}
 # ======================================================================================================================
 
 # query 4
@@ -182,7 +237,6 @@ def top_100_word_occuring_with_country(country):
 # query 5
 
 @app.route('/top_10_preventions/<country>')
-
 def top_10_preventions(country):
 
     try:
