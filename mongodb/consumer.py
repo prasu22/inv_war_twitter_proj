@@ -1,11 +1,9 @@
 import json
 import re
 from datetime import datetime
-from bson import ObjectId
 from kafka import KafkaConsumer
 from mongodb.mongo_data_connector import connect_with_collection_data, mongodb_connection
 from rest_flask.data_cleaning import clean_tweet
-import pymongo
 
 
 my_consumer = KafkaConsumer(

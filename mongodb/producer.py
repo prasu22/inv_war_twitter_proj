@@ -5,7 +5,7 @@ from time import sleep
 from kafka import KafkaProducer
 from twiiter import tweet_crawler
 # from twiiter.streaming_data import StreamListener
-from twiiter.tweet_crawler import StreamListener
+# from twiiter.tweet_crawler import StreamListener
 from twiiter.twitter_api_connector import connect_with_twitter
 
 my_producer = KafkaProducer(

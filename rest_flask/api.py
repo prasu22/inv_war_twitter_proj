@@ -3,13 +3,19 @@ from datetime import datetime
 import time
 from flask import Flask, request
 import json
-# import logging
+from analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, total_tweet_per_country_on_daily_basis, \
+    top_100_words_tweeted_in_world
 from mongodb.mongo_data_connector import connect_with_collection_data, mongodb_connection
 from data_cleaning import *
 from bson import json_util
 
 app = Flask(__name__)
 
+conn = mongodb_connection()
+db = conn['tweet_db']
+coll_overall_tweet = db['overall_tweet_per_country']
+coll_total_tweet_on_daily_basis = db['overall_tweet_per_country_on_daily_basis']
+coll_top_100_words = db['top_100_words']
 # logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
@@ -40,18 +46,9 @@ def overall_tweet_based_on_keyword(country,date):
     """
    # not perfect
     try:
-        st1 = time.time()
-        conn = mongodb_connection()
-        en1 = time.time()
-        # logging.debug("execution time",st1,en1,en1-st1)
-        print("execution time",st1,en1,en1-st1)
-        st2=time.time()
-        db = conn['tweet_db']
-        coll = db['overall_tweet_per_country']
-        month = datetime.strptime(date,'%Y-%m-%d').month
-        row = list(coll.aggregate([{'$match':{'country':{"$regex":country,"$options":'i'},"month":{"$gte":month}}},{'$project':{"_id":1,"count":1,"country":1,"month":1}},{"$group":{"_id":{"country":country},"total_tweet":{"$sum":"$count"}}}]))
-        en2 = time.time()
-        print("execution time2", st2, en2, en2 - st2)
+        # month = datetime.strptime(date,'%Y-%m-%d').month
+        row = overall_tweet_per_country_in_last_n_month(country,date,coll_overall_tweet)
+        # row = list(coll_overall_tweet.aggregate([{'$match':{'country':{"$regex":country,"$options":'i'},"month":{"$gte":month}}},{'$project':{"_id":1,"count":1,"country":1,"month":1}},{"$group":{"_id":{"country":country},"total_tweet":{"$sum":"$count"}}}]))
         if len(row)>0:
             return {"total_tweet_last_n_month":row[0]['total_tweet']}
         else:
@@ -79,16 +76,11 @@ def overall_per_country(country,date):
         return the total tweet on particular date in particular country
     """
     try:
-        st1 = time.time()
-        conn = mongodb_connection()
-        en1 = time.time()
-        print("execution time", st1, en1, en1 - st1)
-        st2 = time.time()
-        db = conn['tweet_db']
-        coll = db['overall_tweet_per_country_on_daily_basis']
-        data = list(coll.aggregate([{'$match':{"country":{"$regex":country,"$options":"i"},"date":date}}]))
-        en2 = time.time()
-        print("execution time2",st2,en2,en2-st2)
+        # st2 = time.time()
+        # data = list(coll_total_tweet_on_daily_basis.aggregate([{'$match':{"country":{"$regex":country,"$options":"i"},"date":date}}]))
+        data = total_tweet_per_country_on_daily_basis(country,date,coll_total_tweet_on_daily_basis)
+        # en2 = time.time()
+        # print("execution time2",st2,en2,en2-st2)
         if len(data)>0:
             # print(data[0]['count'])
             return {"tweet_per_country_on_daily_basis":data[0]['count']}
@@ -121,19 +113,11 @@ def top_100_word_occuring():
        return the top 100 word with there coresponding frequency in output as shown in example above
     """
     try:
-        st1 = time.time()
-        conn = mongodb_connection()
-        db = conn['tweet_db']
-        coll = db['top_100_words']
-        en1 = time.time()
-        print("execution time",st1,en1,en1-st1)
-        st2 = time.time()
-        word_count_list = list(coll.aggregate([{'$project':{"count":1,"word":1}},{"$group":{"_id":"$word","count":{"$sum":"$count"}}},{"$sort":{"count":-1}},{"$limit":100}]))
-        en2 = time.time()
-        print("execution time",st2,en2,en2-st2)
-        word_dict = {}
-        for word in word_count_list:
-            word_dict[word['_id']]=word['count']
+        # word_count_list = list(coll_top_100_words.aggregate([{'$project':{"count":1,"word":1}},{"$group":{"_id":"$word","count":{"$sum":"$count"}}},{"$sort":{"count":-1}},{"$limit":100}]))
+        # word_dict = {}
+        # for word in word_count_list:
+        #     word_dict[word['_id']]=word['count']
+        word_dict = top_100_words_tweeted_in_world(coll_top_100_words)
         return json.dumps(word_dict)
     except Exception as e:
         print("some error occured ",e)
