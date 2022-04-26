@@ -1,6 +1,5 @@
 from collections import OrderedDict
 from datetime import datetime
-import time
 from flask import Flask, request
 import json
 from analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, total_tweet_per_country_on_daily_basis, \
@@ -11,12 +10,6 @@ from bson import json_util
 
 app = Flask(__name__)
 
-conn = mongodb_connection()
-db = conn['tweet_db']
-coll_overall_tweet = db['overall_tweet_per_country']
-coll_total_tweet_on_daily_basis = db['overall_tweet_per_country_on_daily_basis']
-coll_top_100_words = db['top_100_words']
-# logging.basicConfig(level=logging.DEBUG)
 
 @app.route('/')
 def hello_world():
@@ -39,17 +32,14 @@ def overall_tweet_based_on_keyword(country,date):
             http://127.0.0.1:5000/overall_tweet/India/2022-04-22
             output: { overall_tweet_per_country: 23}
        :param
-       coll = store the collection details
-       count = used to store the count of data returned by the query
+        row = store the list return function
        :return
         total number of tweet in last n month  per country
     """
    # not perfect
     try:
-        # month = datetime.strptime(date,'%Y-%m-%d').month
-        row = overall_tweet_per_country_in_last_n_month(country,date,coll_overall_tweet)
-        # row = list(coll_overall_tweet.aggregate([{'$match':{'country':{"$regex":country,"$options":'i'},"month":{"$gte":month}}},{'$project':{"_id":1,"count":1,"country":1,"month":1}},{"$group":{"_id":{"country":country},"total_tweet":{"$sum":"$count"}}}]))
-        if len(row)>0:
+        row = overall_tweet_per_country_in_last_n_month(country,date)
+        if len(row) > 0:
             return {"total_tweet_last_n_month":row[0]['total_tweet']}
         else:
             return {"total_tweet_last_n_month":0}
@@ -70,17 +60,12 @@ def overall_per_country(country,date):
             http://127.0.0.1:5000/overall_tweet/India/2022-04-22
             output: { tweet_per_country_on_daily_basis: 10}
        :param
-       coll = store the collection details
-       count = used to store the count of data returned by the query
+       data = store the list return by the function
        :return
         return the total tweet on particular date in particular country
     """
     try:
-        # st2 = time.time()
-        # data = list(coll_total_tweet_on_daily_basis.aggregate([{'$match':{"country":{"$regex":country,"$options":"i"},"date":date}}]))
-        data = total_tweet_per_country_on_daily_basis(country,date,coll_total_tweet_on_daily_basis)
-        # en2 = time.time()
-        # print("execution time2",st2,en2,en2-st2)
+        data = total_tweet_per_country_on_daily_basis(country,date)
         if len(data)>0:
             # print(data[0]['count'])
             return {"tweet_per_country_on_daily_basis":data[0]['count']}
@@ -92,7 +77,7 @@ def overall_per_country(country,date):
 # ======================================================================================================================
 
 # ======================================================================================================================
-@app.route('/top_100_word')
+@app.route('/top_100_words')
 def top_100_word_occuring():
     """top 100 words occurring on tweets involving coronavirus all over world
     Example:
@@ -105,19 +90,12 @@ def top_100_word_occuring():
                 "deaths": 43,
                 .....}
     :param
-        coll = store the collection details
-        words = dictionary to store the data returned by the query
-        sorted_d = sorted ordered dictionary to store dictionary data
-        top_100_word = store top 100 most frequent word from the tweet
+        word_dict = store the returned dictionary of words by the function
     :return
        return the top 100 word with there coresponding frequency in output as shown in example above
     """
     try:
-        # word_count_list = list(coll_top_100_words.aggregate([{'$project':{"count":1,"word":1}},{"$group":{"_id":"$word","count":{"$sum":"$count"}}},{"$sort":{"count":-1}},{"$limit":100}]))
-        # word_dict = {}
-        # for word in word_count_list:
-        #     word_dict[word['_id']]=word['count']
-        word_dict = top_100_words_tweeted_in_world(coll_top_100_words)
+        word_dict = top_100_words_tweeted_in_world()
         return json.dumps(word_dict)
     except Exception as e:
         print("some error occured ",e)
@@ -223,40 +201,40 @@ def top_100_word_occuring_with_country(country):
 @app.route('/top_10_preventions/<country>')
 def top_10_preventions(country):
 
-    try:
-        list = ['wear mask','use sanitiser','stay home','social distancing','wash hands']
-        answers = []
-        collection = connect_with_collection_data()
-        for word in list:
-            count = 0
-            ans = {}
-            ans['word'] = word
-            for row in collection.aggregate([
-                {'$match': {'$and': [{'country': {'$regex':country,'$options':'i'}},
-                                     {'tweet': {'$regex': 'prevent.*|precaut.*', '$options': 'i'}},
-                                     {'tweet': {'$regex': '.*who.*', '$options': 'i'}},
-                                     {'$text':{'$search':word}}]}}
-                ]):
-                count += 1
-            ans['count'] = count
-            answers.append(ans)
+        try:
+            list = ['wear mask','use sanitiser','stay home','social distancing','wash hands']
+            answers = []
+            collection = connect_with_collection_data()
+            for word in list:
+                count = 0
+                ans = {}
+                ans['word'] = word
+                for row in collection.aggregate([
+                    {'$match': {'$and': [{'country': {'$regex':country,'$options':'i'}},
+                                         {'tweet': {'$regex': 'prevent.*|precaut.*', '$options': 'i'}},
+                                         {'tweet': {'$regex': '.*who.*', '$options': 'i'}},
+                                         {'$text':{'$search':word}}]}}
+                    ]):
+                    count += 1
+                ans['count'] = count
+                answers.append(ans)
 
-        if len(answers):
-            print(answers)
-            answers = sorted(answers, key=lambda i: i['count'],reverse = True)
-            new_dict = [value['word'] for value in answers ]
+            if len(answers):
+                print(answers)
+                answers = sorted(answers, key=lambda i: i['count'],reverse = True)
+                new_dict = [value['word'] for value in answers ]
 
-            # if highest value is zero then print no result found need to implement this
+                # if highest value is zero then print no result found need to implement this
 
-            return json.dumps(answers[:10])
+                return json.dumps(answers[:10])
 
-            # return json.dumps(new_dict[:10])
-        else:
-            return "NO RECORD FOUND"
+                # return json.dumps(new_dict[:10])
+            else:
+                return "NO RECORD FOUND"
 
-    except Exception as e:
-        print("error",e)
-        return json.dumps(e)
+        except Exception as e:
+            print("error",e)
+            return json.dumps(e)
 
 
 @app.route('/top_10_preventions')

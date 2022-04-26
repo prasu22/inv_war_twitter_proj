@@ -1,6 +1,7 @@
 import re
 import string
 import nltk as nltk
+
 nltk.download('stopwords')
 nltk.download('punkt')
 
@@ -10,6 +11,8 @@ stopword = nltk.corpus.stopwords.words('english')
 def clean_tweet(tweet):
     """
     used to creat the tweet text data removing digit, url,
+    :passing argument
+      tweet: It is a string
     :param
         tweet: store thed text data after removing punctuation
         clean: remove the digits
