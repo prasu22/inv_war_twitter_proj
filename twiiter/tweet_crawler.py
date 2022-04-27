@@ -8,7 +8,7 @@ from twiiter.twitter_api_connector import connect_with_twitter
 config = [access_token_secret,access_token,consumer_secret,consumer_key]
 
 
-# DEFAULT_THRESHOLD=10
+
 
 class StreamListener(tweepy.Stream):
     def on_status(self,status):
