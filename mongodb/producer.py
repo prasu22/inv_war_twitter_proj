@@ -3,16 +3,16 @@ from datetime import datetime
 from json import dumps
 from time import sleep
 from kafka import KafkaProducer
-
 import twiiter.tweet_crawler as tc
-from twiiter.twitter_api_connector import connect_with_twitter
-# try:
-#     from twitter import tweet_crawler
-# except ImportError:
-#     import sys
-#     tweet_crawler = sys.modules[__package__ + '.tweet_crawler']
 
-
+""""
+  creating producer to call tweetcrawler api to fetch data from twitter and insert that in topic by the producer
+  :params
+  my_producer =  initialize the kafka producer
+  crawler_object = creating object of class TweetCrawler
+  keywords  = list of keyword based on which we fetch tweet
+  
+"""
 my_producer = KafkaProducer(
         bootstrap_servers=['localhost:9092'],
         api_version=(0, 11, 5),
@@ -21,7 +21,7 @@ my_producer = KafkaProducer(
 
 # ======================================================================================================================
 #static keyword list
-keywords = ['death', 'hospitalisation', 'medicine','GDP', 'unemployment', 'employment', 'layoffs', 'market', 'stock', 'index','donation','fund','donating','donations','wear mask','use sanitiser','stay home','social distancing','wash hands','precaution','preventions','precautions','prevention','covid','corona']
+keywords = ['death covid', 'hospitalisation covid', 'medicine covid','GDP covid', 'unemployment', 'employment', 'layoffs', 'market', 'stock', 'index','donation','fund','donating','donations','wear mask','use sanitiser','stay home','social distancing','wash hands','precaution','prevention','covid','corona']
 # ======================================================================================================================
 
 # ======================================================================================================================

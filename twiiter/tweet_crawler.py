@@ -1,7 +1,6 @@
 import sys
 import tweepy
 from datetime import datetime
-
 from twiiter.config import access_token,access_token_secret,consumer_secret,consumer_key
 from twiiter.twitter_api_connector import connect_with_twitter
 
@@ -71,7 +70,7 @@ class TweetCrawler:
         if rate limit is reached, raises exception ratelimit reached
         '''
         api = connect_with_twitter()
-        n = 1
+        n = 100
         query =keywords1 +" AND Covid"+  "-filter:retweets"
         tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en", tweet_mode="extended").items(n)
         return tweets

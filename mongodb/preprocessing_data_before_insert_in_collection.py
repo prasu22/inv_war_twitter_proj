@@ -96,6 +96,7 @@ def preprocess_total_tweet_per_country(message):
             else:
                 db['overall_tweet_per_country_on_daily_basis'].update_one({"country":daily_basis_tweet['country'],"date":str(daily_basis_tweet['date'])},{'$inc':{'count':1}})
 
+
 def preprocess_top_100_words(message):
     """
         store the data in collection after manupulation in mongodb collection  top_100_words
