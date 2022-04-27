@@ -255,12 +255,6 @@ def top_10_preventions_country_wise():
 
                 ]):
                 ans = row
-                # print(row)
-                # if row['total_appearance']:
-                #     ans["country"] = row["country"]
-                #     print(word,ans)
-                # else:
-                #     print(word)
                 ans['word'] = word
 
                 if row['country'] in final_answer:

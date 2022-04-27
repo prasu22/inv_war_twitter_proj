@@ -4,6 +4,7 @@ from json import dumps
 from time import sleep
 from kafka import KafkaProducer
 import twiiter.tweet_crawler as tc
+from twiiter.twitter_api_connector import connect_with_twitter
 
 """"
   creating producer to call tweetcrawler api to fetch data from twitter and insert that in topic by the producer
@@ -21,14 +22,19 @@ my_producer = KafkaProducer(
 
 # ======================================================================================================================
 #static keyword list
-keywords = ['death covid', 'hospitalisation covid', 'medicine covid','GDP covid', 'unemployment', 'employment', 'layoffs', 'market', 'stock', 'index','donation','fund','donating','donations','wear mask','use sanitiser','stay home','social distancing','wash hands','precaution','prevention','covid','corona']
+
+keywords = ['donation','contribution','@WHO','#WHO','wear mask','use sanitiser','stay home','social distancing','wash hands','precaution','preventions','donation','contribution','covid','precautions','prevention','covid','corona','coronavirus','donation','fund','donating','donations']
+
+
 # ======================================================================================================================
 
 # ======================================================================================================================
 # generating the numbers ranging from 1 to 500
 # code used when we use collect_with_keyword
 # send data to topic after fetch from twitter using search_tweet
-crawler_object = tc.TweetCrawler(tc.config)
+
+api = connect_with_twitter()
+crawler_object = tc.TweetCrawler(tc.config,api)
 
 
 for keyword in keywords:
