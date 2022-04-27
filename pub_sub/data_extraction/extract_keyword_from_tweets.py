@@ -1,5 +1,3 @@
-
-
 import re
 
 def get_keywords(message,keywords):

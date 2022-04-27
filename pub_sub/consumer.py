@@ -5,6 +5,7 @@ from mongodb.mongo_data_connector import mongodb_connection
 from pub_sub.data_analysis.overall_tweets_per_country import overall_tweets_country_wise
 from pub_sub.data_analysis.top_100_words_overall import analysis_top_100_words
 from pub_sub.data_analysis.top_10_precautions import analysis_top_10_preventions
+from pub_sub.data_analysis.total_number_of_donation import analysis_of_total_number_of_donation
 from pub_sub.data_analysis.total_tweets_on_trends import analysis_overall_tweets_based_on_trends
 from pub_sub.data_analysis.total_tweets_per_country_on_daily_basis import analysis_total_tweet_per_country
 
@@ -33,17 +34,17 @@ for message in my_consumer:
     try:
         if 'RT @' not in message['tweet']:
             # query1
-            overall_tweets_country_wise(message, db)
-            # query2
-            analysis_total_tweet_per_country(message,db)
-            # query3
-            analysis_top_100_words(message,db)
-            # query5
-            analysis_top_10_preventions(message,db)
+            # overall_tweets_country_wise(message, db)
+            # # query2
+            # analysis_total_tweet_per_country(message,db)
+            # # query3
+            # analysis_top_100_words(message,db)
+            # # query5
+            # analysis_top_10_preventions(message,db)
             # query6
-            # preprocess_total_number_of_donation(message)
+            analysis_of_total_number_of_donation(message,db)
             # query8
-            analysis_overall_tweets_based_on_trends(message,db)
+            # analysis_overall_tweets_based_on_trends(message,db)
     except Exception as e:
         print(f"error {e}")
         pass
