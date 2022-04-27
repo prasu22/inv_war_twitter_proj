@@ -3,8 +3,6 @@
 #dependencies list:-
 
 # required import libraries
-from json import dumps, loads
-
 from pymongo import MongoClient
 from pymongo.errors import CollectionInvalid
 import urllib

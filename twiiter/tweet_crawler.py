@@ -1,29 +1,34 @@
 import sys
 import tweepy
 from datetime import datetime
-from twiiter.twitter_api_connector import access_token, access_token_secret, consumer_secret, consumer_key
+from twiiter.config import access_token,access_token_secret,consumer_secret,consumer_key
 from twiiter.twitter_api_connector import connect_with_twitter
 
-config = [access_token_secret, access_token, consumer_secret, consumer_key]
+
+
+
+config = [access_token_secret,access_token,consumer_secret,consumer_key]
 
 last_time_for_search_api = ""
-last_time_for_search_30_api = ""
+last_time_for_search_30_api=""
 current_time = datetime.now()
 
 
 class StreamListener(tweepy.Stream):
 
-    def on_status(self, status):
-        if hasattr(status, 'extended_tweet') and status.user.location != None:
-            text = status.extended_tweet['full_text']
-            location = status.user.location
+    def on_status(self,status):
+        if hasattr(status,'extended_tweet') and status.user.location != None:
+            full_text = status.extended_tweet['full_text']
+            country = status.user.location
+            # print("stream: ",status.created_at)
             created_at = status.created_at
             tweet_id = status.id_str
+            my_data = {'_id': str(tweet_id),'tweet':full_text,'country':country,'created_at':str(created_at)}
+            print(my_data)
 
-            # call the mongo insertion function here some fixing need to be done here
 
-    def on_error(self, status_code):
-        print("Encountered Streaming error (", status_code, ")")
+    def on_error(self,status_code):
+        print("Encountered Streaming error (",status_code,")")
         if status_code == 420:
             return False
         sys.exit(1)
@@ -36,7 +41,7 @@ class StreamListener(tweepy.Stream):
 
 class TweetCrawler:
 
-    def __init__(self, config, api):
+    def __init__(self,config,api):
         self.config = config
         self.api = api
 
@@ -49,19 +54,19 @@ class TweetCrawler:
          created_at:
          country:
         }
-        :return: all the tweets
+        :return: list of dictionary
+        if rate limit is reached, raises exception ratelimit reached
         '''
 
         try:
             streamListener = StreamListener(config[3], config[2], config[1], config[0])
             streamListener.filter(track=keywords, languages=['en'])
 
+
         except Exception as e:
-            print("Error occured please check  ", e)
+            print("message is ",e)
 
-    ######### through search api
-
-    def fetch_tweets_from_search_api(self, keywords1, last_time_for_search_api):
+    def fetch_tweets_from_search_api(self, keywords1,last_time_for_search=''):
         '''
         fetches tweets from twitter search API and returns list of tweets in below format
         {
@@ -75,9 +80,11 @@ class TweetCrawler:
         '''
 
         n = 200
-        query = keywords1 + " -filter:retweets"
+        query = keywords1 +" -filter:retweets"
         current_time = datetime.now()
         difference_time = 0
+        global last_time_for_search_api
+        last_time_for_search_api = last_time_for_search
 
         if last_time_for_search_api != "":
             difference_time = (current_time - last_time_for_search_api).total_seconds()
@@ -86,47 +93,54 @@ class TweetCrawler:
 
             try:
                 tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en", tweet_mode="extended").items(n)
-                return tweets
+                if tweets.next():
+                    return tweets
+                # return tweets
+
 
             except tweepy.TooManyRequests as err:
                 print("RATE LIMIT EXCEED ,", err)
-                self.last_time_for_search_api = datetime.now()
+                last_time_for_search_api = datetime.now()
 
             except Exception as e:
                 print("Some error happened ")
 
-        elif difference_time <= 900:
-            print("DONT CALL WAIT FOR ", int(900 - difference_time))
+        elif difference_time <= 900 :
+            print("DONT CALL WAIT FOR ", int(900- difference_time))
 
-    def fetch_tweets_from_archive_api(self, keywords1, last_time_for_search_30_api, start_date=None, end_date=None):
 
-        query = keywords1 + " lang:en"
+    def fetch_tweets_from_archive_api(self, keywords1,last_time_for_search='',start_date=None, end_date=None):
+
+        query = keywords1+" lang:en"
         current_time = datetime.now()
         difference_time = 0
+
+        global last_time_for_search_30_api
+        last_time_for_search_30_api = last_time_for_search
 
         if last_time_for_search_30_api != "":
             difference_time = (current_time - last_time_for_search_30_api).total_seconds()
 
-        if last_time_for_search_30_api == "" or difference_time > 900:
-
+        if  last_time_for_search_30_api == "" or difference_time > 900:
             try:
-                tweets = tweepy.Cursor(self.api.search_30_day, label="research", query=query, maxResults=100,
-                                       romDate=start_date, toDate=end_date).items()
-                return tweets
+                tweets = tweepy.Cursor(api.search_30_day, label="research", query=query, maxResults=100,romDate=start_date, toDate=end_date).items()
+                if tweets.next():
+                    return tweets
 
             except tweepy.TooManyRequests as err:
                 print("RATE LIMIT EXCEED ,", err)
-                self.last_time_for_search_30_api = datetime.now()
+                last_time_for_search_30_api = datetime.now()
+                print("last time ", last_time_for_search_30_api)
 
             except Exception as e:
                 print("Some error happened , please check")
 
         elif difference_time <= 900:
-            print("Wait for next call ", 900 - difference_time)
+            print("Wait for next call ", 900-difference_time)
 
 
-keywords = ['precaution', 'preventions', 'precautions', 'prevention', 'covid', 'corona', 'donation', 'fund', 'donating',
-            'donations']  # for stream
+
+keywords = ['precaution', 'preventions', 'precautions', 'prevention', 'covid', 'corona', 'donation', 'fund', 'donating','donations']  # for stream
 start_date = '202202271220'
 end_date = '202203291220'
 api = connect_with_twitter()
@@ -141,6 +155,14 @@ keywords1 = "donation covid"
 # crawler_object.dump_in_database(tweets)
 #
 # for tweet in tweets:
+#     print(tweet)
+#
+# for i in range(10):
+#     crawler_object.fetch_tweets_from_archive_api(keywords1,last_time_for_search_30_api)
+#     print("time is ", last_time_for_search_30_api)
+
+# for i in range(5):
+#     tweet = crawler_object.fetch_tweets_from_search_api(keywords1)
 #     print(tweet)
 
 
