@@ -3,8 +3,6 @@ import tweepy
 from datetime import datetime
 
 from twiiter.config import access_token,access_token_secret,consumer_secret,consumer_key
-from twiiter.twitter_api_connector import connect_with_twitter
-
 
 config = [access_token_secret,access_token,consumer_secret,consumer_key]
 
@@ -25,7 +23,7 @@ class StreamListener(tweepy.Stream):
             tweet_id = status.id_str
             my_data = {'_id': str(tweet_id),'tweet':full_text,'country':country,'created_at':str(created_date)}
             print("stream",my_data)
-            import mongodb.producer as prod
+            import pub_sub.producer as prod
             prod.my_producer.send('sendingdata', value=my_data)
 
 
@@ -80,7 +78,7 @@ class TweetCrawler:
         '''
 
         n = 200
-        query =keywords1 +" AND Covid"+  "-filter:retweets"
+        query =keywords1 +" covid"+  "-filter:retweets"
         current_time = datetime.now()
         difference_time = 0
         global last_time_for_search_api
@@ -92,7 +90,7 @@ class TweetCrawler:
         if last_time_for_search_api == "" or difference_time > 900:
 
             try:
-                tweets = tweepy.Cursor(api.search_tweets, q=query, lang="en", tweet_mode="extended").items(n)
+                tweets = tweepy.Cursor(self.api.search_tweets, q=query, lang="en", tweet_mode="extended").items(n)
                 if tweets.next():
                     return tweets
                 # return tweets
@@ -103,7 +101,7 @@ class TweetCrawler:
                 last_time_for_search_api = datetime.now()
 
             except Exception as e:
-                print("Some error happened ")
+                print("Some error happened ", e)
 
         elif difference_time <= 900 :
             print("DONT CALL WAIT FOR ", int(900- difference_time))

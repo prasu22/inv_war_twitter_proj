@@ -131,7 +131,7 @@ def preprocess_top_100_words(message):
                                                        {'$inc': {'count': 1}})
 
 
-def preprocess_top_10_precaustion_word(message):
+def preprocess_top_10_precaution_word(message):
     """
            store the data in collection after manupulation in mongodb collection top_10_preventive_words
            :collection schema
