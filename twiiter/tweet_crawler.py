@@ -1,10 +1,9 @@
 import sys
 import tweepy
 from datetime import datetime
+
 from twiiter.config import access_token,access_token_secret,consumer_secret,consumer_key
 from twiiter.twitter_api_connector import connect_with_twitter
-
-
 
 
 config = [access_token_secret,access_token,consumer_secret,consumer_key]
@@ -15,16 +14,19 @@ current_time = datetime.now()
 
 
 class StreamListener(tweepy.Stream):
-
     def on_status(self,status):
         if hasattr(status,'extended_tweet') and status.user.location != None:
             full_text = status.extended_tweet['full_text']
             country = status.user.location
             # print("stream: ",status.created_at)
             created_at = status.created_at
+            new_dt = str(created_at)[:19]
+            created_date = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S')
             tweet_id = status.id_str
-            my_data = {'_id': str(tweet_id),'tweet':full_text,'country':country,'created_at':str(created_at)}
-            print(my_data)
+            my_data = {'_id': str(tweet_id),'tweet':full_text,'country':country,'created_at':str(created_date)}
+            print("stream",my_data)
+            import mongodb.producer as prod
+            prod.my_producer.send('sendingdata', value=my_data)
 
 
     def on_error(self,status_code):
@@ -61,8 +63,6 @@ class TweetCrawler:
         try:
             streamListener = StreamListener(config[3], config[2], config[1], config[0])
             streamListener.filter(track=keywords, languages=['en'])
-
-
         except Exception as e:
             print("message is ",e)
 
@@ -80,7 +80,7 @@ class TweetCrawler:
         '''
 
         n = 200
-        query = keywords1 +" -filter:retweets"
+        query =keywords1 +" AND Covid"+  "-filter:retweets"
         current_time = datetime.now()
         difference_time = 0
         global last_time_for_search_api
@@ -140,12 +140,12 @@ class TweetCrawler:
 
 
 
-keywords = ['precaution', 'preventions', 'precautions', 'prevention', 'covid', 'corona', 'donation', 'fund', 'donating','donations']  # for stream
-start_date = '202202271220'
-end_date = '202203291220'
-api = connect_with_twitter()
-crawler_object = TweetCrawler(config, api)
-keywords1 = "donation covid"
+# keywords = ['precaution', 'preventions', 'precautions', 'prevention', 'covid', 'corona', 'donation', 'fund', 'donating','donations']  # for stream
+# start_date = '202202271220'
+# end_date = '202203291220'
+# api = connect_with_twitter()
+# crawler_object = TweetCrawler(config, api)
+# keywords1 = "donation covid"
 
 # tweets = crawler_object.fetch_tweets_from_archive_api(keywords1,last_time_for_search_30_api)
 # tweets = crawler_object.fetch_tweets_from_search_api(keywords1,last_time_for_search_api)
@@ -168,3 +168,6 @@ keywords1 = "donation covid"
 
 
 
+# crawler_object = TweetCrawler(config)
+# api = connect_with_twitter()
+# crawler_object.fetch_tweets_from_stream("covid")

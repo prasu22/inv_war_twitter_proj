@@ -1,13 +1,6 @@
-#this module contains all schema definitions in mongo and help save data in respective collections
-#this module contains all schema definitions in mongo and help save data in respective collections
-#dependencies list:-
-
-# required import libraries
 from pymongo import MongoClient
 from pymongo.errors import CollectionInvalid
 import urllib
-from twiiter.twitter_api_connector import *
-from datetime import datetime
 
 # ======================================================================================================================
 def mongodb_connection():
@@ -91,26 +84,6 @@ def create_database(db_name,db_collection):
 # ======================================================================================================================
 
 # ======================================================================================================================
-# def connect_with_collection_random():
-#     """connection with tweet_random collection
-#        :param
-#        con = store the connection details
-#        db_name = database name
-#        db = mongodb return the database in this variable
-#     """
-#     try:
-#         con = mongodb_connection()
-#         db_name = "tweet_db"
-#         db = con[db_name]
-#         if "tweet_random" not in db.list_collection_names():
-#             return create_database(db,"tweet_random")
-#         return db["tweet_random"]
-#     except Exception as e:
-#         print(f'Error occured: {e}')
-#         return "404"
-# ======================================================================================================================
-
-# ======================================================================================================================
 def connect_with_collection_data():
     """connection with tweet_random collection
        :param
@@ -132,33 +105,33 @@ def connect_with_collection_data():
         return "404"
 # ======================================================================================================================
 
-# ======================================================================================================================
-def insert_data_in_mongodb():
-    """Insert the data into mongodb fetch from twitter
-        :param
-        coll = store the collection of mongodb atlas
-        api = store the connection detail of the twitter api
-        keyword = value based on which we want to fetch data
-        tweets_data = data return from the twitter store in this variable
-    """
-    coll = connect_with_collection_data()
-    api = connect_with_twitter()
-    keyword = "donation -filter: retweets"
-    tweets_data = collect_with_keyword(api,keyword)
-    for tweet in tweets_data:
-        location = tweet._json['user']['location']
-        if len(location) >0:
-            id = tweet._json['id']
-            status = api.get_status(id=id,tweet_mode="extended")
-            full_text = status.full_text
-            created_at = tweet._json['created_at']
-            new_datetime = datetime.strptime(str(datetime.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y')), '%Y-%m-%d %H:%M:%S')
-            try:
-             coll.insert_one({'_id':str(id),'tweet':full_text,'country':location,'date':new_datetime})
-            except Exception as e:
-                print(e)
-                pass
-# ======================================================================================================================
+# # ======================================================================================================================
+# def insert_data_in_mongodb():
+#     """Insert the data into mongodb fetch from twitter
+#         :param
+#         coll = store the collection of mongodb atlas
+#         api = store the connection detail of the twitter api
+#         keyword = value based on which we want to fetch data
+#         tweets_data = data return from the twitter store in this variable
+#     """
+#     coll = connect_with_collection_data()
+#     api = connect_with_twitter()
+#     keyword = "donation -filter: retweets"
+#     tweets_data = collect_with_keyword(api,keyword)
+#     for tweet in tweets_data:
+#         location = tweet._json['user']['location']
+#         if len(location) >0:
+#             id = tweet._json['id']
+#             status = api.get_status(id=id,tweet_mode="extended")
+#             full_text = status.full_text
+#             created_at = tweet._json['created_at']
+#             new_datetime = datetime.strptime(str(datetime.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y')), '%Y-%m-%d %H:%M:%S')
+#             try:
+#              coll.insert_one({'_id':str(id),'tweet':full_text,'country':location,'date':new_datetime})
+#             except Exception as e:
+#                 print(e)
+#                 pass
+# # ======================================================================================================================
 
 
 

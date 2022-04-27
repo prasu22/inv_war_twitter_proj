@@ -3,10 +3,10 @@ from datetime import datetime
 from json import dumps
 from time import sleep
 from kafka import KafkaProducer
-from twiiter import tweet_crawler
-# from twiiter.streaming_data import StreamListener
-# from twiiter.tweet_crawler import StreamListener
+
+import twiiter.tweet_crawler as tc
 from twiiter.twitter_api_connector import connect_with_twitter
+
 
 my_producer = KafkaProducer(
         bootstrap_servers=['localhost:9092'],
@@ -16,7 +16,9 @@ my_producer = KafkaProducer(
 
 # ======================================================================================================================
 #static keyword list
+
 keywords = ['donation','contribution','@WHO','#WHO','wear mask','use sanitiser','stay home','social distancing','wash hands','precaution','preventions','donation','contribution','covid','precautions','prevention','covid','corona','coronavirus','donation','fund','donating','donations']
+
 # ======================================================================================================================
 
 # ======================================================================================================================
@@ -25,26 +27,31 @@ keywords = ['donation','contribution','@WHO','#WHO','wear mask','use sanitiser',
 # send data to topic after fetch from twitter using search_tweet
 
 api = connect_with_twitter()
-crawler_object = tweet_crawler.TweetCrawler(tweet_crawler.config,api)
+crawler_object = tc.TweetCrawler(tc.config,api)
+
+
 for keyword in keywords:
     tweets_data = crawler_object.fetch_tweets_from_search_api(keyword)
     for tweet in tweets_data:
         country = tweet._json['user']['location']
         if len(country) > 0:
             id = tweet._json['id']
-            status = api.get_status(id=id, tweet_mode="extended")
-            full_text = status.full_text
+            full_text = tweet._json['full_text']
             created_at = tweet._json['created_at']
             new_datetime = datetime.strptime(str(datetime.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y')),'%Y-%m-%d %H:%M:%S')
             try:
                 my_data = {'_id': str(id),'tweet':full_text,'country':country,'created_at':str(new_datetime)}
-                print(my_data)
+                print("search",my_data)
                 my_producer.send('sendingdata', value=my_data)
                 sleep(2)
             except Exception as e:
                 print(e)
                 pass
 # ======================================================================================================================
+# ======================================================================================================================
+# sending data in topic after fetching from twitter stream
+crawler_object.fetch_tweets_from_stream(keywords)
+
 # ======================================================================================================================
 # sending data in topic after fetching data from search_30_days
 # print("list of words",keywords)
@@ -73,9 +80,8 @@ for keyword in keywords:
 #                         print(e)
 #                         pass
 # ======================================================================================================================
-# ======================================================================================================================
-# sending data in topic after fetching from twitter stream
-# print(crawler_object.fetch_tweets_from_stream(keywords))
+
+
 
 
 
