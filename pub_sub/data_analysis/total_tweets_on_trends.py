@@ -7,7 +7,7 @@ economy_keys = ['GDP', 'unemployment', 'employment', 'layoffs', 'market', 'stock
 
 
 
-def overall_tweets_based_on_trends(message,db):
+def analysis_overall_tweets_based_on_trends(message,db):
     """
            store the data in collection after based on  trend  in different collection like if trend is covid than data insert in impact_analysis_on_covid_keys collection or if trend is economy then data insert in impact_analysis_on_economy_keys
            :collection schema
@@ -30,20 +30,20 @@ def overall_tweets_based_on_trends(message,db):
     if covid_trend_data and country_data:
         country_code = country_data['country_code']
         country = country_data['country']
-        if db['impact_analysis_on_covid_keys'].count_documents({"country":country,"trend":"covid"})==0:
-            db['impact_analysis_on_covid_keys'].insert_one({"country":country,'country_code':country_code,'count':1,"trend":"covid"})
+        if db['a_impact_analysis_on_covid_keys'].count_documents({"country":country,"trend":"covid"})==0:
+            db['a_impact_analysis_on_covid_keys'].insert_one({"country":country,'country_code':country_code,'count':1,"trend":"covid"})
         else:
-            db['impact_analysis_on_covid_keys'].update_one({"country":country,"trend":"covid"},{"$inc":{'count': 1}})
+            db['a_impact_analysis_on_covid_keys'].update_one({"country":country,"trend":"covid"},{"$inc":{'count': 1}})
 
 
 
     if economy_trend_data and country_data:
         country_code = country_data['country_code']
         country = country_data['country']
-        if db['impact_analysis_on_economy_keys'].count_documents({"country": country, "trend": "economy"}) == 0:
-            db['impact_analysis_on_economy_keys'].insert_one({"country": country,'country_code':country_code, 'count': 1, "trend": "economy"})
+        if db['a_impact_analysis_on_economy_keys'].count_documents({"country": country, "trend": "economy"}) == 0:
+            db['a_impact_analysis_on_economy_keys'].insert_one({"country": country,'country_code':country_code, 'count': 1, "trend": "economy"})
         else:
-            db['impact_analysis_on_economy_keys'].update_one({"country": country, "trend": "economy"},
+            db['a_impact_analysis_on_economy_keys'].update_one({"country": country, "trend": "economy"},
                                              {"$inc": {'count': 1}})
 
 

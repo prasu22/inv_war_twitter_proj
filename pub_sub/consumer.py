@@ -1,9 +1,12 @@
 import json
 from kafka import KafkaConsumer
-from mongodb.preprocessing_data_before_insert_in_collection import preprocess_overalltweet,\
-    preprocess_total_tweet_per_country,preprocess_top_100_words,preprocess_top_10_precaustion_word, \
-    preprocess_total_number_of_donation, preprocess_tweets_based_on_trends
 
+from mongodb.mongo_data_connector import mongodb_connection
+from pub_sub.data_analysis.overall_tweets_per_country import overall_tweets_country_wise
+from pub_sub.data_analysis.top_100_words_overall import analysis_top_100_words
+from pub_sub.data_analysis.top_10_precautions import analysis_top_10_preventions
+from pub_sub.data_analysis.total_tweets_on_trends import analysis_overall_tweets_based_on_trends
+from pub_sub.data_analysis.total_tweets_per_country_on_daily_basis import analysis_total_tweet_per_country
 
 """
  fetch the data from topic using consumer and  preprocess that data with for different collection before insertertion in collection
@@ -21,6 +24,8 @@ my_consumer = KafkaConsumer(
         value_deserializer=lambda x: json.loads(x.decode('utf-8'))
     )
 
+conn = mongodb_connection()
+db = conn['tweet_db']
 
 for message in my_consumer:
     message = message.value
@@ -28,17 +33,17 @@ for message in my_consumer:
     try:
         if 'RT @' not in message['tweet']:
             # query1
-            preprocess_overalltweet(message)
+            overall_tweets_country_wise(message, db)
             # query2
-            preprocess_total_tweet_per_country(message)
+            analysis_total_tweet_per_country(message,db)
             # query3
-            preprocess_top_100_words(message)
+            analysis_top_100_words(message,db)
             # query5
-            preprocess_top_10_precaustion_word(message)
+            analysis_top_10_preventions(message,db)
             # query6
-            preprocess_total_number_of_donation(message)
+            # preprocess_total_number_of_donation(message)
             # query8
-            preprocess_tweets_based_on_trends(message)
+            analysis_overall_tweets_based_on_trends(message,db)
     except Exception as e:
         print(f"error {e}")
         pass

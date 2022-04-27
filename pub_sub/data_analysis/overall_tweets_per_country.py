@@ -31,14 +31,14 @@ def overall_tweets_country_wise(message, db):
         values = {'country': country, 'month': month, 'count': 1}
         print("last n month", values.keys(), values.values())
         if values is not None:
-            if db['overall_tweet_per_country'].count_documents(
+            if db['a_overall_tweet_per_country'].count_documents(
                     {"country": values['country'], "month": values['month']}) == 0:
                 # print("adsf",db)
-                db['overall_tweet_per_country'].insert_one(
+                db['a_overall_tweet_per_country'].insert_one(
                     {'count': values['count'], 'country': values['country'], 'country_code': country_code,'month': values['month']})
                 # print("happys",db['overall_tweet_per_country'].find())
             else:
-                db['overall_tweet_per_country'].update_one(
+                db['a_overall_tweet_per_country'].update_one(
                     {"country": values['country'], "month": values['month']}, {'$inc': {'count': 1}})
 
 

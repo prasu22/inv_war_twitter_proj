@@ -81,7 +81,7 @@ def preprocess_total_tweet_per_country(message):
     """
     print("query 2 called")
     new_dt = str(message['created_at'])[:19]
-    created_at = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S')
+    created_at = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S').date()
     print(created_at)
     country = message['country']
     # print("overalltweet_per_country",country)

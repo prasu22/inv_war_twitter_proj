@@ -5,7 +5,7 @@ from pub_sub.data_extraction.extract_tweets_by_keywords import get_tweets_with_k
 prevention_list = ['mask','sanitiser','stay home','social distancing','wash hands']
 list_of_who = ['#who','@who']
 
-def top_10_preventions(message,db):
+def analysis_top_10_preventions(message,db):
 
     prevention_data = get_tweets_with_keyword(message,prevention_list)
     who_word = get_tweets_with_keyword(message,list_of_who)
@@ -18,10 +18,10 @@ def top_10_preventions(message,db):
         country = country_data['country']
         for words in list_of_words:
             word = words.title()
-            if db['top_10_prevention_country_code'].count_documents({"word":word,"country_code":country_code})==0:
-                db['top_10_prevention_country_code'].insert_one({'word':word,"country_code":country_code,'country':country,'count':1})
+            if db['a_top_10_prevention_country_code'].count_documents({"word":word,"country_code":country_code})==0:
+                db['a_top_10_prevention_country_code'].insert_one({'word':word,"country_code":country_code,'country':country,'count':1})
             else:
-                db['top_10_prevention_country_code'].update_one({'word': word, "country_code": country_code},{'$inc':{'count':1}})
+                db['a_top_10_prevention_country_code'].update_one({'word': word, "country_code": country_code},{'$inc':{'count':1}})
         print("inserted_success fully")
 
 
