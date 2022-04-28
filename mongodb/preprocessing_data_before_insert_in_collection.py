@@ -1,7 +1,7 @@
 from datetime import datetime
 import re
 from mongodb.mongo_data_connector import mongodb_connection
-from rest_flask.data_cleaning import clean_tweet
+from pub_sub.data_analytics.data_cleaning import clean_tweet
 
 # connection with mongodb database
 conn = mongodb_connection()

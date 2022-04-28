@@ -76,7 +76,7 @@ class TweetCrawler:
         if rate limit is reached, raises exception ratelimit reached
         '''
         n = 200
-        query =keywords1 +" AND covid"+  "-filter:retweets"
+        query =keywords1 + " covid"+  " -filter:retweets"
         current_time = datetime.now()
         difference_time = 0
         global last_time_for_search_api

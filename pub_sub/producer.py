@@ -23,7 +23,7 @@ my_producer = KafkaProducer(
 # ======================================================================================================================
 #static keyword list
 
-keywords = ["Money","donate","fund","charity",'donation','contribution',"amount donated",'@WHO','#WHO','wear mask','use sanitiser','stay home','social distancing','wash hands','precaution','preventions','donation','contribution','covid','precautions','prevention','covid','corona','coronavirus','donation','fund','donating','donations']
+keywords = ['#WHO',"vaccination","vaccine","booster dose","Stay Safe",'use sanitiser','stay home','social distancing','wash hands','precaution','covid','precautions','prevention','GDP', 'unemployment', 'employment', 'death', 'hospitalisation',"Money",'@WHO','mask','precaution','corona',"donate","fund","charity",'donation','contribution',"amount donated",'#WHO',"vaccination","vaccine","booster dose","Stay Safe",'use sanitiser','stay home','social distancing','wash hands','precaution','covid','precautions','prevention','corona','coronavirus','donation','fund','donating','donations']
 
 
 # ======================================================================================================================

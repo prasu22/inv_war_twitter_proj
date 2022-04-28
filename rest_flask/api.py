@@ -4,8 +4,8 @@ from flask import Flask, request
 import json
 from analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, total_tweet_per_country_on_daily_basis, \
     top_100_words_tweeted_in_world
-from mongodb.mongo_data_connector import connect_with_collection_data, mongodb_connection
-from data_cleaning import *
+from mongodb.mongo_data_connector import connect_with_collection_data
+from pub_sub.data_analytics.data_cleaning import *
 from bson import json_util
 
 app = Flask(__name__)
