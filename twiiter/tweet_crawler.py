@@ -119,7 +119,7 @@ class TweetCrawler:
 
         if  last_time_for_search_30_api == "" or difference_time > 900:
             try:
-                tweets = tweepy.Cursor(api.search_30_day, label="research", query=query, maxResults=100,romDate=start_date, toDate=end_date).items()
+                tweets = tweepy.Cursor(self.api.search_30_day, label="research", query=query, maxResults=100,romDate=start_date, toDate=end_date).items()
                 if tweets.next():
                     return tweets
 

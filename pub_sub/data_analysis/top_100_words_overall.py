@@ -39,5 +39,7 @@ def analysis_top_100_words(message,db):
                     db['a_top_100_words'].update_one({'word': words.title(), "country": country},
                                                    {'$inc': {'count': 1}})
                 # print(words)
-
+            return True
+    else:
+        return False
 # preprocess_top_100_words({'tweet':'coronavirus and is my sajshjjd asdas de','country':'united kingdom','created_at':'2022-04-27 06:54:04','id':'123'})

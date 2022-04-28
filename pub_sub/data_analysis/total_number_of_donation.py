@@ -22,5 +22,8 @@ def analysis_of_total_number_of_donation(message,db):
                 db['a_total_number_of_donation_per_country'].insert_one({'count': 1, 'country': country,'country_code': country_code,"amount":amount,"currency":currency})
             else:
                 db['a_total_number_of_donation_per_country'].update_one({"country": country},{'$inc': {'count': 1,"amount":amount}})
-            print("inserted data success fullly")
+            print("donation part inserted data success fullly")
+            return True
+        else:
+            return False
 # analysis_of_total_number_of_donation({"tweet":"people donate in covid for poor people or affected people $3234","country":"India"})

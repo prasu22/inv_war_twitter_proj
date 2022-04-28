@@ -41,7 +41,9 @@ def overall_tweets_country_wise(message, db):
                 db['a_overall_tweet_per_country'].update_one(
                     {"country": values['country'], "month": values['month']}, {'$inc': {'count': 1}})
 
-
+            return True
+    else:
+        return False
 
 # overall_tweets_country_wise({'tweet':'coronavirus','country':'india','created_at':'2022-04-27 06:54:04','id':'123'})
 

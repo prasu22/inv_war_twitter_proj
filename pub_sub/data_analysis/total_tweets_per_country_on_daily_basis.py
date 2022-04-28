@@ -38,5 +38,9 @@ def analysis_total_tweet_per_country(message,db):
             else:
                 db['a_overall_tweet_per_country_on_daily_basis'].update_one({"country":daily_basis_tweet['country'],"date":str(daily_basis_tweet['date'])},{'$inc':{'count':1}})
 
-
+            return True
+        else:
+            return False
+    else:
+        return False
 # preprocess_total_tweet_per_country({'tweet':'coronavi','country':'united kingdom','created_at':'2022-04-27 06:54:04','id':'123'})

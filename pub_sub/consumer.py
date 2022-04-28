@@ -8,6 +8,7 @@ from pub_sub.data_analysis.top_10_precautions import analysis_top_10_preventions
 from pub_sub.data_analysis.total_number_of_donation import analysis_of_total_number_of_donation
 from pub_sub.data_analysis.total_tweets_on_trends import analysis_overall_tweets_based_on_trends
 from pub_sub.data_analysis.total_tweets_per_country_on_daily_basis import analysis_total_tweet_per_country
+from pub_sub.data_extraction.save_raw_data import get_tweets
 
 """
  fetch the data from topic using consumer and  preprocess that data with for different collection before insertertion in collection
@@ -32,19 +33,28 @@ for message in my_consumer:
     message = message.value
     print(message['created_at'])
     try:
-        if 'RT @' not in message['tweet']:
+        flag = 0
+        if 'RT @' not in message['tweet'] and db['tweet_data'].count_documents({'_id':message['_id']})==0:
             # query1
-            # overall_tweets_country_wise(message, db)
+            if overall_tweets_country_wise(message, db):
+              flag=1
             # # query2
-            # analysis_total_tweet_per_country(message,db)
+            if analysis_total_tweet_per_country(message,db):
+                flag=1
             # # query3
-            # analysis_top_100_words(message,db)
+            if analysis_top_100_words(message,db):
+                flag=1
             # # query5
-            # analysis_top_10_preventions(message,db)
+            if analysis_top_10_preventions(message,db):
+                flag=1
             # query6
-            analysis_of_total_number_of_donation(message,db)
+            if analysis_of_total_number_of_donation(message,db):
+                flag=1
             # query8
-            # analysis_overall_tweets_based_on_trends(message,db)
+            if analysis_overall_tweets_based_on_trends(message,db):
+                flag=1
+            if flag==1:
+                get_tweets(message,db)
     except Exception as e:
         print(f"error {e}")
         pass
