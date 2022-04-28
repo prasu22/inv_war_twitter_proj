@@ -1,7 +1,5 @@
 from pub_sub.data_analytics.data_cleaning import clean_tweet
-from pub_sub.data_extraction.extract_all_words import get_all_the_words
-from pub_sub.data_extraction.extract_country_code_1 import get_country_code
-from pub_sub.data_extraction.extract_tweets_by_keywords import get_tweets_with_keyword
+
 
 
 

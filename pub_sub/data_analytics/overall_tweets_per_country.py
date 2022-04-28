@@ -1,8 +1,7 @@
 # get overall tweets per country last n months
 
 from datetime import datetime
-from pub_sub.data_extraction.extract_country_code_1 import get_country_code
-from pub_sub.data_extraction.extract_tweets_by_keywords import get_tweets_with_keyword
+
 
 keyword = ['covid', 'virus', 'coronavirus']
 

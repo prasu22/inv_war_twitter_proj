@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pub_sub.data_extraction.extract_country_code_1 import get_country_code
+
 
 def analysis_total_tweet_per_country(message,db):
     """
@@ -15,7 +15,7 @@ def analysis_total_tweet_per_country(message,db):
         :passing argument
         message : dictionary storing information of tweet
         :param
-        new_dt = extract only date and time in string format
+        new_dt = data_extract only date and time in string format
         created_at = convert string date object format
         country = store the country name
         daily_basis_tweet = store the dictionary

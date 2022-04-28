@@ -8,14 +8,14 @@ from pub_sub.data_analytics.total_number_of_donation import analysis_of_total_nu
 from pub_sub.data_analytics.total_tweets_on_trends import analysis_overall_tweets_based_on_trends
 from pub_sub.data_analytics.total_tweets_on_trends_per_day import analysis_overall_tweets_based_on_trends_per_day
 from pub_sub.data_analytics.total_tweets_per_country_on_daily_basis import analysis_total_tweet_per_country
-from pub_sub.extract.extract_trending_data import get_tweets_with_trending_covid_keywords, \
+from pub_sub.data_extract.extract_trending_data import get_tweets_with_trending_covid_keywords, \
     get_tweets_with_trending_economy_keywords
-from pub_sub.extract.save_raw_data import get_tweets
-from pub_sub.extract.extract_country_code import get_country_code
-from pub_sub.extract.extract_donation_amount_and_currency import get_donation_amount, get_donation_currency, \
+from pub_sub.data_extract.save_raw_data import get_tweets
+from pub_sub.data_extract.extract_country_code import get_country_code
+from pub_sub.data_extract.extract_donation_amount_and_currency import get_donation_amount, get_donation_currency, \
     get_donation_keywords
-from pub_sub.extract.extract_prevention_keywords import get_prevention_keywords, get_who_keywords
-from pub_sub.extract.extract_tweets_by_keywords import get_tweets_with_keyword
+from pub_sub.data_extract.extract_prevention_keywords import get_prevention_keywords, get_who_keywords
+from pub_sub.data_extract.extract_tweets_by_keywords import get_tweets_with_keyword
 
 """
  fetch the data from topic using consumer and  preprocess that data with for different collection before insertertion in collection

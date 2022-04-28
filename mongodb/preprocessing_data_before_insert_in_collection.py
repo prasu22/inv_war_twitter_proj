@@ -30,9 +30,9 @@ def preprocess_overalltweet(message):
         :passing argument
         message : dictionary storing information of tweet
         :param
-        new_dt = extract only date and time in string format
+        new_dt = data_extract only date and time in string format
         created_at = convert string date object format
-        month = extract the month number and store in this variable
+        month = data_extract the month number and store in this variable
         values = store the dictionary
     """
     print("query 1 called")
@@ -74,7 +74,7 @@ def preprocess_total_tweet_per_country(message):
         :passing argument
         message : dictionary storing information of tweet
         :param
-        new_dt = extract only date and time in string format
+        new_dt = data_extract only date and time in string format
         created_at = convert string date object format
         country = store the country name
         daily_basis_tweet = store the dictionary
@@ -145,7 +145,7 @@ def preprocess_top_10_precaution_word(message):
            :passing argument
            message : dictionary storing information of tweet
            :param
-           new_dt = extract only date and time in string format
+           new_dt = data_extract only date and time in string format
            created_at = convert string date object format
            country = store the country name
            word_list = store all the words match in tweet
