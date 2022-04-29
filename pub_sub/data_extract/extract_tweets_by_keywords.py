@@ -1,18 +1,13 @@
-# code for keywords
-
 import re
 
-COVID_KEYWORDS = ['covid', 'virus', 'coronavirus']
+from comman_variables.variable_files import COVID_KEYWORDS, COVID_KEYWORD_KEY, TWEET_KEY
+
 
 def get_tweets_with_keyword(message):
     list_of_covid_keywords = []
-    if re.compile('|'.join(COVID_KEYWORDS ),re.IGNORECASE).search(message['tweet']):
-        list_of_covid_keywords = re.compile('|'.join(COVID_KEYWORDS), re.IGNORECASE).findall(message['tweet'])
-    message["covid_keywords"] = list_of_covid_keywords
+    if re.compile('|'.join(COVID_KEYWORDS), re.IGNORECASE).search(message[TWEET_KEY]):
+        list_of_covid_keywords = re.compile('|'.join(COVID_KEYWORDS), re.IGNORECASE).findall(message[TWEET_KEY])
+    else:
+        print("data is not found")
+    message[COVID_KEYWORD_KEY] = list_of_covid_keywords
     return message
-
-
-
-# print(get_tweets_with_keyword({'tweet':'covid is not good'},['aditya','corona']))
-
-

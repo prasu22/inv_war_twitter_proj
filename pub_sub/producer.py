@@ -1,4 +1,4 @@
-#importing required libraries
+# importing required libraries
 from datetime import datetime
 from json import dumps
 from time import sleep
@@ -15,16 +15,20 @@ from twiiter.twitter_api_connector import connect_with_twitter
   
 """
 my_producer = KafkaProducer(
-        bootstrap_servers=['localhost:9092'],
-        api_version=(0, 11, 5),
-        value_serializer=lambda x: dumps(x).encode('utf-8')
-    )
+    bootstrap_servers=['localhost:9092'],
+    api_version=(0, 11, 5),
+    value_serializer=lambda x: dumps(x).encode('utf-8')
+)
 
 # ======================================================================================================================
-#static keyword list
+# static keyword list
 
-keywords = ['#WHO',"vaccination","vaccine","booster dose","Stay Safe",'use sanitiser','stay home','social distancing','wash hands','precaution','covid','precautions','prevention','GDP', 'unemployment', 'employment', 'death', 'hospitalisation',"Money",'@WHO','mask','precaution','corona',"donate","fund","charity",'donation','contribution',"amount donated",'#WHO',"vaccination","vaccine","booster dose","Stay Safe",'use sanitiser','stay home','social distancing','wash hands','precaution','covid','precautions','prevention','corona','coronavirus','donation','fund','donating','donations']
-
+keywords = ['#WHO', "vaccination", "vaccine", "booster dose", "Stay Safe", 'use sanitiser', 'stay home',
+            'social distancing', 'wash hands', 'precaution', 'covid', 'precautions', 'prevention', 'GDP',
+            'unemployment', 'employment', 'death', 'hospitalisation', "Money", '@WHO', 'mask', 'precaution', 'corona',
+            "donate", "fund", "charity", 'donation', 'contribution', "amount donated", '#WHO', "vaccination", "vaccine",
+            "booster dose", "Stay Safe", 'use sanitiser', 'stay home', 'social distancing', 'wash hands', 'precaution',
+            'covid', 'precautions', 'prevention', 'corona', 'coronavirus', 'donation', 'fund', 'donating', 'donations']
 
 # ======================================================================================================================
 
@@ -34,8 +38,7 @@ keywords = ['#WHO',"vaccination","vaccine","booster dose","Stay Safe",'use sanit
 # send data to topic after fetch from twitter using search_tweet
 
 api = connect_with_twitter()
-crawler_object = tc.TweetCrawler(tc.config,api)
-
+crawler_object = tc.TweetCrawler(tc.config, api)
 
 for keyword in keywords:
     tweets_data = crawler_object.fetch_tweets_from_search_api(keyword)
@@ -45,10 +48,11 @@ for keyword in keywords:
             id = tweet._json['id']
             full_text = tweet._json['full_text']
             created_at = tweet._json['created_at']
-            new_datetime = datetime.strptime(str(datetime.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y')),'%Y-%m-%d %H:%M:%S')
+            new_datetime = datetime.strptime(str(datetime.strptime(created_at, '%a %b %d %H:%M:%S +0000 %Y')),
+                                             '%Y-%m-%d %H:%M:%S')
             try:
-                my_data = {'_id': str(id),'tweet':full_text,'country':country,'created_at':str(new_datetime)}
-                print("search",my_data)
+                my_data = {'_id': str(id), 'tweet': full_text, 'country': country, 'created_at': str(new_datetime)}
+                print("search", my_data)
                 my_producer.send('sendingdata', value=my_data)
                 sleep(2)
             except Exception as e:
@@ -87,11 +91,3 @@ crawler_object.fetch_tweets_from_stream(keywords)
 #                         print(e)
 #                         pass
 # ======================================================================================================================
-
-
-
-
-
-
-
-

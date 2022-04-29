@@ -1,21 +1,41 @@
+from comman_variables.variable_files import COLL_OF_TOP_10_PREVENTIVE_WORDS
 
+from comman_variables.variable_files import COUNTRY_NAME_KEY ,COUNTRY_CODE_KEY ,PREVENTION_KEYWORDS_KEY ,WHO_KEYWORDS_KEY ,WORD_KEY,COUNT_KEY
+def analysis_top_10_preventions(message, db):
+    """
+               store the data in collection after manupulation in mongodb collection top_10_preventive_words
+               :collection schema
+                 {
+                   _id: objectid
+                   country:string
+                   country_code: string
+                   count: int
+                   word: string
+                }
+               :passing argument
+               message : dictionary storing information of tweet
+               db : store the database
+               :param
+               prevention_data = store the list of prevention keyword present in tweet
+               who_word = store the list of WHO keyword present in tweet
+               country_name = store the country name present in message
+               country_code = store the country code
+        """
 
-def analysis_top_10_preventions(message,db):
-
-    prevention_data = message['prevention_keywords']
-    who_word = message['WHO_keywords']
-    country_name = message['country']
-    country_code = message['country_code']
+    prevention_data = message[PREVENTION_KEYWORDS_KEY]
+    who_word = message[WHO_KEYWORDS_KEY]
+    country_name = message[COUNTRY_NAME_KEY]
+    country_code = message[COUNTRY_CODE_KEY]
 
     if len(prevention_data) > 0 and len(who_word) > 0:
         for words in prevention_data:
             word = words.title()
-            if db['a_top_10_prevention_country_code'].count_documents({"word":word,"country_code":country_code})==0:
-                db['a_top_10_prevention_country_code'].insert_one({'word':word,"country_code":country_code,'country':country_name,'count':1})
+            if db[COLL_OF_TOP_10_PREVENTIVE_WORDS].count_documents({WORD_KEY: word, COUNTRY_CODE_KEY: country_code}) == 0:
+                db[COLL_OF_TOP_10_PREVENTIVE_WORDS].insert_one(
+                    {WORD_KEY: word, COUNTRY_CODE_KEY: country_code, COUNTRY_NAME_KEY: country_name, COUNT_KEY: 1})
             else:
-                db['a_top_10_prevention_country_code'].update_one({'word': word, "country_code": country_code},{'$inc':{'count':1}})
-        print("i am in analysis_top_10_preventions")
+                db[COLL_OF_TOP_10_PREVENTIVE_WORDS].update_one({WORD_KEY: word, COUNTRY_CODE_KEY: country_code},
+                                                               {'$inc': {COUNT_KEY: 1}})
+    else:
+        print("data is not found")
 
-
-
-# top_10_preventions({'tweet':'coronavirus and is my sajshjjd asdas mask de sanitiser , #who wash a hands','country':'united kingdom','created_at':'2022-04-27 06:54:04','id':'123'})

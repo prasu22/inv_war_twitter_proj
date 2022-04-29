@@ -2,10 +2,10 @@ from datetime import datetime
 from mongodb.mongo_data_connector import mongodb_connection
 
 conn = mongodb_connection()
-db = conn['tweet_db']
-coll_overall_tweet = db['overall_tweet_per_country']
-coll_total_tweet_on_daily_basis = db['overall_tweet_per_country_on_daily_basis']
-coll_top_100_words = db['top_100_words']
+db = conn['tweet_new_db']
+coll_overall_tweet = db['a_overall_tweet_per_country']
+coll_total_tweet_on_daily_basis = db['a_overall_tweet_per_country_on_daily_basis']
+coll_top_100_words = db['a_top_100_words']
 
 def overall_tweet_per_country_in_last_n_month(country,date):
     """

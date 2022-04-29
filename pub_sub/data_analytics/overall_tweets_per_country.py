@@ -1,34 +1,47 @@
-# get overall tweets per country last n months
-
 from datetime import datetime
 
+from comman_variables.variable_files import COLL_OF_TOTAL_TWEET_PER_COUNTRY, CREATED_AT_KEY, COVID_KEYWORD_KEY, \
+    COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, MONTH_KEY, COUNT_KEY
 
-keyword = ['covid', 'virus', 'coronavirus']
-
-
-# db needs to be taken care of
 
 def overall_tweets_country_wise(message, db):
+    """
+        store the data in collection after manupulation in mongodb collection overall_tweet_per_country
+        :collection schema
+         {
+           _id: objectid
+           country:string
+           country_code: string
+           count: int
+           month: int
+        }
+        :passing argument
+        message : dictionary storing information of tweet
+        :param
+        new_dt = data_extract only date and time in string format
+        created_at = convert string date object format
+        month = data_extract the month number and store in this variable
+        result = store the list of covid keywords
+        country_name =  store the country name
+        country_code = store the country code
+    """
 
-    new_dt = str(message['created_at'])[:19]
+    new_dt = str(message[CREATED_AT_KEY])[:19]
     created_at = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S')
-    print(created_at)
-    # created_at = datetime.strptime(message['created_at'], '%Y-%m-%d %H:%M:%S')
     month = created_at.month
-    print("date", created_at.month)
-    result = len(message['covid_keywords'])
-    country = message['country']
-    country_code = message['country_code']
+    result = len(message[COVID_KEYWORD_KEY])
+    country_name = message[COUNTRY_NAME_KEY]
+    country_code = message[COUNTRY_CODE_KEY]
 
-    # print(result, country_data)
     if result > 0:
-        if db['a_overall_tweet_per_country'].count_documents({"country": country, "month": month}) == 0:
-            # print("adsf",db)
-            db['a_overall_tweet_per_country'].insert_one({'count': 1, 'country':country, 'country_code': country_code,'month': month})
-            # print("happys",db['overall_tweet_per_country'].find())
+
+        if db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].count_documents({COUNTRY_NAME_KEY: country_name, MONTH_KEY: month}) == 0:
+            db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].insert_one(
+                {COUNT_KEY: 1, COUNTRY_NAME_KEY: country_name, COUNTRY_CODE_KEY: country_code, MONTH_KEY: month})
         else:
-            db['a_overall_tweet_per_country'].update_one({"country": country, "month": month}, {'$inc': {'count': 1}})
-        print("i am in overall_tweets_country_wise")
-# overall_tweets_country_wise({'tweet':'coronavirus','country':'india','created_at':'2022-04-27 06:54:04','id':'123'})
+            db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].update_one({COUNTRY_NAME_KEY: country_name, MONTH_KEY: month},
+                                                           {'$inc': {COUNT_KEY: 1}})
+    else:
+        print("data is not found")
 
 

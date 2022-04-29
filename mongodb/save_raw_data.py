@@ -3,7 +3,6 @@
 
 
 def get_tweets(message,db):
-
     try:
         tweet_raw_data = db['tweet_extract_data']
         # print(message)

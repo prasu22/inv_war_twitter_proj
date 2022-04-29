@@ -10,7 +10,7 @@ from pub_sub.data_analytics.total_tweets_on_trends_per_day import analysis_overa
 from pub_sub.data_analytics.total_tweets_per_country_on_daily_basis import analysis_total_tweet_per_country
 from pub_sub.data_extract.extract_trending_data import get_tweets_with_trending_covid_keywords, \
     get_tweets_with_trending_economy_keywords
-from pub_sub.data_extract.save_raw_data import get_tweets
+from mongodb.save_raw_data import get_tweets
 from pub_sub.data_extract.extract_country_code import get_country_code
 from pub_sub.data_extract.extract_donation_amount_and_currency import get_donation_amount, get_donation_currency, \
     get_donation_keywords
@@ -25,28 +25,25 @@ from pub_sub.data_extract.extract_tweets_by_keywords import get_tweets_with_keyw
 """
 
 my_consumer = KafkaConsumer(
-        'sendingdata',
-        bootstrap_servers=['localhost : 9092'],
-        auto_offset_reset='earliest',
-        enable_auto_commit=True,
-        group_id='my-group',
-        value_deserializer=lambda x: json.loads(x.decode('utf-8'))
-    )
+    'sendingdata',
+    bootstrap_servers=['localhost : 9092'],
+    auto_offset_reset='earliest',
+    enable_auto_commit=True,
+    group_id='my-group',
+    value_deserializer=lambda x: json.loads(x.decode('utf-8'))
+)
 
 conn = mongodb_connection()
 db = conn['tweet_new_db']
+
 print(my_consumer)
-
-
-
-
 
 for message in my_consumer:
     message = message.value
     print(message['created_at'])
     try:
-        #remove dublicate data condition
-        if 'RT @' not in message['tweet'] and db['tweet_extract_data'].count_documents({"_id":message['_id']})==0:
+        # remove dublicate data condition
+        if 'RT @' not in message['tweet'] and db['tweet_extract_data'].count_documents({"_id": message['_id']}) == 0:
             # extraction part
             updated_msg = get_country_code(message)
             updated_msg = get_tweets_with_keyword(updated_msg)
@@ -63,17 +60,17 @@ for message in my_consumer:
             message = updated_msg
             overall_tweets_country_wise(message, db)
             # query2
-            analysis_total_tweet_per_country(message,db)
+            analysis_total_tweet_per_country(message, db)
             # query3
-            analysis_top_100_words(message,db)
+            analysis_top_100_words(message, db)
             # query5
-            analysis_top_10_preventions(message,db)
+            analysis_top_10_preventions(message, db)
             # query6
-            analysis_of_total_number_of_donation(message,db)
+            analysis_of_total_number_of_donation(message, db)
             # query 7
             analysis_overall_tweets_based_on_trends_per_day(message, db)
             # query8
-            analysis_overall_tweets_based_on_trends(message,db)
+            analysis_overall_tweets_based_on_trends(message, db)
 
     except Exception as e:
         print(f"error {e}")
