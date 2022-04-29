@@ -1,6 +1,6 @@
 # saurav's credentials
-access_token="1510911074362482692-9Sor1XlkKgt8bF3MwZoIfXaDxwwXBj"
-access_token_secret="kaPREImp3RH1X6zRLz8dIxf4Ysd9lx2Uk9HRT8PcrO46y"
-consumer_key="pAcIUd6Mw7UJbhxX1pe8bklqu"
-consumer_secret="mkFW2pG6QW3ZN3l2GLoEuGPQTWarmm1tHvFrDsTMgcvrZwmFOS"
-bearer_token="AAAAAAAAAAAAAAAAAAAAADl2bAEAAAAAi2HNust24k6Uq67b4sY7dPvYkUs%3DxgldY8eGtTFQfjEsdVAjLBmqA0vrsIS5F6bh4lXqZrrp73rECN"
+access_token = "1510911074362482692-9Sor1XlkKgt8bF3MwZoIfXaDxwwXBj"
+access_token_secret = "kaPREImp3RH1X6zRLz8dIxf4Ysd9lx2Uk9HRT8PcrO46y"
+consumer_key = "pAcIUd6Mw7UJbhxX1pe8bklqu"
+consumer_secret = "mkFW2pG6QW3ZN3l2GLoEuGPQTWarmm1tHvFrDsTMgcvrZwmFOS"
+bearer_token = "AAAAAAAAAAAAAAAAAAAAADl2bAEAAAAAi2HNust24k6Uq67b4sY7dPvYkUs%3DxgldY8eGtTFQfjEsdVAjLBmqA0vrsIS5F6bh4lXqZrrp73rECN"

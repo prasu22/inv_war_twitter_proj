@@ -7,8 +7,16 @@ from analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, 
 from mongodb.mongo_data_connector import connect_with_collection_data
 from pub_sub.data_analytics.data_cleaning import *
 from bson import json_util
+# from dotenv import load_dotenv
+import os
+from configparser import ConfigParser
 
 app = Flask(__name__)
+
+file = os.getenv("ADDRESS")
+config = ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
+config.read(file)
+
 
 
 @app.route('/')
@@ -383,8 +391,8 @@ def impact_analysis(country):
     # keyword = 'covid'
     # trend = 'economy'
 
-    covid_keys = ['death', 'hospitalisation', 'medicine', ]
-    economy_keys = ['GDP', 'unemployment', 'employment', 'layoffs', 'market', 'stock', 'index']
+    covid_keys = list(map(str, config.getlist('covid', 'keywords')))
+    economy_keys = list(map(str, config.getlist('economy', 'keywords')))
 
     try:
         db = connect_with_collection_data()

@@ -1,12 +1,11 @@
 # This module contains all functions/routine to fetch data from twitter using tweepy
 
 
-
 import tweepy
-from twiiter.config import consumer_key,consumer_secret,access_token,access_token_secret
+from twiiter.config import consumer_key, consumer_secret, access_token, access_token_secret
+
 
 def connect_with_twitter():
-
     try:
         auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
         auth.set_access_token(access_token, access_token_secret)
@@ -15,8 +14,3 @@ def connect_with_twitter():
 
     except:
         print("ERROR AUTHENTICATION FAILED ")
-
-
-
-
-
