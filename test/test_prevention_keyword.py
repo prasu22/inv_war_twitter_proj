@@ -1,7 +1,7 @@
 import unittest
 
-from common_variables.variable_files import PREVENTION_KEYWORDS_KEY, WHO_KEYWORDS_KEY
-from pub_sub.data_extract.extract_prevention_keywords import get_prevention_keywords, get_who_keywords
+from src.common.variable_files import PREVENTION_KEYWORDS_KEY, WHO_KEYWORDS_KEY
+from src.pub_sub import get_prevention_keywords, get_who_keywords
 
 
 class MyTestCase(unittest.TestCase):

@@ -1,7 +1,7 @@
 import unittest
 
-from common_variables.variable_files import DONATION_AMOUNT_KEY, CURRENCY_NAME_KEY, DONATION_KEYWORDS_KEY
-from pub_sub.data_extract.extract_donation_amount_and_currency import get_donation_amount, get_donation_currency, \
+from src.common.variable_files import DONATION_AMOUNT_KEY, CURRENCY_NAME_KEY, DONATION_KEYWORDS_KEY
+from src.pub_sub import get_donation_amount, get_donation_currency, \
     get_donation_keywords
 
 

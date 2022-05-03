@@ -1,5 +1,5 @@
 import unittest
-from pub_sub.data_extract.extract_country_code import get_country_code
+from src.pub_sub import get_country_code
 
 
 class MyTestCase(unittest.TestCase):
