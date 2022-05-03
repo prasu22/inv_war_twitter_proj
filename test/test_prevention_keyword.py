@@ -1,10 +1,10 @@
 import unittest
 
 from common_variables.variable_files import PREVENTION_KEYWORDS_KEY, WHO_KEYWORDS_KEY
-from pub_sub.data_extract.extract_prevention_keywords import get_prevention_keywords, get_who_keywords
+from pub_sub.data_extract.preventive_keywords_extractor import get_prevention_keywords, get_who_keywords
 
 
-class MyTestCase(unittest.TestCase):
+class TestPreventionKeywords(unittest.TestCase):
 
     def test_prevention_keyword_case_1(self):
 

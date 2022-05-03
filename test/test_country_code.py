@@ -1,8 +1,8 @@
 import unittest
-from pub_sub.data_extract.extract_country_code import get_country_code
+from pub_sub.data_extract.country_code_extractor import get_country_code
 
 
-class MyTestCase(unittest.TestCase):
+class TestCountryCode(unittest.TestCase):
 
     def test_country_code_case_1(self):
 

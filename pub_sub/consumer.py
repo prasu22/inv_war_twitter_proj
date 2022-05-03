@@ -8,14 +8,14 @@ from pub_sub.data_analytics.total_number_of_donation import analysis_of_total_nu
 from pub_sub.data_analytics.total_tweets_on_trends import analysis_overall_tweets_based_on_trends
 from pub_sub.data_analytics.total_tweets_on_trends_per_day import analysis_overall_tweets_based_on_trends_per_day
 from pub_sub.data_analytics.total_tweets_per_country_on_daily_basis import analysis_total_tweet_per_country
-from pub_sub.data_extract.extract_trending_words import get_tweets_with_trending_covid_keywords, \
+from pub_sub.data_extract.trending_keyword_extractor import get_tweets_with_trending_covid_keywords, \
     get_tweets_with_trending_economy_keywords
 from mongodb.insert_data_in_mongo import insert_preprocessed_data
-from pub_sub.data_extract.extract_country_code import get_country_code
-from pub_sub.data_extract.extract_donation_amount_and_currency import get_donation_amount, get_donation_currency, \
+from pub_sub.data_extract.country_code_extractor import get_country_code
+from pub_sub.data_extract.donation_data_extractor import get_donation_amount, get_donation_currency, \
     get_donation_keywords
-from pub_sub.data_extract.extract_prevention_keywords import get_prevention_keywords, get_who_keywords
-from pub_sub.data_extract.extract_covid_keywords import  get_covid_keywords
+from pub_sub.data_extract.preventive_keywords_extractor import get_prevention_keywords, get_who_keywords
+from pub_sub.data_extract.covid_keywords_extractor import  get_covid_keywords
 
 """
  fetch the data from topic using consumer and  preprocess that data with for different collection before insertertion in collection
