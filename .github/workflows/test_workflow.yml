@@ -23,7 +23,11 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access 
       
-      - name: Checkout repo
-        uses: actions/checkout@v2
+#       - name: Checkout repo
+#         uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          path: develop
       - name: Run tests
-        run: python ./test/test_all_extractors.py
+        run: python test/test_all_extractors.py
