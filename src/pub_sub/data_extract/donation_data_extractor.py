@@ -1,5 +1,5 @@
 import logging
-from configparser import ConfigParser
+from src import APP_CONFIG
 
 LOGGER = logging.getLogger(__name__)
 import re
@@ -8,10 +8,8 @@ from src.common.variable_files import DEFAULT_AMOUNT, CURRENCY_MAPPING, DEFAULT_
 
 
 
-file = '../../common/config.ini'
-config = ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
-config.read(file)
-DONATION_KEYWORDS = list(map(str, config.getlist('keywords', 'DONATION_KEYWORDS')))
+
+DONATION_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'DONATION_KEYWORDS')))
 
 
 def get_donation_amount(message):
@@ -66,6 +64,7 @@ def get_donation_keywords(message):
         return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
 
 
 

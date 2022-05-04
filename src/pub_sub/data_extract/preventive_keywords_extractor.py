@@ -1,15 +1,13 @@
 import logging
-from configparser import ConfigParser
+from src import APP_CONFIG
 
 LOGGER = logging.getLogger(__name__)
 import re
 from src.common.variable_files import PREVENTION_KEYWORDS_KEY, WHO_KEYWORDS_KEY, TWEET_KEY
 
-file = '../../common/config.ini'
-config = ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
-config.read(file)
-PREVENTION_KEYWORDS = list(map(str, config.getlist('keywords', 'PREVENTION_KEYWORDS')))
-WHO_KEYWORDS = list(map(str, config.getlist('keywords', 'WHO_KEYWORDS')))
+
+PREVENTION_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'PREVENTION_KEYWORDS')))
+WHO_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'WHO_KEYWORDS')))
 
 def get_prevention_keywords(message):
     list_of_prevention_keywords = []

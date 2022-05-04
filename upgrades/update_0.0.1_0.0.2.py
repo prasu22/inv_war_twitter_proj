@@ -8,15 +8,18 @@ db = con[db_name]
 # collection name
 COLLECTION_NAME = "tweet_extract_data"
 
+
 def update_currency_value(collection_name):
-    db[collection_name].update_many({'currency_name':'NO_Currency'},{'$set':{'currency_name':'no currency'}})
+    db[collection_name].update_many({'currency_name': 'NO_Currency'}, {'$set': {'currency_name': 'no currency'}})
+
 
 def update_country_values(collection_name):
-    db[collection_name].update_many({'country': 'Not Found'}, {'$set': {'country': 'no country','country_code':'no country code'}})
+    db[collection_name].update_many({'country': 'Not Found'},
+                                    {'$set': {'country': 'no country', 'country_code': 'no country code'}})
+
 
 def update_collection_name(collection_name):
     db[collection_name].rename("save_raw_data")
-
 
 # update_currency_value(COLLECTION_NAME)
 # update_country_values(COLLECTION_NAME)

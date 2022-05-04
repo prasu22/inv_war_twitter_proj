@@ -1,16 +1,14 @@
 
 import logging
-from configparser import ConfigParser
+from src import APP_CONFIG
 
 LOGGER = logging.getLogger(__name__)
 import re
 from src.common.variable_files import COVID_KEYWORD_KEY, TWEET_KEY
 
 
-file = '../../common/config.ini'
-config = ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
-config.read(file)
-COVID_KEYWORDS = list(map(str, config.getlist('keywords', 'COVID_KEYWORDS')))
+COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS')))
+
 
 def get_covid_keywords(message):
     list_of_covid_keywords = []
@@ -23,6 +21,9 @@ def get_covid_keywords(message):
         return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
+
+
 
 
 
