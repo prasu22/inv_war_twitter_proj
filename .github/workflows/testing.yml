@@ -22,5 +22,7 @@ jobs:
           pip install flake8 pytest
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Run test
-        run: python inv_war_twitter_proj/test/test_all_extractor.py
+        working-directory: inv_war_twitter_proj/test
+        run: |
+         python ./test/test_all_extractor.py
           
