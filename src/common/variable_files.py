@@ -9,13 +9,13 @@ DONATION_KEYWORDS = ["donation","Money","contribution","donate","contribute","fu
 DEFAULT_CURRENCY_NAME = "No Currency"
 DEFAULT_AMOUNT = 0
 # ======================================================================================================================
-PREVENTION_KEYWORDS = ['mask','sanitiser','stay home','social distancing','wash hands',"vaccination","vaccine","booster dose","Stay Safe"]
-WHO_KEYWORDS = ["@WHO","#WHO","World health organization"]
+# PREVENTION_KEYWORDS = ['mask','sanitiser','stay home','social distancing','wash hands',"vaccination","vaccine","booster dose","Stay Safe"]
+# WHO_KEYWORDS = ["@WHO","#WHO","World health organization"]
 # ======================================================================================================================
-COVID_KEYS = ['death*', 'hospit*', 'medicin*','vaccin*' ]
-ECONOMY_KEYS = ['GDP', 'employment', 'layoff', 'market', 'stock', 'index']
+# COVID_KEYS = ['death', 'hospitalisation', 'medicine','vaccine' ]
+# ECONOMY_KEYS = ['GDP', 'unemployment', 'layoff', 'market', 'stock', 'index','employment']
 # ======================================================================================================================
-COVID_KEYWORDS = ['covid', 'virus', 'coronavirus','corona']
+# COVID_KEYWORDS = ['covid', 'virus', 'coronavirus','corona']
 # ======================================================================================================================
 
 # All collection names from data analytics directory

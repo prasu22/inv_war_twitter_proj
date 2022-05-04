@@ -1,11 +1,11 @@
 import unittest
 
 from src.common.variable_files import DONATION_AMOUNT_KEY, CURRENCY_NAME_KEY, DONATION_KEYWORDS_KEY
-from src.pub_sub import get_donation_amount, get_donation_currency, \
+from src.pub_sub.data_extract.donation_data_extractor import get_donation_amount, get_donation_currency, \
     get_donation_keywords
 
 
-class MyTestCase(unittest.TestCase):
+class TestDonationDetails(unittest.TestCase):
 
     def test_donation_amount_case_1(self):
 

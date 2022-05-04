@@ -2,12 +2,9 @@ import logging
 LOGGER = logging.getLogger(__name__)
 import re
 
-from src.common.variable_files import COUNTRY_CODE_MAPPED, COUNTRY_NAME, COUNTRY_CODE, COUNTRY_NAME_KEY, \
-    COUNTRY_CODE_KEY
+from src.common.variable_files import COUNTRY_CODE_MAPPED, COUNTRY_NAME, COUNTRY_CODE, COUNTRY_NAME_KEY,COUNTRY_CODE_KEY
 
 
-
-LOGGER.info("hello this is new log")
 
 def get_country_code(message):
     list_of_country = list(COUNTRY_CODE_MAPPED.keys())

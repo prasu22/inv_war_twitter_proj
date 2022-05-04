@@ -1,12 +1,12 @@
 import unittest
 
 from src.common.variable_files import COVID_TRENDING_KEYWORD_KEY, ECONOMY_TRENDING_KEYWORD_KEY
-from src.pub_sub import get_tweets_with_trending_covid_keywords, \
+from src.pub_sub.data_extract.trending_keywords_extractor import get_tweets_with_trending_covid_keywords, \
     get_tweets_with_trending_economy_keywords
 
 
-class MyTestCase(unittest.TestCase):
-    def test_trending_word_containg_single_required_covid_keyword(self):
+class TestTrendingKeywords(unittest.TestCase):
+    def test_trending_word_containing_single_required_covid_keyword(self):
         message = {'tweet':"in 2021 the death count of people due to corona is very high"}
         result = get_tweets_with_trending_covid_keywords(message)
         self.assertEqual(result[COVID_TRENDING_KEYWORD_KEY],['death'])
@@ -38,3 +38,4 @@ class MyTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+

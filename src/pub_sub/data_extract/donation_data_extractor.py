@@ -1,8 +1,15 @@
 import logging
+from src import APP_CONFIG
+
 LOGGER = logging.getLogger(__name__)
 import re
-from src.common.variable_files import DEFAULT_AMOUNT, CURRENCY_MAPPING, DONATION_KEYWORDS, DEFAULT_CURRENCY_NAME, \
+from src.common.variable_files import DEFAULT_AMOUNT, CURRENCY_MAPPING, DEFAULT_CURRENCY_NAME, \
     DONATION_AMOUNT_KEY, TWEET_KEY, CURRENCY_NAME_KEY, DONATION_KEYWORDS_KEY
+
+
+
+
+DONATION_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'DONATION_KEYWORDS')))
 
 
 def get_donation_amount(message):
@@ -57,6 +64,9 @@ def get_donation_keywords(message):
         return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
+
+
 
 
 

@@ -1,7 +1,13 @@
+
 import logging
+from src import APP_CONFIG
+
 LOGGER = logging.getLogger(__name__)
 import re
-from src.common.variable_files import COVID_KEYWORDS, COVID_KEYWORD_KEY, TWEET_KEY
+from src.common.variable_files import COVID_KEYWORD_KEY, TWEET_KEY
+
+
+COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS')))
 
 
 def get_covid_keywords(message):
@@ -15,4 +21,10 @@ def get_covid_keywords(message):
         return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
+
+
+
+
+
 

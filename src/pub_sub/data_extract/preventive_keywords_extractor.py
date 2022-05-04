@@ -1,9 +1,13 @@
 import logging
+from src import APP_CONFIG
+
 LOGGER = logging.getLogger(__name__)
 import re
-from src.common.variable_files import PREVENTION_KEYWORDS, WHO_KEYWORDS, PREVENTION_KEYWORDS_KEY, \
-    WHO_KEYWORDS_KEY, TWEET_KEY
+from src.common.variable_files import PREVENTION_KEYWORDS_KEY, WHO_KEYWORDS_KEY, TWEET_KEY
 
+
+PREVENTION_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'PREVENTION_KEYWORDS')))
+WHO_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'WHO_KEYWORDS')))
 
 def get_prevention_keywords(message):
     list_of_prevention_keywords = []
@@ -31,3 +35,5 @@ def get_who_keywords(message):
         return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
+

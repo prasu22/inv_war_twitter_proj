@@ -1,17 +1,20 @@
+# country_code_extractor
+# include all the test_case in one file
+
 import unittest
 
 from src.common.variable_files import COVID_KEYWORD_KEY
-from src.pub_sub.data_extract.extract_covid_keywords import get_covid_keywords
+from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
 
 
-class MyTestCase(unittest.TestCase):
+class TestCovidKeywords(unittest.TestCase):
 
     def test_covid_keywords_case_1(self):
 
         # single match of keyword
-        message = {'tweet': 'corona affects many lifes this year.'}
+        message = {'tweet': 'corona affects many life this year.'}
         result = get_covid_keywords(message)
-        self.assertEqual(result[COVID_KEYWORD_KEY],['corona'])
+        self.assertEqual(list(result[COVID_KEYWORD_KEY]),['corona'])
 
     def test_covid_keywords_case_2(self):
 

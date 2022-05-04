@@ -1,8 +1,14 @@
 import logging
+
+from src import APP_CONFIG
+
 LOGGER = logging.getLogger(__name__)
 import re
-from src.common.variable_files import COVID_KEYS, ECONOMY_KEYS, COVID_TRENDING_KEYWORD_KEY, \
-    ECONOMY_TRENDING_KEYWORD_KEY, TWEET_KEY
+from src.common.variable_files import COVID_TRENDING_KEYWORD_KEY,ECONOMY_TRENDING_KEYWORD_KEY, TWEET_KEY
+
+
+COVID_KEYS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYS')))
+ECONOMY_KEYS = list(map(str, APP_CONFIG.getlist('keywords', 'ECONOMY_KEYS')))
 
 
 def get_tweets_with_trending_covid_keywords(message):
@@ -29,4 +35,6 @@ def get_tweets_with_trending_economy_keywords(message):
         return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
+
 
