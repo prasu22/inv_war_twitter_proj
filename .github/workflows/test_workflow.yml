@@ -26,4 +26,4 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v2
       - name: Run tests
-        run: python develop/test/test_all_extractors.py
+        run: python ./test/test_all_extractors.py
