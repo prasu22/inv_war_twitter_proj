@@ -25,9 +25,10 @@ my_producer = KafkaProducer(
 # ======================================================================================================================
 # static keyword list
 
-keywords = ["#coronavirus", "#covid", "#pandemic", "#death", "#mask", "@DonationCovid", "@19-donation", "@COVID_WHO",
-            "@COVID_DRUGS", "#donation ", "#WHO ", "#CDC ", "@WHO ", "@CDC ", "@Health ", "@mask ",
-             "#vaccination ", "#sanitiser", "#coronavirus","#precaution", "#prevention", "#vaccines", "@plasmahelp", "@DonationIND"]
+keywords = ['dangerous to the society',"This is test tweet","This is new test tweet with some hashtags",'This is another test tweet']
+            #                                                                  "#coronavirus", "#covid", "#pandemic", "#death", "#mask", "@DonationCovid", "@19-donation", "@COVID_WHO",
+            # "@COVID_DRUGS", "#donation ", "#WHO ", "#CDC ", "@WHO ", "@CDC ", "@Health ", "@mask ",
+            #  "#vaccination ", "#sanitiser", "#coronavirus","#precaution", "#prevention", "#vaccines", "@plasmahelp", "@DonationIND"]
 
 # ======================================================================================================================
 

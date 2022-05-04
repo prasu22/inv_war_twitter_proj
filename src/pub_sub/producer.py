@@ -44,12 +44,12 @@ keywords = ['GDP','unemployment', 'employment','stock market','index','market','
 api = connect_with_twitter()
 crawler_object = tc.TweetCrawler(tc.config, api)
 #
-# for keyword in keywords:
-#    search_api_to_insert_data_in_topic(crawler_object,my_producer,keyword)
+for keyword in keywords:
+   search_api_to_insert_data_in_topic(crawler_object,my_producer,keyword)
 
 # ======================================================================================================================
 # sending data in topic after fetching from twitter stream
-crawler_object.fetch_tweets_from_stream(keywords)
+# crawler_object.fetch_tweets_from_stream(keywords)
 
 # ======================================================================================================================
 # sending data in topic after fetching data from search_30_days
