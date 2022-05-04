@@ -1,7 +1,7 @@
 import unittest
 
-from common_variables.variable_files import COVID_TRENDING_KEYWORD_KEY, ECONOMY_TRENDING_KEYWORD_KEY
-from pub_sub.data_extract.trending_keyword_extractor import get_tweets_with_trending_covid_keywords, \
+from src.common.variable_files import COVID_TRENDING_KEYWORD_KEY, ECONOMY_TRENDING_KEYWORD_KEY
+from src.pub_sub.data_extract.trending_keywords_extractor import get_tweets_with_trending_covid_keywords, \
     get_tweets_with_trending_economy_keywords
 
 

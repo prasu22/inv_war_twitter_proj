@@ -3,8 +3,9 @@
 
 import unittest
 
-from common_variables.variable_files import COVID_KEYWORD_KEY
-from pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
+from src.common.variable_files import COVID_KEYWORD_KEY
+from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
+
 
 class TestCovidKeywords(unittest.TestCase):
 

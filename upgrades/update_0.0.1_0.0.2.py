@@ -1,4 +1,4 @@
-from mongodb.mongo_data_connector import mongodb_connection
+from src.mongodb.mongo_data_connector import mongodb_connection
 
 DATABASE_NAME = "tweet_new_db"
 con = mongodb_connection()
