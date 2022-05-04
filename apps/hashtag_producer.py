@@ -13,7 +13,7 @@ from src.twitter.twitter_api_connector import connect_with_twitter
   my_producer =  initialize the kafka producer
   crawler_object = creating object of class TweetCrawler
   keywords  = list of keyword based on which we fetch tweet
-  
+
 """
 
 my_producer = KafkaProducer(
@@ -25,14 +25,9 @@ my_producer = KafkaProducer(
 # ======================================================================================================================
 # static keyword list
 
-keywords = ['GDP','unemployment', 'employment','stock market','index','market','#WHO', "vaccination", "vaccine", "booster dose", "Stay Safe", 'use sanitiser', 'stay home',
-            'social distancing', 'wash hands', 'precaution', 'covid', 'precautions', 'prevention',  'death', 'hospitalisation', "Money", '@WHO', 'mask', 'precaution', 'corona',
-            "donate", "fund", "charity", 'donation', 'contribution', "amount donated", '#WHO', "vaccination", "vaccine",
-            "booster dose", "Stay Safe", 'use sanitiser', 'stay home', 'social distancing', 'wash hands', 'precaution',
-            'covid', 'precautions', 'prevention', 'corona', 'coronavirus', 'donation', 'fund', 'donating', 'donations']
-# keywords = ["#coronavirus", "#covid", "#pandemic", "#death", "#mask", "@DonationCovid", "@19-donation", "@COVID_WHO",
-#             "@COVID_DRUGS", "#donation ", "#WHO ", "#CDC ", "@WHO ", "@CDC ", "@Health ", "@mask ",
-#              "#vaccination ", "#sanitiser", "#coronavirus","#precaution", "#prevention", "#vaccines", "@plasmahelp", "@DonationIND"]
+keywords = ["#coronavirus", "#covid", "#pandemic", "#death", "#mask", "@DonationCovid", "@19-donation", "@COVID_WHO",
+            "@COVID_DRUGS", "#donation ", "#WHO ", "#CDC ", "@WHO ", "@CDC ", "@Health ", "@mask ",
+             "#vaccination ", "#sanitiser", "#coronavirus","#precaution", "#prevention", "#vaccines", "@plasmahelp", "@DonationIND"]
 
 # ======================================================================================================================
 

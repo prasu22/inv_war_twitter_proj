@@ -387,8 +387,8 @@ def top_10_preventions_country_wise():
 #     # keyword = 'covid'
 #     # trend = 'economy'
 #
-#     covid_keys = list(map(str, config.getlist('covid', 'keywords')))
-#     economy_keys = list(map(str, config.getlist('economy', 'keywords')))
+    # covid_keys = list(map(str, config.getlist('covid', 'keywords')))
+    # economy_keys = list(map(str, config.getlist('economy', 'keywords')))
 #
 #     try:
 #         db = connect_with_collection_data()
