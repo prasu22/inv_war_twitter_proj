@@ -21,5 +21,8 @@ jobs:
       
       - name: Checkout repo
         uses: actions/checkout@v2
-      - name: Run tests
-        run: python test/test_all_extractors.py
+      - name: Run test
+        run: |
+         git branch -a
+         python test/test*.py
+
