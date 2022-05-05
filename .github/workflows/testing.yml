@@ -25,5 +25,5 @@ jobs:
         run: |
          pwd
          git branch -a
-         python test/test_all_extractors.py
+         python test/test*.py
           
