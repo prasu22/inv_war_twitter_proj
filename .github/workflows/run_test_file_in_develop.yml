@@ -30,6 +30,7 @@ jobs:
         run: |
           pwd
           git branch -a
-          export PYTHONPATH = src
+          $PATH
+          export PYTHONPATH=src
           python test/test_country_code.py 
           
