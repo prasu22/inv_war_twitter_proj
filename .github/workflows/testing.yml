@@ -25,5 +25,5 @@ jobs:
       - name: Run test
         run: |
          pwd
-         python ../../../../tst.py
+         python /home/runner/work/inv_war_twitter_proj/inv_war_twitter_proj/tst.py
           
