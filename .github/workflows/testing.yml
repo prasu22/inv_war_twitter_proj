@@ -25,5 +25,5 @@ jobs:
       - name: Run test
         run: |
          pwd
-         python ../../tst.py
+         python ../../../../tst.py
           
