@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Run tests
+name: read_file_in_main_branch
 
 # Controls when the workflow will run
 on:
