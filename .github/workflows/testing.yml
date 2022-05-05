@@ -25,5 +25,6 @@ jobs:
       - name: Run test
         run: |
          pwd
+         git branch -a
          python /home/runner/work/inv_war_twitter_proj/inv_war_twitter_proj/tst.py
           
