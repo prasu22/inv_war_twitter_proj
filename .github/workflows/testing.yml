@@ -1,6 +1,9 @@
 name: Python package
 
-on: [push]
+on:
+  push:
+    branches:
+      - 'develop'
 
 jobs:
   build:
@@ -23,7 +26,6 @@ jobs:
           python -m pip install --upgrade pip
       - name: Run test
         run: |
-         pwd
          git branch -a
          python test/test*.py
           
