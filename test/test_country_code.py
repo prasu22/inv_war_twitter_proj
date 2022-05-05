@@ -1,4 +1,8 @@
 import unittest
+import os
+
+ROOT_PATH = os.path.dirname(os.path.abspath(__file__))
+print(ROOT_PATH)
 
 from src.common.variable_files import COUNTRY_CODE_KEY
 from src.pub_sub.data_extract.country_code_extractor import get_country_code
