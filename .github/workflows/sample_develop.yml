@@ -30,4 +30,4 @@ jobs:
         run: |
           pwd
           git branch -a
-          python hello.py
+          python test/test*.py
