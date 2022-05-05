@@ -30,7 +30,5 @@ jobs:
         run: |
           pwd
           git branch -a
-          sys.path
-          python test/test_all_extractors.py
-          pwd
+          python -m unittest test/test_country_code.py 
           
