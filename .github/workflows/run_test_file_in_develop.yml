@@ -30,6 +30,7 @@ jobs:
         run: |
           pwd
           git branch -a
+          sys.path
           python test/test_all_extractors.py
           pwd
           
