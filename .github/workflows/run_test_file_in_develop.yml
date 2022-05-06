@@ -29,5 +29,6 @@ jobs:
       - name: Run a multi-line script
         run: |
           pwd
+          python setup.py
           python test/test_country_code.py 
           
