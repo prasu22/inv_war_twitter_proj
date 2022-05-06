@@ -27,7 +27,7 @@ For encryption and decryption the data, first we need to install some dependensi
 
 - PBKDF2 (Password Based Key Derivation Function 2) is typically used for deriving a cryptographic key from a password.
 
-> 
+### Creating encryption Key
 > password_provided = <String>
 > 
 > password = password_provided.encode()
@@ -51,6 +51,8 @@ now key is created. so we save this key in file to use it later.
 - OS module in Python provides functions for creating and removing a directory (folder), fetching its contents, changing and identifying the current directory, etc.
 
 - Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key
+  
+  ### Defining Encryption and Decryption function
 
 > def read_key():
 
