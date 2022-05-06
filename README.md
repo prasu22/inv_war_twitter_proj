@@ -8,10 +8,10 @@ Training mock project
 
 This example is made to work with the Connecting the MongoDB Atlas with Airflow.
 
-In order to create the image of docker, clone the puckel/docker-airflow
+In order to create the image of docker, clone the repository
 
 ```
-git clone https://github.com/puckel/docker-airflow.git
+git clone https://github.com/prasu22/inv_war_twitter_proj.git
 ```
 
 install dependencies with by copying requirements.txt in the root.
