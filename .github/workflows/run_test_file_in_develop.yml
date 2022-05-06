@@ -29,8 +29,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           pwd
-          pip freeze > requirements.txt
-          pip install . 
-          pip list
           python test/test_country_code.py 
           
