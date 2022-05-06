@@ -1,12 +1,12 @@
-#Encryption in Python
+# Encryption in Python
 There are two type of encryption in python:-
 1. Symmetric Encryption
 2. Asymmetric Encryption
 
-###Symmtric Encryption
+### Symmtric Encryption
 In symmetric Encryption We use single key for encryption and decryption.
 
-###Asymmetric Encryption
+### Asymmetric Encryption
 In Asymmetric Encryption we use two public and private key for encryption and decryption. The public key is available on internet so the sender can encrypt the message using public key and the private is available only to the receiver so the receiver only can decrypt that message.
 
 ### Symmertic encryption used in this project
