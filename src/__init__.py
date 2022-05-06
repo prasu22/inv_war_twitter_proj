@@ -2,8 +2,8 @@ import logging
 import os
 from configparser import ConfigParser
 
-from src.common.variable_files import COUNTRY_CODE_KEY
-from src.pub_sub.data_extract.country_code_extractor import get_country_code
+from src.common import variable_files
+from src.pub_sub import data_extract
 
 from logging.handlers import TimedRotatingFileHandler
 
