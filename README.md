@@ -1,5 +1,5 @@
 # inv_war_twitter_proj
-<<<<<<< Updated upstream
+
 Training mock project 
 
 
@@ -62,4 +62,4 @@ docker-compose -f docker-compose-LocalExecutor.yml up -d
 ```
 =======
 Training mock project
->>>>>>> Stashed changes
+
