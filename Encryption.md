@@ -53,7 +53,7 @@ now key is created. so we save this key in file to use it later.
 
 - Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key
   
-  
+### Functions
 
 > def read_key():
 
