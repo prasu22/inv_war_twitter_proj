@@ -2,9 +2,6 @@ import logging
 import os
 from configparser import ConfigParser
 
-from src.common import variable_files
-from src.pub_sub import data_extract
-
 from logging.handlers import TimedRotatingFileHandler
 
 LOG_FILE_NAME = "/tmp/var/log/twitter_proj/services.log"
