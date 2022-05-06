@@ -43,6 +43,7 @@ For encryption and decryption the data, first we need to install some dependensi
 
 In above code we assign a string to password_provided, which is converted in byte using encode function and assign to password. we create a random byte string and assign it to salt. Now the **PBKDF2HMAC** create an object to derive the key based on password. Using **base64.urlsafe_b64encode** we can encode the string using url and file system safe alphabets into the binary form.
 now key is created. so we save this key in file to use it later.
+### Import libraries for Encryption and Decryption
 
 >import os
 > 
@@ -52,7 +53,7 @@ now key is created. so we save this key in file to use it later.
 
 - Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key
   
-  ### Defining Encryption and Decryption function
+  
 
 > def read_key():
 
