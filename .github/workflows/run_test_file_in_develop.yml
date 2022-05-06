@@ -29,5 +29,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           mkdir -p /tmp/var/log/twitter_proj
-          export PYTHONPATH=. && python test/test_country_code.py 
+          export PYTHONPATH=. && python test/test_all_extractors.py 
           
