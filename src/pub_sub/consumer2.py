@@ -31,7 +31,7 @@ LOGGER = logging.getLogger(__name__)
 """
 
 my_consumer = KafkaConsumer(
-    'random_data',
+    'sendingdata',
     bootstrap_servers=['localhost : 9092'],
     auto_offset_reset='earliest',
     enable_auto_commit=True,

@@ -5,6 +5,7 @@ from test.test_covid_keyword import TestCovidKeywords
 from test.test_donation_amount_and_currency import TestDonationDetails
 from test.test_prevention_keyword import TestPreventionKeywords
 from test.test_trending_keywords import TestTrendingKeywords
+from test.test_encryption_and_decryption import TestEncryptionDecryptionMethod
 
 # from test import TestCountryCode
 # from test import TestCovidKeywords
@@ -21,6 +22,7 @@ class TestAllConsumers(unittest.TestCase):
     TestDonationDetails
     TestPreventionKeywords
     TestTrendingKeywords
+    TestEncryptionDecryptionMethod
 
 
 

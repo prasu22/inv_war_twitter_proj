@@ -9,6 +9,10 @@ DONATION_KEYWORDS = ["donation","Money","contribution","donate","contribute","fu
 DEFAULT_CURRENCY_NAME = "No Currency"
 DEFAULT_AMOUNT = 0
 
+
+# ======================================================================================================================
+
+
 # All collection names from data analytics directory
 COLL_OF_TOTAL_TWEET_PER_COUNTRY = 'a_overall_tweet_per_country'
 COLL_OF_TOP_10_PREVENTIVE_WORDS = 'a_top_10_prevention_country_code'
