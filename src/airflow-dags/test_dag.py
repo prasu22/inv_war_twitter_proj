@@ -2,8 +2,8 @@ import logging
 from datetime import datetime
 
 from airflow import DAG
-from airflow.operators.dummy_operator import DummyOperator
-from airflow.operators.python_operator import PythonOperator
+from airflow.operators.empty import EmptyOperator
+from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 
 from src.common.app_config import APP_CONFIG
@@ -34,9 +34,9 @@ dag = DAG('test_dag',
           start_date=datetime(2018, 11, 1),
           catchup=False)
 
-start = DummyOperator(task_id='start', dag=dag)
+start = EmptyOperator(task_id='start', dag=dag)
 test_utils = PythonOperator(task_id='test_utils', python_callable=my_func)
 test_mongo = PythonOperator(task_id='test_mongo', python_callable=check_mongo_conn)
-end = DummyOperator(task_id='end', dag=dag, trigger_rule=TriggerRule.ONE_SUCCESS)
+end = EmptyOperator(task_id='end', dag=dag, trigger_rule=TriggerRule.ONE_SUCCESS)
 
 start >> test_utils >> test_mongo >> end
