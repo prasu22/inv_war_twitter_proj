@@ -1,6 +1,6 @@
 services:
   rest-api:
-    build: ./docker/rest-api-server
+    build: ./docker/api-server
     restart: always
     container_name: rest-api
     volumes:

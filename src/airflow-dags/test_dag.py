@@ -28,7 +28,7 @@ def check_mongo_conn():
     LOGGER.info(x)
 
 
-dag = DAG('python_dag',
+dag = DAG('test_dag',
           description='Python DAG',
           schedule_interval='*/5 * * * *',
           start_date=datetime(2018, 11, 1),

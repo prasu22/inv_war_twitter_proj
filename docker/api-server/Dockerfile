@@ -25,7 +25,7 @@ RUN apt-get update -yqq && \
 
 
 COPY ./requirements.txt ./requirements.txt
-COPY ./api_server.sh ./api_server.sh
+COPY ./server_start.sh ./server_start.sh
 COPY ./app_config.ini ${APP_DIR}/config/app_config.ini
 
 RUN pip install --upgrade pip && \
@@ -33,13 +33,13 @@ RUN pip install --upgrade pip && \
     pip install -r requirements.txt
 
 
-RUN chmod +x ./api_server.sh
+RUN chmod +x ./server_start.sh
 RUN chown -R restapi: ${API_HOME}
 RUN chown -R restapi: ${APP_DIR}
 
 USER restapi
 WORKDIR ${API_HOME}
 EXPOSE 5056
-ENTRYPOINT [ "/api_server.sh" ]
+ENTRYPOINT [ "/server_start.sh" ]
 
     
