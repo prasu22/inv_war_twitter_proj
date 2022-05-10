@@ -56,8 +56,8 @@ def set_rules(delete):
     # You can adjust the rules if needed
     sample_rules = [
         {
-            "value": "(donation OR Covid OR mask OR stock market OR stay home OR World health organization) lang:en -birthday -is:retweet",
-            "tag": "#Covid #coronavirus #covid-19 "
+            "value": "(sanitiser OR stay donation OR Covid OR mask OR stock market OR stay home OR World health organization) lang:en -birthday -is:retweet",
+            "tag": "#Covid #coronavirus #covid-19 #WHO #donation #mask"
         }
 
     ]

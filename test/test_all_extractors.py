@@ -7,11 +7,6 @@ from test.test_prevention_keyword import TestPreventionKeywords
 from test.test_trending_keywords import TestTrendingKeywords
 from test.test_encryption_and_decryption import TestEncryptionDecryptionMethod
 
-# from test import TestCountryCode
-# from test import TestCovidKeywords
-# from test import TestDonationDetails
-# from test import TestPreventionKeywords
-# from test import TestTrendingKeywords
 
 
 class TestAllConsumers(unittest.TestCase):

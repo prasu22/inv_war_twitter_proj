@@ -3,7 +3,7 @@ LOGGER = logging.getLogger(__name__)
 import re
 import string
 import nltk as nltk
-
+from cleantext import clean
 nltk.download('stopwords')
 nltk.download('punkt')
 
@@ -26,11 +26,11 @@ def clean_tweet(tweet):
     """
     try:
         tweet = "".join([char for char in tweet if char not in string.punctuation])
-        clean = re.sub("[0-9]", " ", tweet)
-        words = nltk.tokenize.word_tokenize(clean)
+        emoji_remove = clean(tweet, no_emoji=True)
+        only_text = re.sub("[0-9]", " ", emoji_remove)
+        words = nltk.tokenize.word_tokenize(only_text)
         words_new = [i for i in words if i.lower not in stopword and len(i)>3]
         final_list = " ".join(words_new)
         return final_list.lower()
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
-
