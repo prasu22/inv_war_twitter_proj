@@ -1,12 +1,12 @@
-#Encryption in Python
+# Encryption in Python
 There are two type of encryption in python:-
 1. Symmetric Encryption
 2. Asymmetric Encryption
 
-###Symmtric Encryption
+### Symmtric Encryption
 In symmetric Encryption We use single key for encryption and decryption.
 
-###Asymmetric Encryption
+### Asymmetric Encryption
 In Asymmetric Encryption we use two public and private key for encryption and decryption. The public key is available on internet so the sender can encrypt the message using public key and the private is available only to the receiver so the receiver only can decrypt that message.
 
 ### Symmertic encryption used in this project
@@ -27,7 +27,7 @@ For encryption and decryption the data, first we need to install some dependensi
 
 - PBKDF2 (Password Based Key Derivation Function 2) is typically used for deriving a cryptographic key from a password.
 
-> 
+### Creating encryption Key
 > password_provided = <String>
 > 
 > password = password_provided.encode()
@@ -43,6 +43,7 @@ For encryption and decryption the data, first we need to install some dependensi
 
 In above code we assign a string to password_provided, which is converted in byte using encode function and assign to password. we create a random byte string and assign it to salt. Now the **PBKDF2HMAC** create an object to derive the key based on password. Using **base64.urlsafe_b64encode** we can encode the string using url and file system safe alphabets into the binary form.
 now key is created. so we save this key in file to use it later.
+### Import libraries for Encryption and Decryption
 
 >import os
 > 
@@ -51,6 +52,8 @@ now key is created. so we save this key in file to use it later.
 - OS module in Python provides functions for creating and removing a directory (folder), fetching its contents, changing and identifying the current directory, etc.
 
 - Fernet guarantees that a message encrypted using it cannot be manipulated or read without the key
+  
+### Functions
 
 > def read_key():
 
