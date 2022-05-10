@@ -19,9 +19,11 @@ def mongodb_connection():
     """
     usr = APP_CONFIG.get('mongo', 'username')
     pwd = APP_CONFIG.get('mongo', 'password')
+    server = APP_CONFIG.get('mongo', 'servername')
+    default_db = APP_CONFIG.get('mongo', 'database')
     username = urllib.parse.quote_plus(usr)
     password = urllib.parse.quote_plus(pwd)
-    conn_url = f"mongodb+srv://{username}:{password}@cluster0.2tuhc.mongodb.net/tweet_db"
+    conn_url = f"mongodb+srv://{username}:{password}@{server}/{default_db}"
     conn = MongoClient(conn_url, ssl_cert_reqs=ssl.CERT_NONE)
     return conn
 
