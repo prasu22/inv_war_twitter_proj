@@ -1,6 +1,6 @@
 
 import logging
-from src import APP_CONFIG
+from src.common.app_config import APP_CONFIG
 
 LOGGER = logging.getLogger(__name__)
 import re

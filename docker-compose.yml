@@ -1,8 +1,19 @@
-version: "3.9"
 services:
-  web_v019:
-    build: .
+  rest-api:
+    build: ./docker/rest-api-server
+    restart: always
+    container_name: rest-api
+    volumes:
+      - ./src:/opt/restapi/src
     ports:
-      - "8000:5000"
-  # redis:
-  #   image: "redis:alpine"
+      - 5056:5056
+
+  airflow:
+    build: ./docker/airflow
+    restart: always
+    container_name: airflow
+    volumes:
+      - ./src/airflow-dags:/opt/airflow/dags
+      - ./src:/opt/airflow/dags/src
+    ports:
+      - 8080:8080
