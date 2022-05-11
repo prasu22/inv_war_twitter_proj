@@ -1,5 +1,5 @@
 services:
-  rest-api:
+  rest-apipi:
     build: ./docker/api-server
     restart: always
     container_name: rest-api
@@ -16,4 +16,7 @@ services:
       - ./src/airflow-dags:/opt/airflow/dags
       - ./src:/opt/airflow/dags/src
     ports:
-      - 8080:8080
+      - 8000:8080
+
+
+
