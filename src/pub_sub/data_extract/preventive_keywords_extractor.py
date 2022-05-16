@@ -26,7 +26,6 @@ def get_prevention_keywords(message):
 
 
 def get_who_keywords(message):
-    print('WHO keywords')
     list_of_who_keywords = []
     try:
         if re.compile('|'.join(WHO_KEYWORDS), re.IGNORECASE).search(message[TWEET_KEY]):

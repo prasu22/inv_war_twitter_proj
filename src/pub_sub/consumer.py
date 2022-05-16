@@ -3,6 +3,7 @@ import sys
 import json
 from kafka import KafkaConsumer
 
+from src.common.variable_files import DATABASE_TWEET_NEW_DB
 from src.mongodb.mongo_data_connector import mongodb_connection
 from src.pub_sub.data_analytics.overall_tweets_per_country import overall_tweets_country_wise
 from src.pub_sub.data_analytics.top_100_words_overall import analysis_top_100_words
@@ -33,6 +34,7 @@ LOGGER = logging.getLogger(__name__)
 print('hello consumer 1')
 LOGGER.info("this is consumer1")
 print("hello consumer again 1")
+
 my_consumer = KafkaConsumer(
     'random_data',
     bootstrap_servers=['kafka:9092'],
@@ -41,16 +43,13 @@ my_consumer = KafkaConsumer(
     group_id='my-group',
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
-print("now kafkaworking")
 try:
     conn = mongodb_connection()
-    db = conn['tweet_new_db']
+    db = conn[DATABASE_TWEET_NEW_DB]
 except Exception as e:
-    print("mongodb error",{e})
     LOGGER.error(F"ERROR:Connection faild {e}")
     sys.exit()
-print("mongodb access find")
-print(my_consumer)
+
 
 for message in my_consumer:
     message = message.value

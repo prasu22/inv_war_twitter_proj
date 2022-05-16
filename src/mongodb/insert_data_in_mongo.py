@@ -5,7 +5,6 @@ from src.encryption_and_decryption_data.encrypt_and_decryption_data import encry
 LOGGER = logging.getLogger(__name__)
 
 def insert_preprocessed_data(message,db):
-    print('data insert successfully')
     try:
         tweet_raw_data = db['tweet_extract_data']
         if message:

@@ -105,32 +105,4 @@ class TweetCrawler:
         elif difference_time <= 900:
             LOGGER.info(f"DONT CALL WAIT FOR {int(900 - difference_time)}")
 
-    def fetch_tweets_from_30_days_api(self, keywords1, last_time_for_search='', start_date=None, end_date=None):
-
-        query = keywords1 + " lang:en"
-        current_time = datetime.now()
-        difference_time = 0
-
-        global last_time_for_search_30_api
-        last_time_for_search_30_api = last_time_for_search
-
-        if last_time_for_search_30_api != "":
-            difference_time = (current_time - last_time_for_search_30_api).total_seconds()
-
-        if last_time_for_search_30_api == "" or difference_time > 900:
-            try:
-                tweets = tweepy.Cursor(self.api.search_30_day, label="research", query=query, maxResults=100,
-                                       romDate=start_date, toDate=end_date).items()
-                if tweets.next():
-                    return tweets
-
-            except tweepy.TooManyRequests as err:
-                LOGGER.info(f"RATE LIMIT EXCEED, { err}")
-                last_time_for_search_30_api = datetime.now()
-                LOGGER.info(f"last time {last_time_for_search_30_api}")
-
-            except Exception as e:
-                LOGGER.error(f"ERROR:{e}")
-
-        elif difference_time <= 900:
-            LOGGER.info(f"Wait for next call {900 - difference_time}")
+    

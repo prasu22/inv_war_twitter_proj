@@ -56,7 +56,6 @@ def get_donation_currency(message):
 
 
 def get_donation_keywords(message):
-    print('donation keywords')
     list_of_donation_keywords = []
     try:
         if re.compile('|'.join(DONATION_KEYWORDS), re.IGNORECASE).search(message[TWEET_KEY]):

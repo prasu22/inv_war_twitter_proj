@@ -9,7 +9,6 @@ from src.common.variable_files import COUNTRY_CODE_MAPPED, COUNTRY_NAME, COUNTRY
 def get_country_code(message):
     list_of_country = list(COUNTRY_CODE_MAPPED.keys())
     country = re.compile('|'.join(list_of_country), re.IGNORECASE).search(message[COUNTRY_NAME_KEY])
-    print("country_code")
     try:
 
         if country:

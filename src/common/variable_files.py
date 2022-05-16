@@ -14,7 +14,9 @@ DEFAULT_AMOUNT = 0
 
 
 # All collection names from data analytics directory
+DATABASE_TWEET_NEW_DB = "tweet_new_db"
 COLL_OF_TOTAL_TWEET_PER_COUNTRY = 'a_overall_tweet_per_country'
+COLL_TOP_100_WORDS = "a_top_100_words"
 COLL_OF_TOP_10_PREVENTIVE_WORDS = 'a_top_10_prevention_country_code'
 COLL_OF_WORDS_FROM_TWEETS= 'a_top_100_words'
 COLL_OF_DONATION_PER_COUNTRY = 'a_total_number_of_donation_per_country'
@@ -22,7 +24,7 @@ COLL_OF_IMPACT_ANALYSIS_ON_COVID_KEYS = 'a_impact_analysis_on_covid_keys'
 COLL_OF_IMPACT_ANALYSIS_ON_ECONOMY_KEYS = 'a_impact_analysis_on_economy_keys'
 COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_COVID_KEYS = "a_ranking_of_impacted_on_covid_keys_countries"
 COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS = 'a_ranking_of_impacted_on_economy_keys_countries'
-COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS  = "a_overall_tweet_per_country_on_daily_basis"
+COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS = "a_overall_tweet_per_country_on_daily_basis"
 # ======================================================================================================================
 #message dictionary keys
 COUNTRY_NAME_KEY = "country"

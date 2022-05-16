@@ -27,7 +27,6 @@ def overall_tweets_country_wise(message, db):
         country_name =  store the country name
         country_code = store the country code
     """
-    print('analysis start neow')
     try:
         new_dt = str(message[CREATED_AT_KEY])[:19]
         created_at = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S')

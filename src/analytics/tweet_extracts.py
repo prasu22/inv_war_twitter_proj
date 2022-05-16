@@ -1,13 +1,18 @@
 import logging
+
+from src.common.variable_files import DATABASE_TWEET_NEW_DB, COLL_OF_TOTAL_TWEET_PER_COUNTRY, \
+    COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS, COLL_TOP_100_WORDS
+
 LOGGER = logging.getLogger(__name__)
 
 from datetime import datetime
 from src.mongodb.mongo_data_connector import mongodb_connection
+
 conn = mongodb_connection()
-db = conn['tweet_new_db']
-coll_overall_tweet = db['a_overall_tweet_per_country']
-coll_total_tweet_on_daily_basis = db['a_overall_tweet_per_country_on_daily_basis']
-coll_top_100_words = db['a_top_100_words']
+db = conn[DATABASE_TWEET_NEW_DB]
+coll_overall_tweet = db[COLL_OF_TOTAL_TWEET_PER_COUNTRY]
+coll_total_tweet_on_daily_basis = db[COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS]
+coll_top_100_words = db[COLL_TOP_100_WORDS]
 
 
 def overall_tweet_per_country_in_last_n_month(country,date):

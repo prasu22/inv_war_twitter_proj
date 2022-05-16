@@ -30,7 +30,7 @@ def mongodb_connection():
 
 
 # ======================================================================================================================
-# print(mongodb_connection())
+
 # # ======================================================================================================================
 def create_database(db_name, db_collection):
     """creating database and collection schema  with specific schema and indexes
