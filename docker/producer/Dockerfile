@@ -25,4 +25,7 @@ RUN chown -R producer: ${APP_DIR}
 
 USER producer
 WORKDIR ${PRODUCER_HOME}
+
 ENTRYPOINT [ "/producer_start.sh" ]
+
+

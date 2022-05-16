@@ -2,11 +2,6 @@
 from json import dumps
 from kafka import KafkaProducer
 
-from src.pub_sub.producer_call_twitter_api.data_insert_in_producer_topic import search_api_to_insert_data_in_topic, \
-    archive_api_to_insert_data_in_topic
-from src.twitter import tweet_crawler as tc
-from src.twitter.fetch_data_using_twitter_rest_api import get_rules, delete_all_rules, set_rules, get_stream
-from src.twitter.twitter_api_connector import connect_with_twitter
 
 """"
   creating producer to call tweetcrawler api to fetch data from twitter and insert that in topic by the producer

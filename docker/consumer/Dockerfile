@@ -27,3 +27,4 @@ RUN chown -R consumer: ${APP_DIR}
 USER consumer
 WORKDIR ${CONSUMER_HOME}
 ENTRYPOINT [ "/consumer_start.sh" ]
+

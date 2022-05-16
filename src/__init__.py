@@ -19,7 +19,9 @@ logging.basicConfig(
                              utc=False, atTime=None)])
 
 
+
 ROOT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 CONFIG_FILE_PATH = f'{ROOT_FOLDER}/common/config.ini'
 APP_CONFIG = ConfigParser(converters={'list': lambda x: [i.strip() for i in x.split(',')]})
 APP_CONFIG.read(CONFIG_FILE_PATH)
+

@@ -9,18 +9,19 @@ LOGGER = logging.getLogger(__name__)
 
 BEARER_TOKEN = bearer_token
 
-
+LOGGER.info("data is streamming")
 def bearer_oauth(r):
     """
     Method required by bearer token authentication.
     """
-
+    LOGGER.info("stream authentication")
     r.headers["Authorization"] = f"Bearer {BEARER_TOKEN}"
     r.headers["User-Agent"] = "v2FilteredStreamPython"
     return r
 
 
 def get_rules():
+    LOGGER.info("set rules")
     response = requests.get(
         "https://api.twitter.com/2/tweets/search/stream/rules", auth=bearer_oauth
     )
@@ -35,7 +36,7 @@ def get_rules():
 def delete_all_rules(rules):
     if rules is None or "data" not in rules:
         return None
-
+    LOGGER.info("delete rules")
     ids = list(map(lambda rule: rule["id"], rules["data"]))
     payload = {"delete": {"ids": ids}}
     response = requests.post(
@@ -85,6 +86,7 @@ def get_stream(set):
                 response.status_code, response.text
             )
         )
+    LOGGER.info("stream function is streamming")
     import src.pub_sub.producer as prod
     for response_line in response.iter_lines():
         if response_line:
@@ -92,13 +94,17 @@ def get_stream(set):
             json_response = json.loads(response_line)
             print(type(json_response))
             value = json_response
-            print(value)
-            if value['includes']['users'][0].get("location") and  len(value['data']['text'])>0:
-                my_data = {'_id': str(value['data']['id']), 'tweet': value['data']['text'], 'country': value['includes']['users'][0]['location'], 'created_at': str(value['data']['created_at'])}
-                print("stream mydata", my_data)
-                prod.my_producer.send('random_data', value=my_data)
-            else:
-                LOGGER.info("location is not available")
+
+            try:
+                if value['includes']['users'][0].get("location") and  len(value['data']['text'])>0:
+                    my_data = {'_id': str(value['data']['id']), 'tweet': value['data']['text'], 'country': value['includes']['users'][0]['location'], 'created_at': str(value['data']['created_at'])}
+                    print("stream mydata", my_data)
+                    prod.my_producer.send('random_data', value=my_data)
+                else:
+                    LOGGER.info("location is not available")
+            except Exception as e:
+                print(f"error:{e}")
+
 
 
 

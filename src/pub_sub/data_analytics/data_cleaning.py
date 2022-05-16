@@ -11,6 +11,7 @@ stopword = nltk.corpus.stopwords.words('english')
 
 
 def clean_tweet(tweet):
+    print('data cleaning file')
     """
     used to creat the tweet text data removing digit, url,
     :passing argument

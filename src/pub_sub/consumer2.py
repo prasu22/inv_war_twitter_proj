@@ -19,6 +19,7 @@ from src.pub_sub.data_extract.donation_data_extractor import get_donation_amount
     get_donation_keywords
 from src.pub_sub.data_extract.preventive_keywords_extractor import get_prevention_keywords, get_who_keywords
 from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
+
 LOGGER = logging.getLogger(__name__)
 
 """
@@ -28,6 +29,8 @@ LOGGER = logging.getLogger(__name__)
   my_consumer = initialize the kafka consumer
   message = access the data one by one from my_consumer
 """
+print("hello consumer 2")
+LOGGER.info("this is consumer2 file")
 
 LOGGER.info('conusmer 2')
 print('consumer 2')

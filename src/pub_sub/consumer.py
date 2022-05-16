@@ -21,9 +21,10 @@ from src.pub_sub.data_extract.preventive_keywords_extractor import get_preventio
 from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
 
 
+
 LOGGER = logging.getLogger(__name__)
 LOGGER.info('hello i am in consumer')
-print("consumer1")
+
 
 """
  fetch the data from topic using consumer and  preprocess that data with for different collection before 
@@ -33,7 +34,9 @@ print("consumer1")
   message = access the data one by one from my_consumer
 """
 
-
+print('hello consumer 1')
+LOGGER.info("this is consumer1")
+print("hello consumer again 1")
 my_consumer = KafkaConsumer(
     'random_data',
     bootstrap_servers=['kafka:9092'],
@@ -42,17 +45,18 @@ my_consumer = KafkaConsumer(
     group_id='my-group',
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
-
+print("now kafkaworking")
 try:
     conn = mongodb_connection()
     db = conn['tweet_new_db']
     print("connection done")
     LOGGER.info('connection done')
 except Exception as e:
+    print("mongodb error",{e})
     LOGGER.error(F"ERROR:Connection faild {e}")
     print("eroor hai bhai ",e)
     sys.exit()
-
+print("mongodb access find")
 print(my_consumer)
 
 for message in my_consumer:

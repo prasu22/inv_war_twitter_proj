@@ -3,9 +3,12 @@ import os
 
 from flask import Flask
 
+
 from src.analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, top_100_words_tweeted_in_world, \
     total_tweet_per_country_on_daily_basis, top_10_prevention, top_100_word_occuring_with_country, \
     top_10_prevention_world_wide, total_no_of_donations
+
+
 from src.common.app_config import APP_CONFIG
 
 app = Flask(__name__)
@@ -43,8 +46,6 @@ def overall_tweet_based_on_keyword(country,date):
         print('some error occured ',e)
         return {"error":e}
 
-
-#
 # # ======================================================================================================================
 #
 # # ======================================================================================================================
@@ -147,3 +148,4 @@ def total_donations_with_country(country_code):
     except Exception as e:
         print("some error")
         return {'error,',e}
+
