@@ -10,7 +10,6 @@ PREVENTION_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'PREVENTION_K
 WHO_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'WHO_KEYWORDS')))
 
 def get_prevention_keywords(message):
-    print("prevention_kewords")
     list_of_prevention_keywords = []
     try:
         if re.compile('|'.join(PREVENTION_KEYWORDS), re.IGNORECASE).search(message[TWEET_KEY]):

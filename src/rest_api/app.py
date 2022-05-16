@@ -10,7 +10,8 @@ from src.analytics.tweet_extracts import overall_tweet_per_country_in_last_n_mon
 
 
 from src.common.app_config import APP_CONFIG
-
+import logging
+LOGGER = logging.getLogger(__name__)
 app = Flask(__name__)
 
 
@@ -43,7 +44,7 @@ def overall_tweet_based_on_keyword(country,date):
         else:
             return {"total_tweet_last_n_month":0}
     except Exception as e:
-        print('some error occured ',e)
+        LOGGER.error(f"Error:{e}")
         return {"error":e}
 
 # # ======================================================================================================================
@@ -70,7 +71,7 @@ def overall_per_country(country,date):
         else:
             return {"tweet_per_country_on_daily_basis":0}
     except Exception as e:
-        print("some error occured",e)
+        LOGGER.error(f"Error:{e}")
         return {"error":e}
 # # ======================================================================================================================
 #
@@ -96,7 +97,7 @@ def top_100_word_occuring():
         word_dict = top_100_words_tweeted_in_world()
         return json.dumps(word_dict)
     except Exception as e:
-        print("some error occured ",e)
+        LOGGER.error(f"Error:{e}")
         return {"error":e}
 
 # ======================================================================================================================
@@ -112,7 +113,7 @@ def top_100_words_country(country_code):
         else:
             return ('NO RESULT FOUND')
     except Exception as e:
-        print("some error occured ", e)
+        LOGGER.error(f"Error:{e}")
         return {'error',e}
 
 
@@ -124,7 +125,7 @@ def top_10_preventions_with_country(country_code):
         word_list = top_10_prevention(country_code)
         return json.dumps(word_list)
     except Exception as e:
-        print("some error occured",e)
+        LOGGER.error(f"Error:{e}")
         return {'error',e}
 
 
@@ -134,7 +135,7 @@ def top_10_preventions_all_countries():
         word_list = top_10_prevention_world_wide()
         return json.dumps(word_list)
     except Exception as e:
-        print("some error occured",e)
+        LOGGER.error(f"Error:{e}")
         return {'error',e}
 
 #####################################################################################################
@@ -146,6 +147,6 @@ def total_donations_with_country(country_code):
         total_count = total_no_of_donations(country_code)
         return json.dumps(total_count)
     except Exception as e:
-        print("some error")
+        LOGGER.error(f"Error:{e}")
         return {'error,',e}
 

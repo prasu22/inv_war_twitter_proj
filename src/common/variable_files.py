@@ -15,6 +15,7 @@ DEFAULT_AMOUNT = 0
 
 # All collection names from data analytics directory
 DATABASE_TWEET_NEW_DB = "tweet_new_db"
+COLL_OF_RAW_DATA = "tweet_extract_data"
 COLL_OF_TOTAL_TWEET_PER_COUNTRY = 'a_overall_tweet_per_country'
 COLL_TOP_100_WORDS = "a_top_100_words"
 COLL_OF_TOP_10_PREVENTIVE_WORDS = 'a_top_10_prevention_country_code'

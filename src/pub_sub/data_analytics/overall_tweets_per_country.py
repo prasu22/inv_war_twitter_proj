@@ -3,7 +3,7 @@ LOGGER = logging.getLogger(__name__)
 from datetime import datetime
 from src.common.variable_files import COLL_OF_TOTAL_TWEET_PER_COUNTRY, CREATED_AT_KEY, COVID_KEYWORD_KEY, \
     COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, MONTH_KEY, COUNT_KEY
-# name in captial letter
+
 
 
 def overall_tweets_country_wise(message, db):

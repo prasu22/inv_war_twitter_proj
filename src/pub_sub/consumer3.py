@@ -3,7 +3,7 @@ import sys
 import json
 from kafka import KafkaConsumer
 
-from src.common.variable_files import DATABASE_TWEET_NEW_DB
+from src.common.variable_files import DATABASE_TWEET_NEW_DB, TWEET_KEY, COLL_OF_RAW_DATA, ID_KEY
 from src.mongodb.mongo_data_connector import mongodb_connection
 from src.pub_sub.data_analytics.overall_tweets_per_country import overall_tweets_country_wise
 from src.pub_sub.data_analytics.top_100_words_overall import analysis_top_100_words
@@ -54,7 +54,7 @@ for message in my_consumer:
     message = message.value
     print(message)
     try:
-        if 'RT @' not in message['tweet'] and db['tweet_extract_data'].count_documents({"_id": message['_id']}) == 0:
+        if 'RT @' not in message[TWEET_KEY] and db[COLL_OF_RAW_DATA ].count_documents({"_id": message[ID_KEY]}) == 0:
             # extraction part
             updated_msg = get_country_code(message)
             updated_msg = get_covid_keywords(updated_msg)
