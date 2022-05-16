@@ -12,6 +12,7 @@ COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS'))
 
 def get_covid_keywords(message):
     list_of_covid_keywords = []
+    print("covid keywords")
     try:
         if re.compile('|'.join(COVID_KEYWORDS), re.IGNORECASE).search(message[TWEET_KEY]):
             list_of_covid_keywords = re.compile('|'.join(COVID_KEYWORDS), re.IGNORECASE).findall(message[TWEET_KEY])

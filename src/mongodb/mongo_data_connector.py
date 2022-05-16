@@ -24,7 +24,8 @@ def mongodb_connection():
     username = urllib.parse.quote_plus(usr)
     password = urllib.parse.quote_plus(pwd)
     conn_url = f"mongodb+srv://{username}:{password}@{server}/{default_db}"
-    conn = MongoClient(conn_url, ssl_cert_reqs=ssl.CERT_NONE)
+    conn = MongoClient(conn_url)
+    print('connect success full',conn)
     return conn
 
 

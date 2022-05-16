@@ -11,6 +11,7 @@ ECONOMY_KEYS = list(map(str, APP_CONFIG.getlist('keywords', 'ECONOMY_KEYS')))
 
 
 def get_tweets_with_trending_covid_keywords(message):
+    print("trend_covid_keywords")
     try:
         list_of_covid_keywords = []
         if re.compile('|'.join(COVID_KEYS), re.IGNORECASE).search(message[TWEET_KEY]):
@@ -24,6 +25,7 @@ def get_tweets_with_trending_covid_keywords(message):
 
 
 def get_tweets_with_trending_economy_keywords(message):
+    print("trending keywords economy")
     try:
         list_of_economy_keywords = []
         if re.compile('|'.join(ECONOMY_KEYS), re.IGNORECASE).search(message[TWEET_KEY]):

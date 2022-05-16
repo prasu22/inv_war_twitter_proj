@@ -23,7 +23,7 @@ class StreamListener(tweepy.Stream):
             created_date = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S')
             tweet_id = status.id_str
             my_data = {'_id': str(tweet_id), 'tweet': full_text, 'country': country, 'created_at': str(created_date)}
-            print("stream mydata",my_data)
+            print("tweet cawler stream mydata",my_data)
             import src.pub_sub.producer as prod
             prod.my_producer.send('sendingdata', value=my_data)
 
