@@ -85,7 +85,6 @@ def get_stream(set):
     import src.pub_sub.producer as prod
     for response_line in response.iter_lines():
         if response_line:
-            # print(response_line)
             json_response = json.loads(response_line)
             print(type(json_response))
             value = json_response
@@ -98,6 +97,7 @@ def get_stream(set):
                     LOGGER.info("location is not available")
             except Exception as e:
                 print(f"error:{e}")
+
 
 
 

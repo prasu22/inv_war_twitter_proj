@@ -25,12 +25,7 @@ RUN chown -R producer: ${APP_DIR}
 
 USER producer
 WORKDIR ${PRODUCER_HOME}
+
 ENTRYPOINT [ "/producer_start.sh" ]
-
-# CMD [ "python", "src/twitter/fetch_data_using_twitter_rest_api.py"  ]
-
-
-
-
 
 

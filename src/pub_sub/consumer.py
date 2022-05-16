@@ -21,7 +21,10 @@ from src.pub_sub.data_extract.donation_data_extractor import get_donation_amount
 from src.pub_sub.data_extract.preventive_keywords_extractor import get_prevention_keywords, get_who_keywords
 from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
 
+
+
 LOGGER = logging.getLogger(__name__)
+
 
 
 """
@@ -31,9 +34,7 @@ LOGGER = logging.getLogger(__name__)
   my_consumer = initialize the kafka consumer
   message = access the data one by one from my_consumer
 """
-print('hello consumer 1')
-LOGGER.info("this is consumer1")
-print("hello consumer again 1")
+
 
 my_consumer = KafkaConsumer(
     'random_data',
@@ -46,6 +47,7 @@ my_consumer = KafkaConsumer(
 try:
     conn = mongodb_connection()
     db = conn[DATABASE_TWEET_NEW_DB]
+    LOGGER.info('connection done')
 except Exception as e:
     LOGGER.error(F"ERROR:Connection faild {e}")
     sys.exit()
@@ -70,6 +72,7 @@ for message in my_consumer:
 
             # now analytics start
             print("updated mag", updated_msg)
+            LOGGER.info('updated msg')
             message = updated_msg
             overall_tweets_country_wise(message, db)
             # query2

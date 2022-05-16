@@ -23,7 +23,6 @@ from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
 
 LOGGER = logging.getLogger(__name__)
 
-
 """
  fetch the data from topic using consumer and  preprocess that data with for different collection before 
  insertertion in collection
@@ -31,6 +30,9 @@ LOGGER = logging.getLogger(__name__)
   my_consumer = initialize the kafka consumer
   message = access the data one by one from my_consumer
 """
+
+LOGGER.info('conusmer 2')
+print('consumer 2')
 
 my_consumer = KafkaConsumer(
     'sendingdata',
@@ -87,4 +89,4 @@ for message in my_consumer:
     except Exception as e:
         LOGGER.error(f"ERROR:{e}")
         pass
-# ======================================================================================================================
+# # ======================================================================================================================

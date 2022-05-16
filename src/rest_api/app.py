@@ -3,8 +3,12 @@ import os
 
 from flask import Flask
 
-from src.analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, \
-    total_tweet_per_country_on_daily_basis, top_100_words_tweeted_in_world
+
+from src.analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, top_100_words_tweeted_in_world, \
+    total_tweet_per_country_on_daily_basis, top_10_prevention, top_100_word_occuring_with_country, \
+    top_10_prevention_world_wide, total_no_of_donations
+
+
 from src.common.app_config import APP_CONFIG
 
 app = Flask(__name__)
@@ -14,6 +18,8 @@ app = Flask(__name__)
 def info():
     version = os.environ['API_VERSION']
     return f"rest app up and running, v-{version}, config= {APP_CONFIG.sections()}"
+
+
 @app.route('/overall_tweet/<country>/<date>')
 def overall_tweet_based_on_keyword(country,date):
     # write down the required comment here
@@ -39,7 +45,7 @@ def overall_tweet_based_on_keyword(country,date):
     except Exception as e:
         print('some error occured ',e)
         return {"error":e}
-#
+
 # # ======================================================================================================================
 #
 # # ======================================================================================================================
@@ -92,3 +98,54 @@ def top_100_word_occuring():
     except Exception as e:
         print("some error occured ",e)
         return {"error":e}
+
+# ======================================================================================================================
+
+@app.route('/top_100_words_country_code/<country_code>')
+
+def top_100_words_country(country_code):
+    country_code = country_code.upper()
+    try:
+        word_dict = top_100_word_occuring_with_country(country_code)
+        if len(word_dict):
+            return json.dumps(word_dict)
+        else:
+            return ('NO RESULT FOUND')
+    except Exception as e:
+        print("some error occured ", e)
+        return {'error',e}
+
+
+
+@app.route('/top_10_preventions/<country_code>')
+def top_10_preventions_with_country(country_code):
+    country_code = country_code.upper()
+    try:
+        word_list = top_10_prevention(country_code)
+        return json.dumps(word_list)
+    except Exception as e:
+        print("some error occured",e)
+        return {'error',e}
+
+
+@app.route('/top_10_preventions_all_countries')
+def top_10_preventions_all_countries():
+    try:
+        word_list = top_10_prevention_world_wide()
+        return json.dumps(word_list)
+    except Exception as e:
+        print("some error occured",e)
+        return {'error',e}
+
+#####################################################################################################
+
+@app.route('/total_no_donations/<country_code>')
+def total_donations_with_country(country_code):
+    country_code = country_code.upper()
+    try:
+        total_count = total_no_of_donations(country_code)
+        return json.dumps(total_count)
+    except Exception as e:
+        print("some error")
+        return {'error,',e}
+

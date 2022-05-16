@@ -35,4 +35,3 @@ def clean_tweet(tweet):
         return final_list.lower()
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
-

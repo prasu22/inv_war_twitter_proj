@@ -42,6 +42,17 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
 
+
+  consumer:
+    build: ./docker/consumer
+    depends_on :
+      - zookeeper
+      - kafka
+    restart: always
+    container_name: consumer
+    volumes:
+      - ./src:/opt/consumer/src
+
   producer:
     build: ./docker/producer
     depends_on:
@@ -51,18 +62,3 @@ services:
     container_name: producer
     volumes:
       - ./src:/opt/producer/src
-
-  consumer:
-    build: ./docker/consumer
-    restart: always
-    depends_on:
-      - zookeeper
-      - kafka
-    container_name: consumer
-    volumes:
-      - ./src:/opt/consumer/src
-
-
-
-
-
