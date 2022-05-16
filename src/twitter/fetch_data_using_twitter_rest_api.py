@@ -98,7 +98,7 @@ def get_stream(set):
                 print("stream mydata", my_data)
                 prod.my_producer.send('random_data', value=my_data)
             else:
-                LOGGER.INFO("location is not available")
+                LOGGER.info("location is not available")
 
 
 

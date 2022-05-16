@@ -19,8 +19,11 @@ from src.pub_sub.data_extract.donation_data_extractor import get_donation_amount
     get_donation_keywords
 from src.pub_sub.data_extract.preventive_keywords_extractor import get_prevention_keywords, get_who_keywords
 from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
-LOGGER = logging.getLogger(__name__)
 
+
+LOGGER = logging.getLogger(__name__)
+LOGGER.info('hello i am in consumer')
+print("consumer1")
 
 """
  fetch the data from topic using consumer and  preprocess that data with for different collection before 
@@ -30,9 +33,10 @@ LOGGER = logging.getLogger(__name__)
   message = access the data one by one from my_consumer
 """
 
+
 my_consumer = KafkaConsumer(
     'random_data',
-    bootstrap_servers=['localhost : 9092'],
+    bootstrap_servers=['kafka:9092'],
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='my-group',
@@ -42,8 +46,11 @@ my_consumer = KafkaConsumer(
 try:
     conn = mongodb_connection()
     db = conn['tweet_new_db']
+    print("connection done")
+    LOGGER.info('connection done')
 except Exception as e:
     LOGGER.error(F"ERROR:Connection faild {e}")
+    print("eroor hai bhai ",e)
     sys.exit()
 
 print(my_consumer)
@@ -67,6 +74,7 @@ for message in my_consumer:
 
             # now analytics start
             print("updated mag", updated_msg)
+            LOGGER.info('updated msg')
             message = updated_msg
             overall_tweets_country_wise(message, db)
             # query2
