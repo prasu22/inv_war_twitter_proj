@@ -18,7 +18,7 @@ coll_top_10_preventions_country_code = db[COLL_OF_TOP_10_PREVENTIVE_WORDS]
 coll_total_donations = db[COLL_OF_DONATION_PER_COUNTRY]
 
 
-def overall_tweet_per_country_in_last_n_month(country,date):
+def overall_tweet_per_country_in_last_n_month(country_code,from_date,to_date):
     """
        find the all the tweet on country basis in last n months
        :param:
@@ -28,13 +28,16 @@ def overall_tweet_per_country_in_last_n_month(country,date):
        return the list of dictionary the data fetch from mongodb collection
     """
     try:
-        month = datetime.strptime(date,'%Y-%m-%d').month
-        data = list(coll_overall_tweet.aggregate([{'$match':{'country':{"$regex":country,"$options":'i'},"month":{"$gte":month}}},{'$project':{"_id":1,"count":1,"country":1,"month":1}},{"$group":{"_id":{"country":country},"total_tweet":{"$sum":"$count"}}}]))
+        start_month = datetime.strptime(from_date,'%Y-%m').month
+        start_year = datetime.strptime(from_date,"%Y-%m").year
+        end_month = datetime.strptime(to_date,"%Y-%m").month
+        end_year = datetime.strptime(to_date,"%Y-%m").year
+        data = list(coll_overall_tweet.aggregate([{'$match':{'country_code':{"$regex":country_code,"$options":'i'},"year":{"$and":{"$gte":start_year,"$lte":end_year}},"month":{"$and":{"$gte":start_month,"$lte":end_month}}}},{'$project':{"_id":1,"count":1,"country":1,"month":1}},{"$group":{"_id":{"country":country},"total_tweet":{"$sum":"$count"}}}]))
         return data
     except Exception as e:
         LOGGER.error(f"ERROR:{e}")
 
-def total_tweet_per_country_on_daily_basis(country,date):
+def total_tweet_per_country_on_daily_basis(country_code,date):
     """
      find all the tweet per country on daily basis
      :passing argument
@@ -47,7 +50,7 @@ def total_tweet_per_country_on_daily_basis(country,date):
      return the list of dictionary the data fetch from mongodb collection
     """
     try:
-        data = list(coll_total_tweet_on_daily_basis.aggregate([{'$match':{"country":{"$regex":country,"$options":"i"},"date":date}}]))
+        data = list(coll_total_tweet_on_daily_basis.aggregate([{'$match':{"country_code":{"$regex":country_code,"$options":"i"},"date":date}}]))
         return data
     except Exception as e:
         LOGGER.error(f"ERROR:{e}")

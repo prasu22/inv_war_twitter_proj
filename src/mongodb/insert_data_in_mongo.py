@@ -6,6 +6,11 @@ from src.encryption_and_decryption_data.encrypt_and_decryption_data import encry
 LOGGER = logging.getLogger(__name__)
 
 def insert_preprocessed_data(message,db):
+    """
+    store the raw data in the mongodb collection
+    :param
+    tweet_raw_data: initialize the mongodb collection
+    """
     try:
         tweet_raw_data = db[COLL_OF_RAW_DATA]
         if message:

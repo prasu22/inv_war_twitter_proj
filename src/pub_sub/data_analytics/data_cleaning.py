@@ -19,6 +19,7 @@ def clean_tweet(tweet):
     :param
         tweet: store thed text data after removing punctuation
         clean: remove the digits
+        only_text: store the only english words
         words: break the sentence in words
         words_new: store the list of words which are not in stopwords and there length greater than 3
         final_list: return the text with clean words

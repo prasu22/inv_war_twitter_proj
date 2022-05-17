@@ -21,8 +21,8 @@ def info():
     return f"rest app up and running, v-{version}, config= {APP_CONFIG.sections()}"
 
 
-@app.route('/overall_tweet/<country>/<date>')
-def overall_tweet_based_on_keyword(country,date):
+@app.route('/total_tweet_count/<country_code>/<from_date>/<to_date>')
+def overall_tweet_based_on_keyword(country_code,from_date,to_date):
     # write down the required comment here
     """Find the total number of tweet per country in last n months
        :passing parameter in query
@@ -38,7 +38,7 @@ def overall_tweet_based_on_keyword(country,date):
     """
    # not perfect
     try:
-        row = overall_tweet_per_country_in_last_n_month(country,date)
+        row = overall_tweet_per_country_in_last_n_month(country_code,from_date,to_date)
         if len(row) > 0:
             return {"total_tweet_last_n_month":row[0]['total_tweet']}
         else:
@@ -50,8 +50,8 @@ def overall_tweet_based_on_keyword(country,date):
 # # ======================================================================================================================
 #
 # # ======================================================================================================================
-@app.route('/number_of_tweet_per_country/<country>/<date>')
-def overall_per_country(country,date):
+@app.route('/number_of_tweet_per_country/<country_code>/<date>')
+def overall_per_country(country_code,date):
     """overall number of tweets per country on a daily basis
         :passing parameter in query
          country= name of country it is case insensitive
@@ -65,7 +65,7 @@ def overall_per_country(country,date):
         return the total tweet on particular date in particular country
     """
     try:
-        data = total_tweet_per_country_on_daily_basis(country,date)
+        data = total_tweet_per_country_on_daily_basis(country_code,date)
         if len(data)>0:
             return {"tweet_per_country_on_daily_basis":data[0]['count']}
         else:

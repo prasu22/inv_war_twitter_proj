@@ -1,7 +1,4 @@
-import ssl
-
 from pymongo import MongoClient
-from pymongo.errors import CollectionInvalid
 import urllib
 import logging
 
@@ -12,6 +9,10 @@ LOGGER = logging.getLogger(__name__)
 def mongodb_connection():
     """connection with mongodb
        :param
+       usr: store the username of database
+       pwd: store the password of the database
+       server: store the cluser name
+       default_db : store the database name
        username = username to access the database
        password = password to access the database
        conn = store the connection detail
@@ -24,7 +25,7 @@ def mongodb_connection():
     password = urllib.parse.quote_plus(pwd)
     conn_url = f"mongodb+srv://{username}:{password}@{server}/{default_db}"
     conn = MongoClient(conn_url)
-    print('connect success full',conn)
+    # print('connect success full',conn)
     return conn
 
 

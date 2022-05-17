@@ -25,7 +25,7 @@ class StreamListener(tweepy.Stream):
             tweet_id = status.id_str
             my_data = {'_id': str(tweet_id), 'tweet': full_text, 'country': country, 'created_at': str(created_date)}
             print("tweet cawler stream mydata",my_data)
-            import src.pub_sub.producer as prod
+            import src.apps.keyword_producer as prod
             prod.my_producer.send('sendingdata', value=my_data)
 
     def on_error(self, status_code):

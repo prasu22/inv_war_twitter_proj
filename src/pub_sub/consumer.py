@@ -38,7 +38,7 @@ LOGGER = logging.getLogger(__name__)
 
 my_consumer = KafkaConsumer(
     'random_data',
-    bootstrap_servers=['kafka:9092'],
+    bootstrap_servers=['kacomcocomasdfjlfka:9092'],
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='my-group',

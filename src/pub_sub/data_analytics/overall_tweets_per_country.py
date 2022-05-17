@@ -2,8 +2,7 @@ import logging
 LOGGER = logging.getLogger(__name__)
 from datetime import datetime
 from src.common.variable_files import COLL_OF_TOTAL_TWEET_PER_COUNTRY, CREATED_AT_KEY, COVID_KEYWORD_KEY, \
-    COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, MONTH_KEY, COUNT_KEY
-
+    COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, MONTH_KEY, COUNT_KEY, YEAR_KEY
 
 
 def overall_tweets_country_wise(message, db):
@@ -31,17 +30,18 @@ def overall_tweets_country_wise(message, db):
         new_dt = str(message[CREATED_AT_KEY])[:19]
         created_at = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S')
         month = created_at.month
+        year = created_at.year
         result = len(message[COVID_KEYWORD_KEY])
         country_name = message[COUNTRY_NAME_KEY]
         country_code = message[COUNTRY_CODE_KEY]
 
         if result > 0:
 
-            if db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].count_documents({COUNTRY_NAME_KEY: country_name, MONTH_KEY: month}) == 0:
+            if db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].count_documents({COUNTRY_NAME_KEY: country_name, MONTH_KEY: month,YEAR_KEY: year}) == 0:
                 db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].insert_one(
-                    {COUNT_KEY: 1, COUNTRY_NAME_KEY: country_name, COUNTRY_CODE_KEY: country_code, MONTH_KEY: month})
+                    {COUNT_KEY: 1, COUNTRY_NAME_KEY: country_name, COUNTRY_CODE_KEY: country_code, MONTH_KEY: month,YEAR_KEY: year})
             else:
-                db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].update_one({COUNTRY_NAME_KEY: country_name, MONTH_KEY: month},
+                db[COLL_OF_TOTAL_TWEET_PER_COUNTRY].update_one({COUNTRY_NAME_KEY: country_name, MONTH_KEY: month,YEAR_KEY: year},
                                                                {'$inc': {COUNT_KEY: 1}})
         else:
             LOGGER.info(f"MESSAGE:Data is not found! ")
