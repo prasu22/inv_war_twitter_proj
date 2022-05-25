@@ -67,6 +67,18 @@ def get_donation_keywords(message):
         LOGGER.error(f"ERROR:{e} ")
 
 
+def parse_donation_keywords(tweet_list):
+    list_tweet = list(map(lambda x: get_donation_keywords(x), tweet_list))
+    return list_tweet
+
+def parse_donation_amount(tweet_list):
+    list_tweet = list(map(lambda x: get_donation_amount(x), tweet_list))
+    return list_tweet
+
+
+def parse_donation_currency(tweet_list):
+    list_tweet = list(map(lambda x: get_donation_currency(x), tweet_list))
+    return list_tweet
 
 
 

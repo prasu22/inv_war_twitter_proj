@@ -5,21 +5,34 @@ from src.encryption_and_decryption_data.encrypt_and_decryption_data import encry
 
 LOGGER = logging.getLogger(__name__)
 
-def insert_preprocessed_data(message,db):
+def insert_preprocessed_data(tweet_list,db):
     """
     store the raw data in the mongodb collection
     :param
     tweet_raw_data: initialize the mongodb collection
     """
-    try:
-        tweet_raw_data = db[COLL_OF_RAW_DATA]
-        if message:
-            message[TWEET_KEY] = encrypt_string(message[TWEET_KEY])
-            tweet_raw_data.insert_one(message)
-        else:
-            LOGGER.info(f"Message:data is not in proper format {message}")
-    except Exception as e:
-        LOGGER.error(f"Error:{e}")
+    print(tweet_list)
+    updated_list =[]
+    tweet_raw_data = db['test_airflow']
+
+    for message in tweet_list:
+        try:
+            if message:
+                message[TWEET_KEY] = encrypt_string(message[TWEET_KEY])
+                updated_list.append(message)
+            else:
+                LOGGER.info(f"Message:data is not in proper format {message}")
+        except Exception as e:
+            LOGGER.error(f"Error:{e}")
+
+    tweet_raw_data.insert_many(updated_list)
+
+
+
+
+
+
+
 
 
 

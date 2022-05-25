@@ -13,7 +13,7 @@ from kafka import KafkaProducer
 """
 
 my_producer = KafkaProducer(
-    bootstrap_servers=['kafka:9092'],
+    bootstrap_servers=['localhost:9092'],
     api_version=(0, 11, 5),
     value_serializer=lambda x: dumps(x).encode('utf-8')
 )

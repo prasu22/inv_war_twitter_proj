@@ -1,10 +1,11 @@
 import logging
 LOGGER = logging.getLogger(__name__)
-from src.common.variable_files import COLL_OF_WORDS_FROM_TWEETS
-from src.pub_sub.data_analytics.data_cleaning import clean_tweet
-from src.common.variable_files import COUNTRY_NAME_KEY ,COUNTRY_CODE_KEY ,TWEET_KEY ,COVID_KEYWORD_KEY ,WORD_KEY,COUNT_KEY
+from src.common.variable_files import COLL_OF_WORDS_FROM_TWEETS, TWEET_KEYWORDS, IS_COVID_TWEET
+from src.common.variable_files import COUNTRY_NAME_KEY ,COUNTRY_CODE_KEY  ,WORD_KEY,COUNT_KEY
 
-def analysis_top_100_words(message, db):
+COLL_OF_WORDS_FROM_TWEETS = 'get_words_top'
+
+def analysis_top_100_words(message,output_dictionary,db):
     """
         store the data in collection after manupulation in mongodb collection  top_100_words
         :collection schema
@@ -24,19 +25,62 @@ def analysis_top_100_words(message, db):
         country_code =  store the country code
     """
     try:
-        result = message[COVID_KEYWORD_KEY]
-        list_of_words = clean_tweet(message[TWEET_KEY])
+        result = message[IS_COVID_TWEET]
+        list_of_words = message[TWEET_KEYWORDS]
         country_name = message[COUNTRY_NAME_KEY]
         country_code = message[COUNTRY_CODE_KEY]
-        if len(result) > 0:
-            for words in list_of_words.split(" "):
-                if db[COLL_OF_WORDS_FROM_TWEETS].count_documents({WORD_KEY: words.title(), COUNTRY_CODE_KEY: country_name}) == 0:
+        print("list_of_words",list_of_words)
+        if result:
+            for words in list_of_words:
+                if db[COLL_OF_WORDS_FROM_TWEETS].count_documents({WORD_KEY: words.title(), COUNTRY_CODE_KEY: country_code}) == 0:
                     db[COLL_OF_WORDS_FROM_TWEETS].insert_one(
                         {WORD_KEY: words.title(), COUNTRY_NAME_KEY: country_name, COUNTRY_CODE_KEY: country_code, COUNT_KEY: 1})
+
+                    ### for validation
+                    country_code_key = country_code
+                    if country_code_key not in output_dictionary:
+                        output_dictionary[country_code_key] = [{words: 1}]
+                    else:
+                        list_of_words = output_dictionary[country_code_key]
+                        flag = 0
+                        for frequency in list_of_words:
+                            if words in frequency.keys():
+                                frequency[words] += 1
+                                flag = 1
+                                break
+                        if flag == 0:
+                            output_dictionary[country_code_key].append({words: 1})
+
                 else:
-                    db[COLL_OF_WORDS_FROM_TWEETS].update_one({WORD_KEY: words.title(), COUNTRY_NAME_KEY: country_name},
+                    db[COLL_OF_WORDS_FROM_TWEETS].update_one({WORD_KEY: words.title(), COUNTRY_CODE_KEY: country_code},
                                                              {'$inc': {COUNT_KEY: 1}})
+
+                    ## for validation
+                    country_code_key = country_code
+                    if country_code_key not in output_dictionary:
+                        output_dictionary[country_code_key] = [{words: 1}]
+                    else:
+                        list_of_words = output_dictionary[country_code_key]
+                        flag = 0
+                        for frequency in list_of_words:
+                            if words in frequency.keys():
+                                frequency[words] += 1
+                                flag = 1
+                                break
+                        if flag == 0:
+                            output_dictionary[country_code_key].append({words: 1})
+
+
         else:
             LOGGER.info(f"MESSAGE:Data is not found! ")
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
+
+
+def updated_list_top_words(tweet_list,db):
+
+    output_dictionary = {}
+    for message in tweet_list:
+        analysis_top_100_words(message,output_dictionary,db)
+    return output_dictionary

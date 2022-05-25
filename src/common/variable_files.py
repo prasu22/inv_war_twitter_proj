@@ -28,8 +28,8 @@ COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS = 'a_ranking_of_impacte
 COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS = "a_overall_tweet_per_country_on_daily_basis"
 # ======================================================================================================================
 #message dictionary keys
-COUNTRY_NAME_KEY = "country"
-COUNTRY_CODE_KEY = "country_code"
+COUNTRY_NAME_KEY = 'country'
+COUNTRY_CODE_KEY = 'country_code'
 TWEET_KEY = 'tweet'
 CREATED_AT_KEY = 'created_at'
 ID_KEY = '_id'
@@ -48,6 +48,8 @@ WORD_KEY = 'word'
 TREND_KEY = "trend"
 ECONOMY_VALUE = "economy"
 COVID_VALUE = "covid"
+IS_COVID_TWEET='is_covid_tweet'
+TWEET_KEYWORDS ='tweet_keywords'
 
 # ======================================================================================================================
 

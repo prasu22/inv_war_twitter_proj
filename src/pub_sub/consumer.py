@@ -38,7 +38,7 @@ LOGGER = logging.getLogger(__name__)
 
 my_consumer = KafkaConsumer(
     'random_data',
-    bootstrap_servers=['kacomcocomasdfjlfka:9092'],
+    bootstrap_servers=['localhost:9092'],
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id='my-group',
@@ -49,13 +49,49 @@ try:
     db = conn[DATABASE_TWEET_NEW_DB]
     LOGGER.info('connection done')
 except Exception as e:
-    LOGGER.error(F"ERROR:Connection faild {e}")
+    LOGGER.error(F"ERROR:Connection failed {e}")
     sys.exit()
 
+# for message in my_consumer:
+#     message = message.value
+#     print(message)
+#     try:
+#         if 'RT @' not in message[TWEET_KEY] and db[COLL_OF_RAW_DATA].count_documents({"_id": message[ID_KEY]}) == 0:
+#             # extraction part
+#             updated_msg = get_country_code(message)
+#             updated_msg = get_covid_keywords(updated_msg)
+#             updated_msg = get_prevention_keywords(updated_msg)
+#             updated_msg = get_who_keywords(updated_msg)
+#             updated_msg = get_donation_amount(updated_msg)
+#             updated_msg = get_donation_currency(updated_msg)
+#             updated_msg = get_donation_keywords(updated_msg)
+#             updated_msg = get_tweets_with_trending_covid_keywords(updated_msg)
+#             updated_msg = get_tweets_with_trending_economy_keywords(updated_msg)
+#             insert_preprocessed_data(updated_msg, db)
+#
+#             # now analytics start
+#             print("updated mag", updated_msg)
+#             LOGGER.info('updated msg')
+#             message = updated_msg
+#             overall_tweets_country_wise(message, db)
+#             # query2
+#             analysis_total_tweet_per_country(message, db)
+#             # query3
+#             analysis_top_100_words(message, db)
+#             # query5
+#             analysis_top_10_preventions(message, db)
+#             # query6
+#             analysis_of_total_number_of_donation(message, db)
+#             # query 7
+#             analysis_overall_tweets_based_on_trends_per_day(message, db)
+#             # query8
+#             analysis_overall_tweets_based_on_trends(message, db)
+#
+#     except Exception as e:
+#         LOGGER.error(f"ERROR:{e}")
+#         pass
 
-for message in my_consumer:
-    message = message.value
-    print(message)
+def extractors(message):
     try:
         if 'RT @' not in message[TWEET_KEY] and db[COLL_OF_RAW_DATA].count_documents({"_id": message[ID_KEY]}) == 0:
             # extraction part
@@ -69,26 +105,34 @@ for message in my_consumer:
             updated_msg = get_tweets_with_trending_covid_keywords(updated_msg)
             updated_msg = get_tweets_with_trending_economy_keywords(updated_msg)
             insert_preprocessed_data(updated_msg, db)
-
-            # now analytics start
-            print("updated mag", updated_msg)
-            LOGGER.info('updated msg')
-            message = updated_msg
-            overall_tweets_country_wise(message, db)
-            # query2
-            analysis_total_tweet_per_country(message, db)
-            # query3
-            analysis_top_100_words(message, db)
-            # query5
-            analysis_top_10_preventions(message, db)
-            # query6
-            analysis_of_total_number_of_donation(message, db)
-            # query 7
-            analysis_overall_tweets_based_on_trends_per_day(message, db)
-            # query8
-            analysis_overall_tweets_based_on_trends(message, db)
+            return updated_msg
 
     except Exception as e:
-        LOGGER.error(f"ERROR:{e}")
+        LOGGER.error(f'Error:{e}')
         pass
+
+def analysis(message):
+
+    overall_tweets_country_wise(message, db)
+    # query2
+    analysis_total_tweet_per_country(message, db)
+    # query3
+    analysis_top_100_words(message, db)
+    # query5
+    analysis_top_10_preventions(message, db)
+    # query6
+    analysis_of_total_number_of_donation(message, db)
+    # query 7
+    analysis_overall_tweets_based_on_trends_per_day(message, db)
+    # query8
+    analysis_overall_tweets_based_on_trends(message, db)
+
+
+for message in my_consumer:
+    message = message.value
+    print('hello',message)
+    updated_msg = extractors(message)
+    analysis(updated_msg)
+
+
 # ======================================================================================================================

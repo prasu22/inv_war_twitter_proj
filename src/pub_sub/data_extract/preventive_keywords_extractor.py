@@ -37,3 +37,11 @@ def get_who_keywords(message):
         LOGGER.error(f"ERROR:{e} ")
 
 
+def parse_who_keywords(tweet_list):
+    list_tweet = list(map(lambda x: get_who_keywords(x), tweet_list))
+    return list_tweet
+
+def parse_prevention_keywords(tweet_list):
+    list_tweet = list(map(lambda x: get_prevention_keywords(x), tweet_list))
+    return list_tweet
+

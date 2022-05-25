@@ -23,3 +23,9 @@ def get_country_code(message):
             return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e}")
+
+
+def parse_country_codes(tweet_list):
+
+     list_tweet = list(map(lambda x : get_country_code(x), tweet_list))
+     return list_tweet

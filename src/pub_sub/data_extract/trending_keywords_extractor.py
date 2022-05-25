@@ -34,3 +34,12 @@ def get_tweets_with_trending_economy_keywords(message):
         return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
+
+def parse_trending_covid_keywords(tweet_list):
+    list_tweet = list(map(lambda x: get_tweets_with_trending_covid_keywords(x), tweet_list))
+    return list_tweet
+
+def parse_trending_economy_keywords(tweet_list):
+    list_tweet = list(map(lambda x: get_tweets_with_trending_economy_keywords(x), tweet_list))
+    return list_tweet
