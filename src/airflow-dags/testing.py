@@ -270,9 +270,9 @@ def test_donation_metadata(li_ids):
 
 def test_donation_raw_data(li_ids):
     list_id = li_ids
-
+    print('donation',list_id)
     count1 = list(coll.aggregate([
-        {'$match': {"$and": [{"donation_amount": {'$ne': 0}}, {"_id": {"$in": list_id}}]}},
+        {'$match': {"$and": [{"is_covid_tweet": {'$eq': True}},{"donation_amount": {'$ne': 0}},{'donation_keywords':{ '$exists': True, '$not': {'$size': 0} }}, {"_id": {"$in": list_id}}]}},
         {'$project': {'country_code': 1, 'count': 1}},
         {"$group": {"_id": "$country_code", "count": {"$sum": 1}}}
     ]))

@@ -53,13 +53,14 @@ my_consumer = KafkaConsumer(
 def duplicate_country(ti):
     li = []
 
-    for message in my_consumer:
-        message = message.value
-        li.append(message)
-        if len(li) >= 100:
-            my_consumer.close()
-            break
+    # for message in my_consumer:
+    #     message = message.value
+    #     li.append(message)
+    #     if len(li) >= 2:
+    #         my_consumer.close()
+    #         break
 
+    li = [{'_id': '1532580064955977049', 'tweet': 'Wayfinding and COVID-19 https://t.co/o2K04lkGmV', 'country': 'no country', 'created_at': '2022-06-03 04:29:18' }, {'_id': '153580154575873', 'tweet': '@elisled2 And monkeypox most likely covid donation $ 200.', 'country': 'no country', 'created_at': '2022-06-03 04:29:18'}]
     li_message = parse_country_codes(li)
     print('helo',li_message)
     message_list = ti.xcom_push(key='message_list', value=li_message)
