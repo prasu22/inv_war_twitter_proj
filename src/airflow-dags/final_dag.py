@@ -56,13 +56,14 @@ def duplicate_country(ti):
     for message in my_consumer:
         message = message.value
         li.append(message)
-        if len(li) >= 3:
+        if len(li) >= 100:
             my_consumer.close()
             break
 
     li_message = parse_country_codes(li)
+    print('helo',li_message)
     message_list = ti.xcom_push(key='message_list', value=li_message)
-    print('hello ,', message_list)
+
 
 
 def collection_for_validation(ti):
@@ -125,7 +126,9 @@ def duplicate_tweet_keywords(ti):
 def insert_mongo(ti):
     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
     try:
+        print(coll.count_documents({}), 'before')
         insert_preprocessed_data(message, db)
+        print(coll.count_documents({}), 'after')
     except:
         pass
 
@@ -405,6 +408,9 @@ def test_donation(ti):
 
 
 def mid(ti):
+
+
+    print('hhelooo',coll_name.find().count())
 
     li_message = ti.xcom_pull(task_ids='total_tweets', key='total_tweets_data')
     date_time_list = ti.xcom_pull(task_ids='make_collection', key='datetime_record')

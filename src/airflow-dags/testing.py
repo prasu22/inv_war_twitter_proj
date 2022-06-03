@@ -10,6 +10,8 @@ db = mongo_conn[db_name]
 coll = db["test_airflow"]
 coll_name = db['metadata table']
 
+print(coll.count_documents({}))
+
 # list_ids = ["1532580160649986049","1532580159114575873","1532580156379889665"]
 
 def test_tweets_daily_basis_metadata(li_ids):
@@ -31,7 +33,7 @@ def test_tweets_daily_basis_metadata(li_ids):
         i += 1
 
     res = {val[0]: val[1] for val in sorted(dict_count.items(), key=lambda x: (-x[1], x[0]))}
-    print('1', res)
+    print('meta', res)
     return res
 
 
@@ -57,7 +59,7 @@ def test_raw_daily_basis(li_ids):
             output_dict[key] += z
 
     res = {val[0]: val[1] for val in sorted(output_dict.items(), key=lambda x: (-x[1], x[0]))}
-
+    print('raw',res)
     return res
 
 
@@ -121,8 +123,8 @@ def test_top_100_words_from_raw_data(li_ids):
         {'$project': {"tweet_keywords": 1}},
         {'$unwind': "$tweet_keywords"},
         {"$group": {"_id": "$tweet_keywords", "count": {"$sum": 1}}},
-        {'$project': {"_id": 1, "count": 1}},
-        {"$sort": {"count": -1}}, {"$limit": 100}]))
+        {'$project': {"_id": 1, "count": 1}}]))
+        # {"$sort": {"count": -1}}, {"$limit": 100}]))
 
     output_dict = {}
     for i in count1:
@@ -134,6 +136,7 @@ def test_top_100_words_from_raw_data(li_ids):
             output_dict[x] += y
 
     res = {val[0]: val[1] for val in sorted(output_dict.items(), key=lambda x: (-x[1], x[0]))}
+    print('raw',res)
     return res
 
 
@@ -195,7 +198,7 @@ def test_top_100_country_basis_metadata(li_ids):
 
     res = {val[0]: val[1] for val in sorted(ans_dict.items(), key=lambda x: (-x[1], x[0]))}
 
-    # print("meta", res)
+    print("meta", res)
     return res
 
 
@@ -208,8 +211,8 @@ def test_top_100_words_from_raw_data_country_basis(li_ids):
         {'$unwind': "$tweet_keywords"},
         {"$group": {"_id": {"tweet_keywords": "$tweet_keywords", "country_code": "$country_code"},
                     "count": {"$sum": 1}}},
-        {'$project': {"_id": 1, "country_code": 1, "count": 1}},
-        {"$sort": {"count": -1}}, {"$limit": 100}
+        {'$project': {"_id": 1, "country_code": 1, "count": 1}}
+        # {"$sort": {"count": -1}}, {"$limit": 100}
     ]))
 
     output_dict = {}
@@ -223,7 +226,7 @@ def test_top_100_words_from_raw_data_country_basis(li_ids):
     # #
     res = {val[0]: val[1] for val in sorted(output_dict.items(), key=lambda x: (-x[1], x[0]))}
 
-    # print("raw", res)
+    print("raw", res)
     return res
 
 
@@ -261,6 +264,7 @@ def test_donation_metadata(li_ids):
                 output_dict[k] = dict_donation_after[k] - dict_donation_before[k]
 
     res = {val[0]: val[1] for val in sorted(output_dict.items(), key=lambda x: (-x[1], x[0]))}
+    print('meta',res)
     return res
 
 
@@ -284,6 +288,7 @@ def test_donation_raw_data(li_ids):
             output_dict[x] += y
 
     res = {val[0]: val[1] for val in sorted(output_dict.items(), key=lambda x: (-x[1], x[0]))}
+    print('raw',res)
     return res
 
 
