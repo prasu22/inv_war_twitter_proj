@@ -47,7 +47,7 @@ def analysis_top_10_preventions(message, output_dictionary,db):
                         for frequency in list_of_words:
                             if word in frequency.keys():
                                 frequency[word] += 1
-                                flag=1
+                                flag = 1
                                 break
                         if flag == 0:
                             output_dictionary[country_code_key].append({word:1})

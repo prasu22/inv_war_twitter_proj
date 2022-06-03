@@ -38,14 +38,14 @@ LOGGER = logging.getLogger(__name__)
 
 def duplicate_country(ti):
     li = []
-    mess1 = {'_id': '142226724199133409281',
+    mess1 = {'_id': '121226724199133409281',
              'tweet': '@DarylTractor Oh you beat @WHO me to it! corona donation Not a good $ 2332 sanitiser look unemployment smiling while PM is mask talking about deaths! Attention span of a gnat has #StephAsher',
              'country': 'Australia', 'created_at': '2022-05-18 03:58:29'}
 
-    mess2 = {'_id': '23223376199537409281',
+    mess2 = {'_id': '22323376199537409281',
              'tweet': '@Stanneel Oh you beat me @WHO to it! Not a good look donation smiling $2222 while PM is talking mask corona about deaths! Attention span of a gnat has #StephAsher',
              'country': 'China', 'created_at': '2022-05-19 03:58:29'}
-    mess3 = {'_id': '82222356199537409281',
+    mess3 = {'_id': '83322356199537409281',
              'tweet': '@aditya Oh you beat me to it! @WHO Not a good look smiling donation $123 while sanitiser corona PM is unemployment talking about deaths! Attention span of a gnat has #StephAsher',
              'country': 'India', 'created_at': '2022-05-18 03:58:29'}
 
@@ -68,7 +68,7 @@ def collection_for_validation(ti):
 
     date_time_list_id = {}
     date_time_list_id['start_datetime'] = start_datetime
-    date_time_list_id['record_ids']=list_ids
+    date_time_list_id['record_ids'] = list_ids
 
     ti.xcom_push(key='datetime_record', value=date_time_list_id)
     coll_name.insert_one({'start_datetime':start_datetime,'record_ids':list_ids})
@@ -177,7 +177,7 @@ def tweets_daily_basis(ti) :
     # {'IN 2022-05-18': 2, 'GB 2022-05-19': 1}
 
     message = ti.xcom_pull(task_ids='keyword_data',key='message_list')
-    li_message = updated_list_daily_tweets(message,db)
+    li_message = updated_list_daœily_tweets(message,db)
     print('hello',li_message)
 
     date_time_list = ti.xcom_pull(task_ids='make_collection', key='datetime_record')
@@ -239,7 +239,7 @@ def get_top_preventions(ti):
 
     else:
 
-        # {'IN': [{'Sanitiser': 2}, {'Mask': 1}], 'GB': [{'Mask': 1}]}
+        # {'IN': [{'Sanitiser': 2}, {'Mask': 1}], 'GB': [{'Mask': 1}]}  ['sanitiser: 2 , '': val]
 
         temp_dict = before_batch['prevention_after']
 
@@ -312,20 +312,16 @@ def get_trend_data(ti):
                 covid_trend_list[key] += value
 
         coll_name.update_one({'start_datetime': start_datetime},
-                             {'$set': {'donation_before': temp_dict, 'donation_after': covid_trend_list}})
+                             {'$set': {'covid_trend_before': temp_dict, 'covid_trend_after': covid_trend_list}})
 
     #################end covid ##################################################
 
     ######################economy ###############################################
 
-    date_time_list = ti.xcom_pull(task_ids='make_collection', key='datetime_record')
-    start_datetime = date_time_list['start_datetime']
 
-    batch_list = list(coll_name.find().sort('start_datetime', -1))
-    if len(batch_list) == 1:
-        before_batch = batch_list[0]
-    else:
-        before_batch = batch_list[1]
+
+
+
 
     print('before start time ', before_batch['start_datetime'])
     print('abhi wala', start_datetime)
@@ -333,22 +329,22 @@ def get_trend_data(ti):
     if before_batch['start_datetime'] == start_datetime:
         print('1st')
         coll_name.update_one({'start_datetime': start_datetime},
-                             {'$set': {'covid_trend_before': 'Null', 'covid_trend_after': covid_trend_list}})
+                             {'$set': {'economy_trend_before': 'Null', 'economy_trend_after': economy_trend_list}})
 
     else:
-        temp_dict = before_batch['covid_trend_after']
+        temp_dict = before_batch['economy_trend_after']
         print('purana')
         for key, value in temp_dict.items():
-            if key not in covid_trend_list.keys():
-                covid_trend_list[key] = value
+            if key not in economy_trend_list.keys():
+                economy_trend_list[key] = value
             else:
-                covid_trend_list[key] += value
+                economy_trend_list[key] += value
 
         coll_name.update_one({'start_datetime': start_datetime},
-                             {'$set': {'donation_before': temp_dict, 'donation_after': covid_trend_list}})
+                             {'$set': {'economy_trend_before': temp_dict, 'economy_trend_after': economy_trend_list}})
 
 
-
+############################ economy end ##################################################
 
 
 
@@ -446,12 +442,113 @@ def get_trend_daily(ti):
     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
     trend_list = updated_trend_list_total_tweets(message,db)
     print(trend_list)
+    covid_trend_daily = trend_list['covid']
+    economy_trend_daily = trend_list['economy']
+
+    #### {'covid': [{'2022-05-18 AU': 1}, {'2022-05-19 CN': 1}, {'2022-05-18 IN': 1}], 'economy': [{'2022-05-18 AU': 1}, {'2022-05-18 IN': 1}]}
+
+    #########################
+    # covid trend daily
+    # economy trend daily
+
+    #################### covid trend daily ########################################
+
+    date_time_list = ti.xcom_pull(task_ids='make_collection', key='datetime_record')
+    start_datetime = date_time_list['start_datetime']
+
+    batch_list = list(coll_name.find().sort('start_datetime', -1))
+    if len(batch_list) == 1:
+        before_batch = batch_list[0]
+    else:
+        before_batch = batch_list[1]
+
+    print('before start time ', before_batch['start_datetime'])
+    print('abhi wala', start_datetime)
+
+    if before_batch['start_datetime'] == start_datetime:
+        print('1st')
+        coll_name.update_one({'start_datetime': start_datetime},
+                             {'$set': {'covid_trend_daily_before': 'Null', 'covid_trend_daily_after': covid_trend_daily}})
+
+    else:
+
+        # [{'2022-05-18 AU': 1}, {'2022-05-19 CN': 1}, {'2022-05-18 IN': 1}]
+
+        temp_dict = before_batch['covid_trend_daily_after']
+
+        for key, value in temp_dict.items():
+            if key not in covid_trend_daily.keys():
+                covid_trend_daily[key] = value
+
+            else:
+                updated_dict = {}
+                old_list = temp_dict[key]
+                for dictionary in old_list:
+                    for key1, val1 in dictionary.items():
+                        updated_dict[key1] = val1
+
+                new_list = covid_trend_daily[key]
+                for dictionary in new_list:
+                    for key1, val1 in dictionary.items():
+                        updated_dict[key1] = updated_dict.get(key1, 0) + val1
+
+                new_updated_list = []
+                for key1, val1 in updated_dict.items():
+                    new_updated_list.append({key1: val1})
+
+                covid_trend_daily[key] = new_updated_list
+
+        coll_name.update_one({'start_datetime': start_datetime},
+                             {'$set': {'covid_trend_daily_before': temp_dict, 'covid_trend_daily_after': covid_trend_daily}})
+
+    ############################ covid end ###########################################################################
+
+    ####################### economy #########################################
+
+    if before_batch['start_datetime'] == start_datetime:
+        print('1st')
+        coll_name.update_one({'start_datetime': start_datetime},
+                             {'$set': {'economy_trend_daily_before': 'Null', 'economy_trend_daily_after': economy_trend_daily}})
+
+    else:
+
+        # [{'2022-05-18 AU': 1}, {'2022-05-19 CN': 1}, {'2022-05-18 IN': 1}]
+
+        temp_dict = before_batch['economy_trend_daily_after']
+
+        for key, value in temp_dict.items():
+            if key not in economy_trend_daily.keys():
+                economy_trend_daily[key] = value
+
+            else:
+                updated_dict = {}
+                old_list = temp_dict[key]
+                for dictionary in old_list:
+                    for key1, val1 in dictionary.items():
+                        updated_dict[key1] = val1
+
+                new_list = economy_trend_daily[key]
+                for dictionary in new_list:
+                    for key1, val1 in dictionary.items():
+                        updated_dict[key1] = updated_dict.get(key1, 0) + val1
+
+                new_updated_list = []
+                for key1, val1 in updated_dict.items():
+                    new_updated_list.append({key1: val1})
+
+                economy_trend_daily[key] = new_updated_list
+
+        coll_name.update_one({'start_datetime': start_datetime},
+                             {'$set': {'economy_trend_daily_before': temp_dict, 'economy_trend_daily_after': economy_trend_daily}})
+
+################## economy end ###################################################################
+
 
 #############################################################################################
 
 dag = DAG('consumer555_dag',
           description='Python DAG',
-          schedule_interval='*/5 * * * *',
+          schedule_interval='@daily',
           start_date=datetime(2018, 11, 1),
           catchup=False)
 

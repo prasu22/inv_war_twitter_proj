@@ -48,7 +48,7 @@ def analysis_overall_tweets_based_on_trends_per_day(message, output_dictionary, 
                     {COUNTRY_NAME_KEY: country_name, COUNTRY_CODE_KEY: country_code, COUNT_KEY: 1,
                      TREND_KEY: COVID_VALUE,
                      "created_at": str(created_at)})
-
+                #################################################
                 trend_key = 'covid'
                 output_key = str(created_at) + ' ' + str(country_code)
                 if trend_key not in output_dictionary:
