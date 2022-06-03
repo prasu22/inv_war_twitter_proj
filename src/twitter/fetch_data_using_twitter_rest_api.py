@@ -1,8 +1,11 @@
+from datetime import datetime
+
 import requests
 import os
 import json
 import logging
 
+from src.common.variable_files import TOPIC1
 from src.twitter.config import bearer_token
 
 LOGGER = logging.getLogger(__name__)
@@ -90,12 +93,16 @@ def get_stream(set):
             value = json_response
             try:
                 if value['includes']['users'][0].get("location") and  len(value['data']['text'])>0:
-                    my_data = {'_id': str(value['data']['id']), 'tweet': value['data']['text'], 'country': value['includes']['users'][0]['location'], 'created_at': str(value['data']['created_at'])}
+                    dates = str(value['data']['created_at'])
+                    new_dt = str(dates[:19])
+                    date = datetime.strftime(datetime.strptime(new_dt, "%Y-%m-%dT%H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+                    my_data = {'_id': str(value['data']['id']), 'tweet': value['data']['text'], 'country': value['includes']['users'][0]['location'], 'created_at': date}
                     print("stream mydata", my_data)
-                    prod.my_producer.send('random_data', value=my_data)
+                    prod.my_producer.send(TOPIC1, value=my_data)
                 else:
                     LOGGER.info("location is not available")
             except Exception as e:
+                LOGGER.error(f"Error:{e}")
                 print(f"error:{e}")
 
 

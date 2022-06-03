@@ -54,3 +54,11 @@ TWEET_KEYWORDS ='tweet_keywords'
 # ======================================================================================================================
 
 #put the confing.ini file in common
+
+BOOTSTRAP_SERVER="kafka:9092"
+TOPIC1 = "twitter_stream_rest_api"
+TOPIC2 = "tweepy_stream_data"
+TOPIC3 = "search_api"
+# GROUP_ID="my-group"
+GROUP_ID="my-group"
+BATCH_SIZE=3

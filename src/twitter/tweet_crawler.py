@@ -2,6 +2,8 @@
 import sys
 import tweepy
 from datetime import datetime
+
+from src.common.variable_files import TOPIC2
 from src.twitter.config import access_token, access_token_secret, consumer_secret, consumer_key
 import logging
 
@@ -26,7 +28,7 @@ class StreamListener(tweepy.Stream):
             my_data = {'_id': str(tweet_id), 'tweet': full_text, 'country': country, 'created_at': str(created_date)}
             print("tweet cawler stream mydata",my_data)
             import src.apps.keyword_producer as prod
-            prod.my_producer.send('sendingdata', value=my_data)
+            prod.my_producer.send(TOPIC2, value=my_data)
 
     def on_error(self, status_code):
         LOGGER.error(f"ERROR;Encountered Streaming error ( {status_code} )" )
@@ -105,5 +107,3 @@ class TweetCrawler:
 
         elif difference_time <= 900:
             LOGGER.info(f"DONT CALL WAIT FOR {int(900 - difference_time)}")
-
-    

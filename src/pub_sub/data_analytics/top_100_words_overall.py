@@ -1,9 +1,19 @@
 import logging
+
+from src.mongodb.mongo_data_connector import mongodb_connection
+
 LOGGER = logging.getLogger(__name__)
 from src.common.variable_files import COLL_OF_WORDS_FROM_TWEETS, TWEET_KEYWORDS, IS_COVID_TWEET
 from src.common.variable_files import COUNTRY_NAME_KEY ,COUNTRY_CODE_KEY  ,WORD_KEY,COUNT_KEY
 
 COLL_OF_WORDS_FROM_TWEETS = 'get_words_top'
+
+mongo_conn = mongodb_connection()
+db_name = "tweet_db"
+db = mongo_conn[db_name]
+
+
+
 
 def analysis_top_100_words(message,output_dictionary,db):
     """
@@ -30,9 +40,11 @@ def analysis_top_100_words(message,output_dictionary,db):
         country_name = message[COUNTRY_NAME_KEY]
         country_code = message[COUNTRY_CODE_KEY]
         print("list_of_words",list_of_words)
+
         if result:
             for words in list_of_words:
                 if db[COLL_OF_WORDS_FROM_TWEETS].count_documents({WORD_KEY: words.title(), COUNTRY_CODE_KEY: country_code}) == 0:
+
                     db[COLL_OF_WORDS_FROM_TWEETS].insert_one(
                         {WORD_KEY: words.title(), COUNTRY_NAME_KEY: country_name, COUNTRY_CODE_KEY: country_code, COUNT_KEY: 1})
 
@@ -56,6 +68,8 @@ def analysis_top_100_words(message,output_dictionary,db):
                                                              {'$inc': {COUNT_KEY: 1}})
 
                     ## for validation
+
+
                     country_code_key = country_code
                     if country_code_key not in output_dictionary:
                         output_dictionary[country_code_key] = [{words: 1}]
@@ -77,10 +91,13 @@ def analysis_top_100_words(message,output_dictionary,db):
         LOGGER.error(f"ERROR:{e} ")
 
 
-
+output_dictionary = {}
 def updated_list_top_words(tweet_list,db):
 
-    output_dictionary = {}
     for message in tweet_list:
         analysis_top_100_words(message,output_dictionary,db)
     return output_dictionary
+
+list = [{'_id': '1532580160649986049', 'tweet': 'Wayfinding and COVID-19 https://t.co/o2K04lkGmV', 'country': 'no country', 'created_at': '2022-06-03 04:29:18', 'country_code': 'no country code', 'covid_keywords': ['COVID'], 'is_covid_tweet': True, 'donation_amount': 0, 'currency_name': 'no currency', 'donation_keywords': [], 'prevention_keywords': [], 'WHO_keywords': [], 'covid_trending_keywords': [], 'economy_trending_keywords': [], 'tweet_keywords': ['wayfinding', 'covid', 'https', 'lkgmv']}, {'_id': '1532580159114575873', 'tweet': '@elisled2 And monkeypox most likely.', 'country': 'no country', 'created_at': '2022-06-03 04:29:18', 'country_code': 'no country code', 'covid_keywords': [], 'is_covid_tweet': False, 'donation_amount': 0, 'currency_name': 'no currency', 'donation_keywords': [], 'prevention_keywords': [], 'WHO_keywords': [], 'covid_trending_keywords': [], 'economy_trending_keywords': [], 'tweet_keywords': ['elisled', 'monkeypox', 'most', 'likely']}, {'_id': '1532580156379889665', 'tweet': '@BBCBreaking Very convenient', 'country': 'no country', 'created_at': '2022-06-03 04:29:17', 'country_code': 'no country code', 'covid_keywords': [], 'is_covid_tweet': False, 'donation_amount': 0, 'currency_name': 'no currency', 'donation_keywords': [], 'prevention_keywords': [], 'WHO_keywords': [], 'covid_trending_keywords': [], 'economy_trending_keywords': [], 'tweet_keywords': ['bbcbreaking', 'very', 'convenient']}]
+
+
