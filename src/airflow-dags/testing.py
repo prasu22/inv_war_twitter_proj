@@ -5,7 +5,7 @@ from datetime import datetime
 from src.mongodb.mongo_data_connector import mongodb_connection
 
 mongo_conn = mongodb_connection()
-db_name = "tweet_db"
+db_name = "new_test_db"
 db = mongo_conn[db_name]
 coll = db["test_airflow"]
 coll_name = db['metadata table']
@@ -20,6 +20,7 @@ def test_tweets_daily_basis_metadata(li_ids):
     batch_list = list(coll_name.find({'record_ids':li_ids}))
     dict_tweet_daily_after = batch_list[0]['tweet_daily_after']
     dict_tweet_daily_before = batch_list[0]['tweet_daily_before']
+
 
     dict_count = {}
     i = 0
@@ -79,6 +80,8 @@ def test_query1(li_ids):
 #
 def helper(dict):
     ans_dict = {}
+    if len(dict) == 0:
+        return ans_dict
 
     for key, val in dict.items():
         x = 0
@@ -164,6 +167,8 @@ def test_query2(li_ids):
 
 def helper1(dict):
     ans_dict = {}
+    if len(dict) == 0:
+        return ans_dict
 
     for key, val in dict.items():
         x = 0

@@ -425,8 +425,8 @@
 # #
 # # def get_trend_daily(ti):
 # #     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
-# #     trend_list = updated_trend_list_total_tweets(message, db)
-# #     print(trend_list)
+#     trend_list = updated_trend_list_total_tweets(message, db)
+#     print(trend_list)
 # #     covid_trend_daily = trend_list['covid']
 # #     economy_trend_daily = trend_list['economy']
 # #
