@@ -1,18 +1,9 @@
 import logging
 
-from src.mongodb.mongo_data_connector import mongodb_connection
 
 LOGGER = logging.getLogger(__name__)
 from src.common.variable_files import COLL_OF_WORDS_FROM_TWEETS, TWEET_KEYWORDS, IS_COVID_TWEET
 from src.common.variable_files import COUNTRY_NAME_KEY ,COUNTRY_CODE_KEY  ,WORD_KEY,COUNT_KEY
-
-COLL_OF_WORDS_FROM_TWEETS = 'get_words_top'
-
-mongo_conn = mongodb_connection()
-db_name = "tweet_db"
-db = mongo_conn[db_name]
-
-
 
 
 def analysis_top_100_words(message,output_dictionary,db):

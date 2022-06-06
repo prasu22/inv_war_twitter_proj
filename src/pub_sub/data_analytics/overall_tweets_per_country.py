@@ -9,7 +9,7 @@ from src.common.variable_files import COLL_OF_TOTAL_TWEET_PER_COUNTRY, CREATED_A
 
 
 
-COLL_OF_TOTAL_TWEET_PER_COUNTRY = 'total_tweets_country'
+
 
 
 def overall_tweets_country_wise(message,output_dictionary,db):

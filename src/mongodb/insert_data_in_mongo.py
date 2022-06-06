@@ -13,7 +13,7 @@ def insert_preprocessed_data(tweet_list,db):
     """
     print(tweet_list)
     updated_list =[]
-    tweet_raw_data = db['test_airflow']
+    tweet_raw_data = db[COLL_OF_RAW_DATA]
 
     for message in tweet_list:
         try:

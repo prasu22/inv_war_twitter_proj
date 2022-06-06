@@ -5,9 +5,6 @@ from src.common.variable_files import COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS, 
 from src.common.variable_files import COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, CREATED_AT_KEY, COUNT_KEY
 
 
-COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS ='tweet_daily_basis'
-
-
 def analysis_total_tweet_per_country(message,output_dictionary,db):
     """
         store the data in collection after manupulation in mongodb collection overall_tweet_per_country_on_daily_basis

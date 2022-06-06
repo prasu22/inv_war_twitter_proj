@@ -8,8 +8,7 @@ from src.common.variable_files import COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WIT
 from src.common.variable_files import COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, CREATED_AT_KEY, \
     COVID_TRENDING_KEYWORD_KEY, ECONOMY_TRENDING_KEYWORD_KEY, TREND_KEY, COVID_VALUE, COUNT_KEY
 
-COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS = 'economy_daily'
-COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_COVID_KEYS = 'covid_daily'
+
 
 def analysis_overall_tweets_based_on_trends_per_day(message, output_dictionary, db):
     """

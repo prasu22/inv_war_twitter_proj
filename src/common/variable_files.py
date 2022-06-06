@@ -16,6 +16,7 @@ DEFAULT_AMOUNT = 0
 # All collection names from data analytics directory
 DATABASE_TWEET_NEW_DB = "tweet_new_db"
 COLL_OF_RAW_DATA = "tweet_raw_data"
+COLL_METADATA = 'metadata_table'
 COLL_OF_TOTAL_TWEET_PER_COUNTRY = 'a_overall_tweet_per_country'
 COLL_TOP_100_WORDS = "a_top_100_words"
 COLL_OF_TOP_10_PREVENTIVE_WORDS = 'a_top_10_prevention_country_code'
@@ -26,6 +27,8 @@ COLL_OF_IMPACT_ANALYSIS_ON_ECONOMY_KEYS = 'a_impact_analysis_on_economy_keys'
 COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_COVID_KEYS = "a_ranking_of_impacted_on_covid_keys_countries"
 COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS = 'a_ranking_of_impacted_on_economy_keys_countries'
 COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS = "a_overall_tweet_per_country_on_daily_basis"
+
+
 # ======================================================================================================================
 #message dictionary keys
 COUNTRY_NAME_KEY = 'country'
@@ -50,6 +53,22 @@ ECONOMY_VALUE = "economy"
 COVID_VALUE = "covid"
 IS_COVID_TWEET='is_covid_tweet'
 TWEET_KEYWORDS ='tweet_keywords'
+
+######## metadata table keys
+
+RECORD_IDS = 'record_ids'
+TWEET_DAILY_AFTER ='tweet_daily_after'
+TWEET_DAILY_BEFORE = 'tweet_daily_before'
+TOP_WORDS_AFTER = 'top_words_after'
+TOP_WORDS_BEFORE ='top_words_before'
+DONATION_AFTER ='donation_after'
+DONATION_BEFORE ='donation_before'
+
+TOTAL_TWEETS_BEFORE = 'total_tweets_before'
+TOTAL_TWEETS_AFTER = 'total_tweets_after'
+PREVENTION_BEFORE ='prevention_before'
+PREVENTION_AFTER ='prevention_after'
+
 
 # ======================================================================================================================
 

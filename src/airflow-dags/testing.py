@@ -2,13 +2,16 @@ import json
 import operator
 from datetime import datetime
 
+from src.common.variable_files import DATABASE_TWEET_NEW_DB, COLL_OF_RAW_DATA, COLL_METADATA, RECORD_IDS, \
+    TWEET_DAILY_AFTER, TWEET_DAILY_BEFORE, COUNTRY_CODE_KEY, IS_COVID_TWEET, ID_KEY, COUNT_KEY, TOP_WORDS_AFTER, \
+    TOP_WORDS_BEFORE, TWEET_KEYWORDS, DONATION_BEFORE, DONATION_AFTER, DONATION_AMOUNT_KEY, DONATION_KEYWORDS_KEY
 from src.mongodb.mongo_data_connector import mongodb_connection
 
 mongo_conn = mongodb_connection()
-db_name = "new_test_db"
+db_name = DATABASE_TWEET_NEW_DB
 db = mongo_conn[db_name]
-coll = db["test_airflow"]
-coll_name = db['metadata table']
+coll = db[COLL_OF_RAW_DATA]
+coll_name = db[COLL_METADATA]
 
 print(coll.count_documents({}))
 
@@ -17,9 +20,9 @@ print(coll.count_documents({}))
 def test_tweets_daily_basis_metadata(li_ids):
     # start_datetime = '27-05-2022 10:47:07'
 
-    batch_list = list(coll_name.find({'record_ids':li_ids}))
-    dict_tweet_daily_after = batch_list[0]['tweet_daily_after']
-    dict_tweet_daily_before = batch_list[0]['tweet_daily_before']
+    batch_list = list(coll_name.find({RECORD_IDS:li_ids}))
+    dict_tweet_daily_after = batch_list[0][TWEET_DAILY_AFTER]
+    dict_tweet_daily_before = batch_list[0][TWEET_DAILY_BEFORE]
 
 
     dict_count = {}
@@ -42,17 +45,17 @@ def test_raw_daily_basis(li_ids):
     list_id = li_ids
     count1 = list(coll.aggregate([
         #  filter by ids
-        {"$project": {'_id': 1, "is_covid_tweet": 1, "country_code": 1, "date": {
+        {"$project": {ID_KEY: 1, IS_COVID_TWEET: 1, COUNTRY_CODE_KEY: 1, "date": {
             "$dateToString": {"format": '%Y-%m-%d', "date": {"$dateFromString": {"dateString": '$created_at'}}}}}},
-        {"$match": {"$and": [{"is_covid_tweet": {'$eq': True}}, {"_id": {"$in": list_id}}]}},
-        {"$group": {"_id": {"country_code": "$country_code", "date": "$date"}, "count": {"$sum": 1}}}]))
+        {"$match": {"$and": [{IS_COVID_TWEET: {'$eq': True}}, {ID_KEY: {"$in": list_id}}]}},
+        {"$group": {ID_KEY: {COUNTRY_CODE_KEY: "$country_code", "date": "$date"}, COUNT_KEY: {"$sum": 1}}}]))
 
     output_dict = {}
 
     for i in count1:
-        x = i['_id']['country_code']
-        y = i['_id']['date']
-        z = i['count']
+        x = i[ID_KEY][COUNTRY_CODE_KEY]
+        y = i[ID_KEY]['date']
+        z = i[COUNT_KEY]
         key = str(x) + " " + str(y)
         if key not in output_dict:
             output_dict[key] = z
@@ -97,9 +100,9 @@ def helper(dict):
 
 def test_top_100_metadata(li_ids):
 
-    batch_list = list(coll_name.find({'record_ids':li_ids}))
-    top_words_after = batch_list[0]['top_words_after']
-    top_words_before = batch_list[0]['top_words_before']
+    batch_list = list(coll_name.find({RECORD_IDS:li_ids}))
+    top_words_after = batch_list[0][TOP_WORDS_AFTER]
+    top_words_before = batch_list[0][TOP_WORDS_BEFORE]
 
     dict_after = helper(top_words_after)
     dict_before = helper(top_words_before)
@@ -122,17 +125,17 @@ def test_top_100_words_from_raw_data(li_ids):
     list_id = li_ids
 
     count1 = list(coll.aggregate([
-        {"$match": {"$and": [{"is_covid_tweet": {'$eq': True}}, {"_id": {"$in": list_id}}]}},
-        {'$project': {"tweet_keywords": 1}},
+        {"$match": {"$and": [{IS_COVID_TWEET: {'$eq': True}}, {ID_KEY: {"$in": list_id}}]}},
+        {'$project': {TWEET_KEYWORDS: 1}},
         {'$unwind': "$tweet_keywords"},
-        {"$group": {"_id": "$tweet_keywords", "count": {"$sum": 1}}},
-        {'$project': {"_id": 1, "count": 1}}]))
-        # {"$sort": {"count": -1}}, {"$limit": 100}]))
+        {"$group": {ID_KEY: "$tweet_keywords", COUNT_KEY: {"$sum": 1}}},
+        {'$project': {ID_KEY: 1, COUNT_KEY: 1}}]))
+
 
     output_dict = {}
     for i in count1:
-        x = i['_id']
-        y = i['count']
+        x = i[ID_KEY]
+        y = i[COUNT_KEY]
         if x not in output_dict:
             output_dict[x] = y
         else:
@@ -185,9 +188,9 @@ def helper1(dict):
 
 def test_top_100_country_basis_metadata(li_ids):
 
-    batch_list = list(coll_name.find({'record_ids':li_ids}))
-    top_words_after = batch_list[0]['top_words_after']
-    top_words_before = batch_list[0]['top_words_before']
+    batch_list = list(coll_name.find({RECORD_IDS:li_ids}))
+    top_words_after = batch_list[0][TOP_WORDS_AFTER]
+    top_words_before = batch_list[0][TOP_WORDS_BEFORE]
 
     dict_after = helper1(top_words_after)
     dict_before = helper1(top_words_before)
@@ -211,19 +214,19 @@ def test_top_100_words_from_raw_data_country_basis(li_ids):
     list_id = li_ids
 
     count1 = list(coll.aggregate([
-        {"$match": {"$and": [{"is_covid_tweet": {'$eq': True}}, {"_id": {"$in": list_id}}]}},
-        {'$project': {"tweet_keywords": 1, "country_code": 1}},
+        {"$match": {"$and": [{IS_COVID_TWEET: {'$eq': True}}, {ID_KEY: {"$in": list_id}}]}},
+        {'$project': {TWEET_KEYWORDS: 1, COUNTRY_CODE_KEY: 1}},
         {'$unwind': "$tweet_keywords"},
-        {"$group": {"_id": {"tweet_keywords": "$tweet_keywords", "country_code": "$country_code"},
-                    "count": {"$sum": 1}}},
-        {'$project': {"_id": 1, "country_code": 1, "count": 1}}
-        # {"$sort": {"count": -1}}, {"$limit": 100}
+        {"$group": {ID_KEY: {TWEET_KEYWORDS: "$tweet_keywords", COUNTRY_CODE_KEY: "$country_code"},
+                    COUNT_KEY: {"$sum": 1}}},
+        {'$project': {ID_KEY: 1, COUNTRY_CODE_KEY: 1,COUNT_KEY: 1}}
+
     ]))
 
     output_dict = {}
     for i in count1:
-        x = str(i['_id']['country_code']) + " " + str(i['_id']['tweet_keywords'])
-        y = i['count']
+        x = str(i[ID_KEY][COUNTRY_CODE_KEY]) + " " + str(i[ID_KEY][TWEET_KEYWORDS])
+        y = i[COUNT_KEY]
         if x not in output_dict:
             output_dict[x] = y
         else:
@@ -254,9 +257,9 @@ def test_query3(li_ids):
 
 def test_donation_metadata(li_ids):
 
-    batch_list = list(coll_name.find({'record_ids':li_ids}))
-    dict_donation_after = batch_list[0]['donation_after']
-    dict_donation_before = batch_list[0]['donation_before']
+    batch_list = list(coll_name.find({RECORD_IDS:li_ids}))
+    dict_donation_after = batch_list[0][DONATION_AFTER]
+    dict_donation_before = batch_list[0][DONATION_BEFORE]
 
     output_dict = {}
 
@@ -277,16 +280,16 @@ def test_donation_raw_data(li_ids):
     list_id = li_ids
     print('donation',list_id)
     count1 = list(coll.aggregate([
-        {'$match': {"$and": [{"is_covid_tweet": {'$eq': True}},{"donation_amount": {'$ne': 0}},{'donation_keywords':{ '$exists': True, '$not': {'$size': 0} }}, {"_id": {"$in": list_id}}]}},
-        {'$project': {'country_code': 1, 'count': 1}},
-        {"$group": {"_id": "$country_code", "count": {"$sum": 1}}}
+        {'$match': {"$and": [{IS_COVID_TWEET: {'$eq': True}},{DONATION_AMOUNT_KEY: {'$ne': 0}},{DONATION_KEYWORDS_KEY:{ '$exists': True, '$not': {'$size': 0} }}, {ID_KEY: {"$in": list_id}}]}},
+        {'$project': {COUNTRY_CODE_KEY: 1, COUNT_KEY: 1}},
+        {"$group": {ID_KEY: "$country_code", COUNT_KEY: {"$sum": 1}}}
     ]))
 
     output_dict = {}
 
     for i in count1:
-        x = i['_id']
-        y = i['count']
+        x = i[ID_KEY]
+        y = i[COUNT_KEY]
         if x not in output_dict:
             output_dict[x] = y
         else:

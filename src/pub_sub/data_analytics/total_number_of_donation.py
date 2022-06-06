@@ -8,7 +8,7 @@ from src.common.variable_files import COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, DONATI
    DONATION_KEYWORDS_KEY, COVID_KEYWORD_KEY, COUNT_KEY
 
 
-COLL_OF_DONATION_PER_COUNTRY = 'donation_data_coll'
+
 
 def analysis_of_total_number_of_donation(message, output_dictionary, db):
    """

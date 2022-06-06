@@ -3,7 +3,7 @@ LOGGER = logging.getLogger(__name__)
 from src.common.variable_files import COLL_OF_TOP_10_PREVENTIVE_WORDS
 from src.common.variable_files import COUNTRY_NAME_KEY ,COUNTRY_CODE_KEY ,PREVENTION_KEYWORDS_KEY ,WHO_KEYWORDS_KEY ,WORD_KEY,COUNT_KEY
 
-COLL_OF_TOP_10_PREVENTIVE_WORDS = 'prevention_data'
+
 
 def analysis_top_10_preventions(message, output_dictionary,db):
     """
