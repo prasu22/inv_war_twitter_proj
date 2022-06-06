@@ -25,6 +25,5 @@ class TestAllConsumers(unittest.TestCase):
     TestEncryptionDecryptionMethod
 
 
-
 if __name__ == '__main__':
     unittest.main()

@@ -90,14 +90,14 @@ class TestDonationDetails(unittest.TestCase):
         # wrong answer
         message = {'tweet': 'hi your total amount is 234.345'}
         result = get_donation_currency(message)
-        self.assertEqual(result[CURRENCY_NAME_KEY],'No Currency')
+        self.assertEqual(result[CURRENCY_NAME_KEY],'no currency')
 
     def test_currency_name_case_6(self):
 
 
         message = {'tweet': 'hi your total amount is USD'}
         result = get_donation_currency(message)
-        self.assertEqual(result[CURRENCY_NAME_KEY],'No Currency')
+        self.assertEqual(result[CURRENCY_NAME_KEY],'no currency')
 
     def test_currency_name_case_7(self):
 

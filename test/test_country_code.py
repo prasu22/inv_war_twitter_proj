@@ -20,7 +20,7 @@ class TestCountryCode(unittest.TestCase):
         # wrong country name
         message = {'tweet': 'hi', 'country': 'new york'}
         result = get_country_code(message)
-        self.assertEqual(result[COUNTRY_CODE_KEY],'No Country')
+        self.assertEqual(result[COUNTRY_CODE_KEY],'no country code')
 
     def test_country_code_case_3(self):
 
