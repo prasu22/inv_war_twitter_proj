@@ -123,8 +123,4 @@ for msgs in my_consumer:
         pass
     # my_consumer.close()
 
-
-# consumer_processing()
-
-# validating_data()
 # # ======================================================================================================================

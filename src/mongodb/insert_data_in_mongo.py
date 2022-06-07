@@ -24,10 +24,12 @@ def insert_preprocessed_data(tweet_list,db):
                 LOGGER.info(f"Message:data is not in proper format {message}")
         except Exception as e:
             LOGGER.error(f"Error:{e}")
+
     try:
-        tweet_raw_data.insert_many(updated_list)
+        tweet_raw_data.insert_many(updated_list,ordered = False)
     except Exception as e:
         print('bulk error is ',e)
+
 
 
 

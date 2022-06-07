@@ -46,12 +46,12 @@ my_consumer = KafkaConsumer(
     bootstrap_servers=[BOOTSTRAP_SERVER],
     auto_offset_reset='earliest',
     enable_auto_commit=True,
-    group_id=GROUP_ID,
+    group_id = GROUP_ID,
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
 
-def duplicate_country(ti):
+def data_from_topic(ti):
     li = []
 
     for message in my_consumer:
@@ -60,28 +60,16 @@ def duplicate_country(ti):
         if len(li) >= 100:
             my_consumer.close()
             break
+    # li = [{'_id': '153007049', 'tweet': 'Wayfinding and wear mask covid unemployment gdp down corona COVID-19 https://t.co/o2K04lkGmV', 'country': 'no country', 'created_at': '2022-06-03 04:29:18' }, {'_id': '1580154338733333', 'tweet': '@elisled2 And monkeypox most likely covid donation $ 200.', 'country': 'no country', 'created_at': '2022-06-03 04:29:18'}, {'_id': '158015433873', 'tweet': '@elisled2 And monkeypox most likely covid donation $ 200.', 'country': 'no country', 'created_at': '2022-06-03 04:29:18'}]
+    ti.xcom_push(key='raw_data',value=li)
 
-    # li = [{'_id': '15300957049', 'tweet': 'Wayfinding and wear mask covid unemployment gdp down corona COVID-19 https://t.co/o2K04lkGmV', 'country': 'no country', 'created_at': '2022-06-03 04:29:18' }, {'_id': '158015433873', 'tweet': '@elisled2 And monkeypox most likely covid donation $ 200.', 'country': 'no country', 'created_at': '2022-06-03 04:29:18'}]
+
+def duplicate_country(ti):
+
+    li = ti.xcom_pull(task_ids = 'data_from_topic',key = 'raw_data')
     li_message = parse_country_codes(li)
     print('helo',li_message)
     ti.xcom_push(key='message_list', value=li_message)
-
-
-
-def collection_for_validation(ti):
-    messages = ti.xcom_pull(task_ids='get_country_code', key='message_list')
-
-    start_datetime = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-    list_ids = []
-    for message in messages:
-        list_ids.append(message['_id'])
-
-    date_time_list_id = {'start_datetime': start_datetime, RECORD_IDS: list_ids}
-
-    ti.xcom_push(key='datetime_record', value=date_time_list_id)
-    coll_name.insert_one({'start_datetime': start_datetime, RECORD_IDS: list_ids})
-    print('inserted')
-
 
 def duplicate_covid_keywords(ti):
     message = ti.xcom_pull(task_ids='get_country_code', key='message_list')
@@ -127,12 +115,12 @@ def duplicate_tweet_keywords(ti):
 
 def insert_mongo(ti):
     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
-    try:
-        print(coll.count_documents({}), 'before')
-        insert_preprocessed_data(message, db)
-        print(coll.count_documents({}), 'after')
-    except:
-        pass
+    # try:
+    print(coll.count_documents({}), 'before')
+    insert_preprocessed_data(message, db)
+    print(coll.count_documents({}), 'after')
+    # except:
+    #     pass
 
 
 # def helper()
@@ -271,6 +259,19 @@ def test_donation(ti):
 
 ################################################################################
 
+def collection_for_validation(ti):
+    messages = ti.xcom_pull(task_ids='get_country_code', key='message_list')
+
+    start_datetime = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+    list_ids = []
+    for message in messages:
+        list_ids.append(message['_id'])
+
+    date_time_list_id = {'start_datetime': start_datetime, RECORD_IDS: list_ids}
+
+    ti.xcom_push(key='datetime_record', value=date_time_list_id)
+    coll_name.insert_one({'start_datetime': start_datetime, RECORD_IDS: list_ids})
+    print('inserted')
 
 def mid(ti):
 
@@ -283,15 +284,12 @@ def mid(ti):
     li_message_2 =ti.xcom_pull(task_ids ='donation_coll',key ='donation_tweets')
 
 
-
     batch_list = list(coll_name.find().sort('start_datetime', -1))
     if len(batch_list) == 1:
         before_batch = batch_list[0]
     else:
         before_batch = batch_list[1]
 
-    print('before start time ', before_batch['start_datetime'])
-    print('abhi wala', start_datetime)
 
     if before_batch['start_datetime'] == start_datetime:
 
@@ -391,12 +389,12 @@ def mid(ti):
 
 dag = DAG('consumer777_dag',
           description='Python DAG',
-          schedule_interval='@daily',
+          schedule_interval='*/5 * * * *',
           start_date=datetime(2018, 11, 1),
           catchup=False)
 
 start = EmptyOperator(task_id='start', dag=dag)
-
+consumer_data = PythonOperator(task_id ='data_from_topic',python_callable =data_from_topic)
 ### extractor
 
 ############################################################################
@@ -435,6 +433,5 @@ make_collection = PythonOperator(task_id='make_collection', python_callable=coll
 
 end = EmptyOperator(task_id='end', dag=dag, trigger_rule=TriggerRule.ONE_SUCCESS)
 
-start >> country_code >> [covid_keywords,
-                          make_collection] >> donation_data >> prevention_data >> trend_data >> keywords_data >> insert_mongo >> [
-    total_tweets, tweets_daily_basis, top_preventions, top_words, donation_coll,trends_tweet,trends_tweet_daily] >> mid >> [test_total_tweets, test_tweets_daily_basis, test_top_100, test_donation] >> end
+start >> consumer_data >> country_code >> covid_keywords >> donation_data >> prevention_data >> trend_data >> keywords_data >> insert_mongo >> [
+    total_tweets, tweets_daily_basis, top_preventions, top_words, donation_coll,trends_tweet,trends_tweet_daily] >> make_collection >> mid >> [test_total_tweets, test_tweets_daily_basis, test_top_100, test_donation] >> end
