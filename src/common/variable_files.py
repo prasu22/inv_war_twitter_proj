@@ -72,7 +72,7 @@ PREVENTION_AFTER ='prevention_after'
 
 # ======================================================================================================================
 # data validation
-BOOTSTRAP_SERVER="localhost:9092"
+BOOTSTRAP_SERVER="kafka:9092"
 TOPIC1 = "twitter_stream_rest_apis"
 TOPIC2 = "tweepy_stream_data"
 TOPIC3 = "search_api"
