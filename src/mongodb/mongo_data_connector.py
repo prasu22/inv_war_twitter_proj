@@ -5,7 +5,8 @@ import logging
 from src.common.app_config import APP_CONFIG
 
 LOGGER = logging.getLogger(__name__)
-#remote connection
+
+
 def mongodb_connection():
     """connection with mongodb
        :param
@@ -17,6 +18,7 @@ def mongodb_connection():
        password = password to access the database
        conn = store the connection detail
     """
+
     try:
         usr = APP_CONFIG.get('mongo', 'username')
         pwd = APP_CONFIG.get('mongo', 'password')
@@ -37,4 +39,5 @@ def fetch_data():
     db = conn["tweet_new_db"]
     print(db['tweet_processed_data'].count_documents({}))
 fetch_data()
+
 # ======================================================================================================================

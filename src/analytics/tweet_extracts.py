@@ -6,6 +6,7 @@ from src.common.variable_files import DATABASE_TWEET_NEW_DB, COLL_OF_TOTAL_TWEET
     COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_COVID_KEYS, COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS, \
     COUNT_KEY, COUNTRY_CODE_KEY
 
+
 LOGGER = logging.getLogger(__name__)
 
 from datetime import datetime
@@ -18,6 +19,7 @@ coll_total_tweet_on_daily_basis = db[COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS]
 coll_top_100_words = db[COLL_TOP_100_WORDS]
 coll_top_10_preventions_country_code = db[COLL_OF_TOP_10_PREVENTIVE_WORDS]
 coll_total_donations = db[COLL_OF_DONATION_PER_COUNTRY]
+
 coll_impact_covid_keys = db[COLL_OF_IMPACT_ANALYSIS_ON_COVID_KEYS]
 coll_impact_economy_keys = db[COLL_OF_IMPACT_ANALYSIS_ON_ECONOMY_KEYS]
 coll_ranking_impact_covid_keys = db[COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_COVID_KEYS]

@@ -27,7 +27,6 @@ def analysis_total_tweet_per_country(message,output_dictionary,db):
 
     """
     try:
-
         new_dt = str(message[CREATED_AT_KEY])[:19]
         created_at = datetime.strptime(new_dt, '%Y-%m-%d %H:%M:%S').date()
         country_name = message[COUNTRY_NAME_KEY]

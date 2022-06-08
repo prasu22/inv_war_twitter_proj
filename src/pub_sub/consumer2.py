@@ -1,6 +1,7 @@
 import logging
 import sys
 import json
+
 import time
 from kafka import KafkaConsumer
 from src.common.variable_files import DATABASE_TWEET_NEW_DB, ID_KEY, COLL_OF_RAW_DATA, TWEET_KEY, BOOTSTRAP_SERVER, \
@@ -21,6 +22,7 @@ from src.pub_sub.data_extract.donation_data_extractor import get_donation_amount
     get_donation_keywords
 from src.pub_sub.data_extract.preventive_keywords_extractor import get_prevention_keywords, get_who_keywords
 from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
+
 from src.pub_sub.data_extract.tweet_keywords_extractor import get_tweet_keywords
 
 LOGGER = logging.getLogger(__name__)
@@ -49,6 +51,7 @@ try:
 except Exception as e:
     LOGGER.error(F"ERROR:Connection faild {e}")
     sys.exit()
+
 
 def consumer_processing():
     list_tweet_info = []
@@ -110,3 +113,4 @@ def consumer_processing():
 
 consumer_processing()
 # # # ======================================================================================================================
+

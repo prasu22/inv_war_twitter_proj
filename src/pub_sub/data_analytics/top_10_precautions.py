@@ -69,11 +69,11 @@ def analysis_top_10_preventions(message, output_dictionary,db):
                                 break
                         if flag == 0:
                             output_dictionary[country_code_key].append({word: 1})
-
         else:
             LOGGER.info(f"MESSAGE:Data is not found! ")
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
+
 
 def updated_list_top_10_precautions(tweet_list,db):
 
@@ -81,3 +81,4 @@ def updated_list_top_10_precautions(tweet_list,db):
     for message in tweet_list:
         analysis_top_10_preventions(message,output_dictionary,db)
     return output_dictionary
+

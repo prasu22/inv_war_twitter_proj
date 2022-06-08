@@ -61,12 +61,14 @@ services:
       - ./mongo/data:/data/db
 
 
+
   consumer:
     build: ./docker/consumer
     depends_on :
       - zookeeper
       - kafka
       - mongodb
+
     restart: always
     container_name: consumer
     volumes:

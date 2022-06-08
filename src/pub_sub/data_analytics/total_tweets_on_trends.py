@@ -1,4 +1,3 @@
-
 import logging
 LOGGER = logging.getLogger(__name__)
 from src.common.variable_files import COLL_OF_IMPACT_ANALYSIS_ON_COVID_KEYS, \

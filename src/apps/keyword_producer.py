@@ -1,8 +1,8 @@
 # importing required libraries
 from json import dumps
 from kafka import KafkaProducer
-
 from src.common.variable_files import BOOTSTRAP_SERVER
+
 from src.twitter import tweet_crawler as tc
 from src.twitter.twitter_api_connector import connect_with_twitter
 
@@ -39,3 +39,4 @@ crawler_object = tc.TweetCrawler(tc.config, api)
 
 # sending data in topic after fetching from twitter stream
 crawler_object.fetch_tweets_from_stream(keywords)
+

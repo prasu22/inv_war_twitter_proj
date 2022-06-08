@@ -29,6 +29,7 @@ COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS = 'a_ranking_of_impacte
 COLL_OF_TWEET_PER_COUNTRY_ON_DAILY_BASIS = "a_overall_tweet_per_country_on_daily_basis"
 
 
+
 # ======================================================================================================================
 #message dictionary keys
 COUNTRY_NAME_KEY = 'country'

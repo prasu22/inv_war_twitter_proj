@@ -1,5 +1,4 @@
 import logging
-
 # from src.mongodb.mongo_data_connector import mongodb_connection
 
 LOGGER = logging.getLogger(__name__)
@@ -8,7 +7,6 @@ from src.common.variable_files import COLL_OF_TOTAL_TWEET_PER_COUNTRY, CREATED_A
     COUNTRY_NAME_KEY, COUNTRY_CODE_KEY, MONTH_KEY, COUNT_KEY, YEAR_KEY
 
 def overall_tweets_country_wise(message,output_dictionary,db):
-
     """
         store the data in collection after manupulation in mongodb collection overall_tweet_per_country
         :collection schema
@@ -64,7 +62,6 @@ def overall_tweets_country_wise(message,output_dictionary,db):
                     output_dictionary[country_code_month_year] = 1
                 else:
                     output_dictionary[country_code_month_year] += 1
-
         else:
             LOGGER.info(f"MESSAGE:Data is not found! ")
     except Exception as e:

@@ -21,6 +21,7 @@ from src.pub_sub.data_extract.donation_data_extractor import get_donation_amount
     get_donation_keywords
 from src.pub_sub.data_extract.preventive_keywords_extractor import get_prevention_keywords, get_who_keywords
 from src.pub_sub.data_extract.covid_keywords_extractor import get_covid_keywords
+
 from src.pub_sub.data_extract.tweet_keywords_extractor import get_tweet_keywords
 
 LOGGER = logging.getLogger(__name__)
@@ -43,6 +44,7 @@ my_consumer = KafkaConsumer(
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 #
+
 try:
     conn = mongodb_connection()
     db = conn[DATABASE_TWEET_NEW_DB]

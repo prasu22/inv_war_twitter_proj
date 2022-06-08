@@ -1,4 +1,3 @@
-print("hello consumer1")
 import logging
 import sys
 import json
@@ -34,6 +33,7 @@ LOGGER = logging.getLogger(__name__)
   message = access the data one by one from my_consumer
 """
 
+
 my_consumer = KafkaConsumer(
     TOPIC1,
     bootstrap_servers=[BOOTSTRAP_SERVER],
@@ -43,10 +43,12 @@ my_consumer = KafkaConsumer(
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
+
 try:
     conn = mongodb_connection()
     db = conn[DATABASE_TWEET_NEW_DB]
     LOGGER.info('connection done')
+
     print("connection", db)
 except Exception as e:
     print("error occured")
@@ -122,3 +124,4 @@ for msgs in my_consumer:
 # validating_data()
 
 # # ======================================================================================================================
+

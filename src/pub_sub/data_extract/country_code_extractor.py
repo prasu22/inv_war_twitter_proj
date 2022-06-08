@@ -4,8 +4,6 @@ import re
 
 from src.common.variable_files import COUNTRY_CODE_MAPPED, COUNTRY_NAME, COUNTRY_CODE, COUNTRY_NAME_KEY,COUNTRY_CODE_KEY
 
-
-print("country_code_extractor")
 def get_country_code(message):
     list_of_country = list(COUNTRY_CODE_MAPPED.keys())
     country = re.compile('|'.join(list_of_country), re.IGNORECASE).search(message[COUNTRY_NAME_KEY])
@@ -25,7 +23,9 @@ def get_country_code(message):
         LOGGER.error(f"ERROR:{e}")
 
 
+
 def parse_country_codes(tweet_list):
 
      list_tweet = list(map(lambda x : get_country_code(x), tweet_list))
      return list_tweet
+

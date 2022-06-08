@@ -3,6 +3,7 @@ from time import sleep
 
 import logging
 
+
 from src.common.variable_files import TOPIC3
 
 LOGGER = logging.getLogger(__name__)

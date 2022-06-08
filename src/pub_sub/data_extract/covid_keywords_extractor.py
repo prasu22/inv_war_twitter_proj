@@ -4,6 +4,7 @@ from src.common.app_config import APP_CONFIG
 
 LOGGER = logging.getLogger(__name__)
 import re
+
 from src.common.variable_files import COVID_KEYWORD_KEY, TWEET_KEY, IS_COVID_TWEET
 
 COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS')))
@@ -27,10 +28,10 @@ def get_covid_keywords(message):
         LOGGER.error(f"ERROR:{e} ")
 
 
+
 def parse_covid_keywords(tweet_list):
     list_tweet = list(map(lambda x: get_covid_keywords(x), tweet_list))
     return list_tweet
-
 
 
 

@@ -1,10 +1,8 @@
 from datetime import datetime
-
 import requests
 import os
 import json
 import logging
-
 from src.common.variable_files import TOPIC1
 from src.twitter.config import bearer_token
 

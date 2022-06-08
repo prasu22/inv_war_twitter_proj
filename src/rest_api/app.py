@@ -7,6 +7,7 @@ from src.analytics.tweet_extracts import overall_tweet_per_country_in_last_n_mon
     impact_analysis_on_covid_keys_month, impact_analysis_on_economy_keys, impact_analysis_on_covid_keys
 from src.common.app_config import APP_CONFIG
 
+
 import logging
 LOGGER = logging.getLogger(__name__)
 app = Flask(__name__)
@@ -17,6 +18,7 @@ def info():
     # version = os.environ['API_VERSION']
     # return f"rest app up and running, v-{version}, config= {APP_CONFIG.sections()}"
     return "hello"
+
 
 
 @app.route('/total_tweet_count/<country_code>/<from_date>/<to_date>')
@@ -137,6 +139,7 @@ def total_donations_with_country(country_code):
         LOGGER.error(f"Error:{e}")
         return {'error,',e}
 
+
 @app.route('/impact_analysis_on_economy_keys_by_months/<country_code>')
 def trend_impact_analysis_on_economy_keys_month(country_code):
     country_code = country_code.upper()
@@ -181,3 +184,4 @@ def trend_impact_analysis_on_economy_keys(country_code):
 
 # if __name__ == "__main__":
 #     app.run(debug=True,host='0.0.0.0', port=80)
+

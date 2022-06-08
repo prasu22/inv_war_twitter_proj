@@ -22,8 +22,6 @@ RUN pip install --upgrade pip && \
 RUN chmod +x ./consumer_start.sh
 RUN chown -R consumer: ${CONSUMER_HOME}
 RUN chown -R consumer: ${APP_DIR}
-# RUN python -m nltk.downloader stopwords
-# RUN python -m nltk.downloader punkt && python -m nltk.downloader stopwords
 USER consumer
 WORKDIR ${CONSUMER_HOME}
 ENTRYPOINT [ "/consumer_start.sh" ]

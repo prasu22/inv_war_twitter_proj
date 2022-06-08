@@ -1,6 +1,4 @@
-
 import logging
-
 LOGGER = logging.getLogger(__name__)
 from datetime import datetime
 from src.common.variable_files import COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS, \
@@ -81,7 +79,6 @@ def analysis_overall_tweets_based_on_trends_per_day(message, output_dictionary, 
                             break
                     if flag == 0:
                         output_dictionary[trend_key].append({output_key: 1})
-
         else:
             LOGGER.info(f"MESSAGE:Data is not found! ")
 
@@ -136,3 +133,4 @@ def updated_trend_list_total_tweets(tweet_list, db):
     for message in tweet_list:
         analysis_overall_tweets_based_on_trends_per_day(message, output_dictionary, db)
     return output_dictionary
+

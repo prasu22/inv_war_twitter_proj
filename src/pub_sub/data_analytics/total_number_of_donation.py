@@ -1,5 +1,3 @@
-
-
 import logging
 
 LOGGER = logging.getLogger(__name__)
@@ -77,5 +75,6 @@ def updated_donation_list_total_tweets(tweet_list, db):
    for message in tweet_list:
        analysis_of_total_number_of_donation(message, output_dictionary, db)
    return output_dictionary
+
 
 
