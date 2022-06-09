@@ -13,7 +13,6 @@ kdf = PBKDF2HMAC(algorithm=hashes.SHA256(),
                 iterations=100000)
 
 key = base64.urlsafe_b64encode(kdf.derive(password))
-# print(key)
 file = open('key.key', 'wb')
 file.write(key)
 file.close()

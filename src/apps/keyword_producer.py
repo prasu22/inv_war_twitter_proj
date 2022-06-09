@@ -1,6 +1,8 @@
 # importing required libraries
 from json import dumps
 from kafka import KafkaProducer
+from src.common.variable_files import BOOTSTRAP_SERVER
+
 from src.twitter import tweet_crawler as tc
 from src.twitter.twitter_api_connector import connect_with_twitter
 
@@ -14,7 +16,7 @@ from src.twitter.twitter_api_connector import connect_with_twitter
 """
 
 my_producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
+    bootstrap_servers=[BOOTSTRAP_SERVER],
     api_version=(0, 11, 5),
     value_serializer=lambda x: dumps(x).encode('utf-8')
 )

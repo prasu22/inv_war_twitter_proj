@@ -1,5 +1,5 @@
 import logging
-from src import APP_CONFIG
+from src.common.app_config import APP_CONFIG
 
 LOGGER = logging.getLogger(__name__)
 import re
@@ -11,7 +11,6 @@ from src.common.variable_files import DEFAULT_AMOUNT, CURRENCY_MAPPING, DEFAULT_
 
 DONATION_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'DONATION_KEYWORDS')))
 
-
 def get_donation_amount(message):
     try:
         if re.compile('[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\s?)(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?').search(message[TWEET_KEY]):
@@ -19,9 +18,8 @@ def get_donation_amount(message):
             value = float(re.sub(r'[^\d.]', '', amount))
             message[DONATION_AMOUNT_KEY] = value
             return message
-
-        elif re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b)", re.IGNORECASE).search(message[TWEET_KEY]):
-            amount = re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b)", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
+        elif re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]):
+            amount = re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
             value = float(re.sub(r'[^\d.]', '', amount))
             message[DONATION_AMOUNT_KEY] = value
             return message
@@ -39,10 +37,9 @@ def get_donation_currency(message):
             currency_symbol = re.compile('[$¢£¥฿€₹]').search(message[TWEET_KEY]).group(0)
             message[CURRENCY_NAME_KEY] = CURRENCY_MAPPING[currency_symbol]
             return message
-
-        elif re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b)", re.IGNORECASE).search(
+        elif re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(
                 message[TWEET_KEY]):
-            currency_name = re.compile(r"\bUSD\b|\bINR\b", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
+            currency_name = re.compile(r"\bUSD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
             message[CURRENCY_NAME_KEY] = currency_name.upper()
             return message
 
@@ -66,6 +63,19 @@ def get_donation_keywords(message):
         LOGGER.error(f"ERROR:{e} ")
 
 
+
+def parse_donation_keywords(tweet_list):
+    list_tweet = list(map(lambda x: get_donation_keywords(x), tweet_list))
+    return list_tweet
+
+def parse_donation_amount(tweet_list):
+    list_tweet = list(map(lambda x: get_donation_amount(x), tweet_list))
+    return list_tweet
+
+
+def parse_donation_currency(tweet_list):
+    list_tweet = list(map(lambda x: get_donation_currency(x), tweet_list))
+    return list_tweet
 
 
 

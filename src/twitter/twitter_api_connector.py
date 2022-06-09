@@ -1,6 +1,4 @@
-# This module contains all functions/routine to fetch data from twitter using tweepy
-
-
+# twitter authentication
 import tweepy
 from src.twitter.config import consumer_key, consumer_secret, access_token, access_token_secret
 import logging

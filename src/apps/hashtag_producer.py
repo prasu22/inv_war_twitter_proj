@@ -1,7 +1,7 @@
 # importing required libraries
 from json import dumps
 from kafka import KafkaProducer
-
+from src.common.variable_files import BOOTSTRAP_SERVER
 from src.pub_sub.producer_call_twitter_api.data_insert_in_producer_topic import search_api_to_insert_data_in_topic
 from src.twitter import tweet_crawler as tc
 from src.twitter.twitter_api_connector import connect_with_twitter
@@ -16,7 +16,7 @@ from src.twitter.twitter_api_connector import connect_with_twitter
 """
 
 my_producer = KafkaProducer(
-    bootstrap_servers=['localhost:9092'],
+    bootstrap_servers=[BOOTSTRAP_SERVER],
     api_version=(0, 11, 5),
     value_serializer=lambda x: dumps(x).encode('utf-8')
 )
@@ -34,6 +34,3 @@ crawler_object = tc.TweetCrawler(tc.config, api)
 
 for keyword in keywords:
    search_api_to_insert_data_in_topic(crawler_object,my_producer,keyword)
-
-
-

@@ -1,20 +1,19 @@
+from datetime import datetime
 import requests
 import os
 import json
 import logging
-
+from src.common.variable_files import TOPIC1
 from src.twitter.config import bearer_token
 
 LOGGER = logging.getLogger(__name__)
 
 BEARER_TOKEN = bearer_token
 
-
 def bearer_oauth(r):
     """
     Method required by bearer token authentication.
     """
-
     r.headers["Authorization"] = f"Bearer {BEARER_TOKEN}"
     r.headers["User-Agent"] = "v2FilteredStreamPython"
     return r
@@ -35,7 +34,6 @@ def get_rules():
 def delete_all_rules(rules):
     if rules is None or "data" not in rules:
         return None
-
     ids = list(map(lambda rule: rule["id"], rules["data"]))
     payload = {"delete": {"ids": ids}}
     response = requests.post(
@@ -85,20 +83,26 @@ def get_stream(set):
                 response.status_code, response.text
             )
         )
-    import src.pub_sub.producer as prod
+    import src.pub_sub.twitter_rest_api_producer as prod
     for response_line in response.iter_lines():
         if response_line:
-            # print(response_line)
             json_response = json.loads(response_line)
             print(type(json_response))
             value = json_response
-            print(value)
-            if value['includes']['users'][0].get("location") and  len(value['data']['text'])>0:
-                my_data = {'_id': str(value['data']['id']), 'tweet': value['data']['text'], 'country': value['includes']['users'][0]['location'], 'created_at': str(value['data']['created_at'])}
-                print("stream mydata", my_data)
-                prod.my_producer.send('random_data', value=my_data)
-            else:
-                LOGGER.INFO("location is not available")
+            try:
+                if value['includes']['users'][0].get("location") and  len(value['data']['text'])>0:
+                    dates = str(value['data']['created_at'])
+                    new_dt = str(dates[:19])
+                    date = datetime.strftime(datetime.strptime(new_dt, "%Y-%m-%dT%H:%M:%S"), "%Y-%m-%d %H:%M:%S")
+                    my_data = {'_id': str(value['data']['id']), 'tweet': value['data']['text'], 'country': value['includes']['users'][0]['location'], 'created_at': date}
+                    print("stream mydata", my_data)
+                    prod.my_producer.send(TOPIC1, value=my_data)
+                else:
+                    LOGGER.info("location is not available")
+            except Exception as e:
+                LOGGER.error(f"Error:{e}")
+                print(f"error:{e}")
+
 
 
 
