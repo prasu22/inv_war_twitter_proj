@@ -1,7 +1,5 @@
 import logging
-
 from cleantext import clean
-
 from src.common.app_config import APP_CONFIG
 from src.common.variable_files import TWEET_KEY, TWEET_KEYWORDS
 import re
