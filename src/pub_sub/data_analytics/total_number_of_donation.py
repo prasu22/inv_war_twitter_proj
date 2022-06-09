@@ -42,7 +42,7 @@ def analysis_of_total_number_of_donation(message, output_dictionary, db):
        if len(covid_data) > 0 and len(donation_data) > 0 and currency_name != "NO_Currency" and amount > 0:
            print(country_name, country_code, amount, currency_name)
 
-           if db[COLL_OF_DONATION_PER_COUNTRY].count_documents({COUNTRY_NAME_KEY: country_name}) == 0:
+           if db[COLL_OF_DONATION_PER_COUNTRY].count_documents({COUNTRY_NAME_KEY: country_name, CURRENCY_NAME_KEY: currency_name}) == 0:
                db[COLL_OF_DONATION_PER_COUNTRY].insert_one(
                    {COUNT_KEY: 1, COUNTRY_NAME_KEY: country_name, COUNTRY_CODE_KEY: country_code,
                     DONATION_AMOUNT_KEY: amount,
@@ -55,7 +55,7 @@ def analysis_of_total_number_of_donation(message, output_dictionary, db):
                else:
                    output_dictionary[country_code] += 1
            else:
-               db[COLL_OF_DONATION_PER_COUNTRY].update_one({COUNTRY_NAME_KEY: country_name},
+               db[COLL_OF_DONATION_PER_COUNTRY].update_one({COUNTRY_NAME_KEY: country_name, CURRENCY_NAME_KEY: currency_name},
                                                            {'$inc': {COUNT_KEY: 1, DONATION_AMOUNT_KEY: amount}})
 
                # for validation
