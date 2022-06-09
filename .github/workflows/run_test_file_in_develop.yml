@@ -29,5 +29,6 @@ jobs:
       - name: Run all test files
         run: |
           mkdir -p /tmp/var/log/twitter_proj
+          pip install clean-text
           export PYTHONPATH=. && python test/test_all_extractors.py 
           
