@@ -1,22 +1,22 @@
 import logging
-import cleantext
 from src.common.app_config import APP_CONFIG
 from src.common.variable_files import TWEET_KEY, TWEET_KEYWORDS
 import re
 import string
+from cleantext import clean
 import nltk as nltk
 from nltk import ngrams
 nltk.download('stopwords')
 nltk.download('punkt')
 # from nltk.corpus import stopwords
 
-
-
 LOGGER = logging.getLogger(__name__)
 
 stopword = nltk.corpus.stopwords.words('english')
 COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS')))
 # print("tweet_keyword_extractor")
+
+
 def get_tweet_keywords(message):
     """
     used to creat the tweet text data removing digit, url,
@@ -34,11 +34,11 @@ def get_tweet_keywords(message):
     """
     try:
         tweet = message[TWEET_KEY]
-        tweet_without_emoji = cleantext.clean(tweet, no_emoji=True)
+        tweet_without_emoji = clean(tweet, no_emoji=True)
         tweet_without_numbers = re.sub("[0-9]", " ", tweet_without_emoji)
         tweet_without_punctuation = re.sub('[%s]' % re.escape(string.punctuation), ' ', tweet_without_numbers)
         tweet_without_stopwords = (" ").join([i for i in tweet_without_punctuation.split() if i.lower() not in stopword and len(i) > 3])
-        # print(tweet_without_stopwords)
+        print(tweet_without_stopwords)
         n1=1
         n2=2
         n3=3
