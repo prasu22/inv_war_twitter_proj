@@ -25,7 +25,6 @@ def get_country_code(message):
 
 
 def parse_country_codes(tweet_list):
-
      list_tweet = list(map(lambda x : get_country_code(x), tweet_list))
      return list_tweet
 

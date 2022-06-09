@@ -3,6 +3,7 @@ import urllib
 import logging
 
 from src.common.app_config import APP_CONFIG
+from src.common.variable_files import DATABASE_TWEET_NEW_DB
 
 LOGGER = logging.getLogger(__name__)
 
@@ -27,6 +28,7 @@ def mongodb_connection():
         password = urllib.parse.quote_plus(pwd)
         db_location = APP_CONFIG.get('mongo','db_location')
         conn_url=f"{db_location}://{username}:{password}@{server}"
+        # print("conn url",conn_url)
         conn = MongoClient(conn_url)
         return conn
     except Exception as e:
@@ -35,8 +37,10 @@ def mongodb_connection():
 
 def fetch_data():
     conn = mongodb_connection()
-    print("connect i",conn)
-    db = conn["tweet_new_db"]
+    # print("database name ",DATABASE_TWEET_NEW_DB)
+    # print("connect i",conn)
+    # conn.drop_database(DATABASE_TWEET_NEW_DB)
+    db = conn[DATABASE_TWEET_NEW_DB]
     print(db['tweet_processed_data'].count_documents({}))
 fetch_data()
 

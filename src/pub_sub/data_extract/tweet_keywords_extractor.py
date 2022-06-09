@@ -38,7 +38,7 @@ def get_tweet_keywords(message):
         tweet_without_numbers = re.sub("[0-9]", " ", tweet_without_emoji)
         tweet_without_punctuation = re.sub('[%s]' % re.escape(string.punctuation), ' ', tweet_without_numbers)
         tweet_without_stopwords = (" ").join([i for i in tweet_without_punctuation.split() if i.lower() not in stopword and len(i) > 3])
-        print(tweet_without_stopwords)
+        # print(tweet_without_stopwords)
         n1=1
         n2=2
         n3=3

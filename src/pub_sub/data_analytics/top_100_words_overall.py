@@ -1,6 +1,5 @@
 import logging
 
-
 LOGGER = logging.getLogger(__name__)
 from src.common.variable_files import COLL_OF_WORDS_FROM_TWEETS, TWEET_KEYWORDS, IS_COVID_TWEET
 from src.common.variable_files import COUNTRY_NAME_KEY ,COUNTRY_CODE_KEY  ,WORD_KEY,COUNT_KEY
@@ -30,7 +29,7 @@ def analysis_top_100_words(message,output_dictionary,db):
         list_of_words = message[TWEET_KEYWORDS]
         country_name = message[COUNTRY_NAME_KEY]
         country_code = message[COUNTRY_CODE_KEY]
-        print("list_of_words",list_of_words)
+        # print("list_of_words",list_of_words)
 
         if result:
             for words in list_of_words:
