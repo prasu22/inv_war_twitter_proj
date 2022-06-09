@@ -30,5 +30,6 @@ jobs:
         run: |
           mkdir -p /tmp/var/log/twitter_proj
           pip install clean-text
+          pip install nltk
           export PYTHONPATH=. && python test/test_all_extractors.py 
           
