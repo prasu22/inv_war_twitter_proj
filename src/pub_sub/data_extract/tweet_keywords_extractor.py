@@ -1,9 +1,11 @@
 import logging
+
+from cleantext import clean
+
 from src.common.app_config import APP_CONFIG
 from src.common.variable_files import TWEET_KEY, TWEET_KEYWORDS
 import re
 import string
-from cleantext import clean
 import nltk as nltk
 from nltk import ngrams
 nltk.download('stopwords')
