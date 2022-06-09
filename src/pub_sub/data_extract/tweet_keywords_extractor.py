@@ -1,5 +1,5 @@
 import logging
-from cleantext import clean
+import cleantext
 from src.common.app_config import APP_CONFIG
 from src.common.variable_files import TWEET_KEY, TWEET_KEYWORDS
 import re
@@ -34,7 +34,7 @@ def get_tweet_keywords(message):
     """
     try:
         tweet = message[TWEET_KEY]
-        tweet_without_emoji = clean(tweet, no_emoji=True)
+        tweet_without_emoji = cleantext.clean(tweet, no_emoji=True)
         tweet_without_numbers = re.sub("[0-9]", " ", tweet_without_emoji)
         tweet_without_punctuation = re.sub('[%s]' % re.escape(string.punctuation), ' ', tweet_without_numbers)
         tweet_without_stopwords = (" ").join([i for i in tweet_without_punctuation.split() if i.lower() not in stopword and len(i) > 3])
