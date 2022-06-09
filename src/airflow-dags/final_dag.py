@@ -38,13 +38,12 @@ coll_name = db[COLL_METADATA]
 
 LOGGER = logging.getLogger(__name__)
 
-
 my_consumer = KafkaConsumer(
     TOPIC2,
     bootstrap_servers=[BOOTSTRAP_SERVER],
     auto_offset_reset='earliest',
     enable_auto_commit=True,
-    group_id = GROUP_ID,
+    group_id=GROUP_ID,
     value_deserializer=lambda x: json.loads(x.decode('utf-8'))
 )
 
@@ -62,15 +61,15 @@ def data_from_topic(ti):
         else:
             print('err mess', message)
     # li = [{'_id': '153007049', 'tweet': 'Wayfinding and wear mask covid unemployment gdp down corona COVID-19 https://t.co/o2K04lkGmV', 'country': 'no country', 'created_at': '2022-06-03 04:29:18' }, {'_id': '1580154338733333', 'tweet': '@elisled2 And monkeypox most likely covid donation $ 200.', 'country': 'no country', 'created_at': '2022-06-03 04:29:18'}, {'_id': '158015433873', 'tweet': '@elisled2 And monkeypox most likely covid donation $ 200.', 'country': 'no country', 'created_at': '2022-06-03 04:29:18'}]
-    ti.xcom_push(key='raw_data',value=li)
+    ti.xcom_push(key='raw_data', value=li)
 
 
 def duplicate_country(ti):
-
-    li = ti.xcom_pull(task_ids = 'data_from_topic',key = 'raw_data')
+    li = ti.xcom_pull(task_ids='data_from_topic', key='raw_data')
     li_message = parse_country_codes(li)
-    print('helo',li_message)
+    print('helo', li_message)
     ti.xcom_push(key='message_list', value=li_message)
+
 
 def duplicate_covid_keywords(ti):
     message = ti.xcom_pull(task_ids='get_country_code', key='message_list')
@@ -130,7 +129,6 @@ def insert_mongo(ti):
 #########################################################################
 
 def total_tweets(ti):
-
     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
     li_message = updated_list_total_tweets(message, db)
     print('bye', li_message)
@@ -138,7 +136,6 @@ def total_tweets(ti):
 
 
 def tweets_daily_basis(ti):
-
     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
     li_message = updated_list_daily_tweets(message, db)
     print('hello', li_message)
@@ -153,7 +150,7 @@ def get_top_preventions(ti):
     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
     new_dict = updated_list_top_10_precautions(message, db)
     print(new_dict)
-    ti.xcom_push(key="top_prevention", value = new_dict)
+    ti.xcom_push(key="top_prevention", value=new_dict)
 
 
 def get_top_words(ti):
@@ -181,10 +178,7 @@ def get_trend_data(ti):
 def get_trend_daily(ti):
     message = ti.xcom_pull(task_ids='keyword_data', key='message_list')
     trend_list = updated_trend_list_total_tweets(message, db)
-    print('trend_list',trend_list)
-
-
-
+    print('trend_list', trend_list)
 
 
 ############################################################
@@ -252,11 +246,12 @@ def test_donation(ti):
 
     dict1 = test_donation_metadata(li_ids)
     dict2 = test_donation_raw_data(li_ids)
-    assert(dict1 == dict2)
+    assert (dict1 == dict2)
     if dict1 == dict2:
         print("Yes")
     else:
         print("No")
+
 
 ################################################################################
 
@@ -274,16 +269,15 @@ def collection_for_validation(ti):
     coll_name.insert_one({'start_datetime': start_datetime, RECORD_IDS: list_ids})
     print('inserted')
 
-def mid(ti):
 
+def mid(ti):
     date_time_list = ti.xcom_pull(task_ids='make_collection', key='datetime_record')
     start_datetime = date_time_list['start_datetime']
     li_message = ti.xcom_pull(task_ids='total_tweets', key='total_tweets_data')
-    li_message_1 = ti.xcom_pull(task_ids = 'tweets_daily' , key ='tweets_daily_basis')
-    new_dict = ti.xcom_pull(task_ids = 'top_preventions', key = 'top_prevention')
-    new_dict_1 =ti.xcom_pull(task_ids = 'top_words',key='get_top_words')
-    li_message_2 =ti.xcom_pull(task_ids ='donation_coll',key ='donation_tweets')
-
+    li_message_1 = ti.xcom_pull(task_ids='tweets_daily', key='tweets_daily_basis')
+    new_dict = ti.xcom_pull(task_ids='top_preventions', key='top_prevention')
+    new_dict_1 = ti.xcom_pull(task_ids='top_words', key='get_top_words')
+    li_message_2 = ti.xcom_pull(task_ids='donation_coll', key='donation_tweets')
 
     batch_list = list(coll_name.find().sort('start_datetime', -1))
     if len(batch_list) == 1:
@@ -291,12 +285,14 @@ def mid(ti):
     else:
         before_batch = batch_list[1]
 
-
     if before_batch['start_datetime'] == start_datetime:
 
         coll_name.update_one({'start_datetime': start_datetime},
-                              {'$set': {TOTAL_TWEETS_BEFORE: {}, TOTAL_TWEETS_AFTER : li_message,TWEET_DAILY_BEFORE: {}, TWEET_DAILY_AFTER: li_message_1,PREVENTION_BEFORE: {}, PREVENTION_AFTER : new_dict,
-                                        TOP_WORDS_BEFORE: {}, TOP_WORDS_AFTER: new_dict_1,DONATION_BEFORE: {}, DONATION_AFTER: li_message_2}})
+                             {'$set': {TOTAL_TWEETS_BEFORE: {}, TOTAL_TWEETS_AFTER: li_message, TWEET_DAILY_BEFORE: {},
+                                       TWEET_DAILY_AFTER: li_message_1, PREVENTION_BEFORE: {},
+                                       PREVENTION_AFTER: new_dict,
+                                       TOP_WORDS_BEFORE: {}, TOP_WORDS_AFTER: new_dict_1, DONATION_BEFORE: {},
+                                       DONATION_AFTER: li_message_2}})
 
 
     else:
@@ -306,7 +302,6 @@ def mid(ti):
         temp_dict_2 = before_batch[PREVENTION_AFTER]
         temp_dict_3 = before_batch[TOP_WORDS_AFTER]
         temp_dict_4 = before_batch[DONATION_AFTER]
-
 
         ## total tweets
         for key, value in temp_dict.items():
@@ -321,7 +316,6 @@ def mid(ti):
                 li_message_1[key] = value
             else:
                 li_message_1[key] += value
-
 
         ### preventions
         for key, value in temp_dict_2.items():
@@ -377,11 +371,12 @@ def mid(ti):
             else:
                 li_message_2[key] += value
 
-        coll_name.update_one({'start_datetime':start_datetime},
-                              {'$set': {TOTAL_TWEETS_BEFORE: temp_dict, TOTAL_TWEETS_AFTER: li_message ,TWEET_DAILY_BEFORE: temp_dict_1, TWEET_DAILY_AFTER: li_message_1,
-                                        PREVENTION_BEFORE: temp_dict_2, PREVENTION_AFTER: new_dict,TOP_WORDS_BEFORE: temp_dict_3, TOP_WORDS_AFTER: new_dict_1,DONATION_BEFORE: temp_dict_4, DONATION_AFTER: li_message_2}})
-
-
+        coll_name.update_one({'start_datetime': start_datetime},
+                             {'$set': {TOTAL_TWEETS_BEFORE: temp_dict, TOTAL_TWEETS_AFTER: li_message,
+                                       TWEET_DAILY_BEFORE: temp_dict_1, TWEET_DAILY_AFTER: li_message_1,
+                                       PREVENTION_BEFORE: temp_dict_2, PREVENTION_AFTER: new_dict,
+                                       TOP_WORDS_BEFORE: temp_dict_3, TOP_WORDS_AFTER: new_dict_1,
+                                       DONATION_BEFORE: temp_dict_4, DONATION_AFTER: li_message_2}})
 
         print('updated_successfully')
 
@@ -390,12 +385,12 @@ def mid(ti):
 
 dag = DAG('consumer777_dag',
           description='Python DAG',
-          schedule_interval='*/5 * * * *',
+          schedule_interval='*/2 * * * *',
           start_date=datetime(2018, 11, 1),
           catchup=False)
 
 start = EmptyOperator(task_id='start', dag=dag)
-consumer_data = PythonOperator(task_id ='data_from_topic',python_callable =data_from_topic)
+consumer_data = PythonOperator(task_id='data_from_topic', python_callable=data_from_topic)
 ### extractor
 
 ############################################################################
@@ -416,8 +411,8 @@ tweets_daily_basis = PythonOperator(task_id='tweets_daily', python_callable=twee
 top_preventions = PythonOperator(task_id='top_preventions', python_callable=get_top_preventions)
 top_words = PythonOperator(task_id='top_words', python_callable=get_top_words)
 donation_coll = PythonOperator(task_id='donation_coll', python_callable=get_donation_data)
-trends_tweet = PythonOperator(task_id ='trending_data',python_callable =get_trend_data)
-trends_tweet_daily = PythonOperator(task_id ='trending_data_daily',python_callable =get_trend_daily)
+trends_tweet = PythonOperator(task_id='trending_data', python_callable=get_trend_data)
+trends_tweet_daily = PythonOperator(task_id='trending_data_daily', python_callable=get_trend_daily)
 
 # ###################################################
 
@@ -435,4 +430,6 @@ make_collection = PythonOperator(task_id='make_collection', python_callable=coll
 end = EmptyOperator(task_id='end', dag=dag, trigger_rule=TriggerRule.ONE_SUCCESS)
 
 start >> consumer_data >> country_code >> covid_keywords >> donation_data >> prevention_data >> trend_data >> keywords_data >> insert_mongo >> [
-    total_tweets, tweets_daily_basis, top_preventions, top_words, donation_coll,trends_tweet,trends_tweet_daily] >> make_collection >> mid >> [test_total_tweets, test_tweets_daily_basis, test_top_100, test_donation] >> end
+    total_tweets, tweets_daily_basis, top_preventions, top_words, donation_coll, trends_tweet,
+    trends_tweet_daily] >> make_collection >> mid >> [test_total_tweets, test_tweets_daily_basis, test_top_100,
+                                                      test_donation] >> end
