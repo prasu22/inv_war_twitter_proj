@@ -22,7 +22,7 @@ class TestAllConsumers(unittest.TestCase):
     TestPreventionKeywords
     TestTrendingKeywords
     TestEncryptionDecryptionMethod
-    TestTweetKeywords
+    # TestTweetKeywords
 
 
 if __name__ == '__main__':
