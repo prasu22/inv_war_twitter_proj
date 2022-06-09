@@ -52,7 +52,7 @@ WORD_KEY = 'word'
 TREND_KEY = "trend"
 ECONOMY_VALUE = "economy"
 COVID_VALUE = "covid"
-BATCH_SIZE = 10
+BATCH_SIZE = 100
 TWEET_KEYWORDS = "tweet_keywords"
 IS_COVID_TWEET = "is_covid_tweet"
 ######## metadata table keys
