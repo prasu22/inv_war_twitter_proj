@@ -14,8 +14,6 @@ from test.test_tweet_keywords_extractor import TestTweetKeywords
 class TestAllConsumers(unittest.TestCase):
 
     # call all the classes from all the test module
-    ## this is for testing all files
-
     TestCountryCode
     TestCovidKeywords
     TestDonationDetails
