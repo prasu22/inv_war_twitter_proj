@@ -10,13 +10,13 @@ nltk.download('stopwords')
 nltk.download('punkt')
 # from nltk.corpus import stopwords
 
-
-
 LOGGER = logging.getLogger(__name__)
 
 stopword = nltk.corpus.stopwords.words('english')
 COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS')))
 # print("tweet_keyword_extractor")
+
+
 def get_tweet_keywords(message):
     """
     used to creat the tweet text data removing digit, url,
