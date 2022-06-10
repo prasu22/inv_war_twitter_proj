@@ -136,7 +136,7 @@ Response Status Code:
   - 200: Return count and country code per country
   - 500: Internal Server Error 
 
-  
+ For more information about API, refer this: [Doc](https://docs.google.com/document/d/11Y_E7dSwzooN6lTaS5ROtsU5Qge4SWvyZ0kYmn3yxBE/edit)
 
  ## Data Visualization
   
