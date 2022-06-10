@@ -20,6 +20,7 @@ def search_api_to_insert_data_in_topic(crawler_object,my_producer,keyword):
                                              '%Y-%m-%d %H:%M:%S')
             try:
                 my_data = {'_id': str(id), 'tweet': full_text, 'country': country, 'created_at': str(new_datetime)}
+                print("search_apis",my_dataq)
                 my_producer.send(TOPIC3, value=my_data)
                 sleep(2)
             except Exception as e:
