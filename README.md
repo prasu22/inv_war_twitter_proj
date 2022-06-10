@@ -33,7 +33,8 @@ cd inv_war_twitter_proj
 pip install -r requirements.txt
 ```
 
-## To Create Docker container
+
+## To run the Application and Docker container
 
 ### Build the docker container
 ```
@@ -48,7 +49,27 @@ docker-compose stop kafka zookeeper
 docker-compose up -d kafka zookeeper
 ```
 
-### To run the airflow UI
+### To validate the docker container
+
+```
+docker ps
+```
+
+## How data production is working in pipeline:
+
+Using twitter stream API, we are fetching the tweets using kafka producer and insert the data in Kafka topic.
+
+## How to consume the data
+
+### With Airflow:
+
+Airflow dags are created which consumes data thorugh Kafka topic and store the data in MongoDB container after processing.
+
+### Without Airflow
+
+We created consumer container which fetch the data from kafka topic, and store the data in MongoDB container after processing.
+
+## To run the airflow UI
 
 Hit the server: http://localhost:8000/
 
