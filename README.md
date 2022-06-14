@@ -54,6 +54,8 @@ docker-compose up -d kafka zookeeper
 ```
 docker ps
 ```
+<img width="698" alt="image" src="https://user-images.githubusercontent.com/47415702/173573271-0fe314d8-a3e7-4144-ae84-8f84c2065df6.png">
+
 
 ## How data production is working in pipeline:
 
