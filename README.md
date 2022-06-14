@@ -33,7 +33,8 @@ cd inv_war_twitter_proj
 pip install -r requirements.txt
 ```
 
-## To Create Docker container
+
+## To run the Application and Docker container
 
 ### Build the docker container
 ```
@@ -48,7 +49,29 @@ docker-compose stop kafka zookeeper
 docker-compose up -d kafka zookeeper
 ```
 
-### To run the airflow UI
+### To validate the docker container
+
+```
+docker ps
+```
+<img width="698" alt="image" src="https://user-images.githubusercontent.com/47415702/173573271-0fe314d8-a3e7-4144-ae84-8f84c2065df6.png">
+
+
+## How data production is working in pipeline:
+
+Using twitter stream API, we are fetching the tweets using kafka producer and insert the data in Kafka topic.
+
+## How to consume the data
+
+### With Airflow:
+
+Airflow dags are created which consumes data thorugh Kafka topic and store the data in MongoDB container after processing.
+
+### Without Airflow
+
+We created consumer container which fetch the data from kafka topic, and store the data in MongoDB container after processing.
+
+## To run the airflow UI
 
 Hit the server: http://localhost:8000/
 
@@ -136,7 +159,7 @@ Response Status Code:
   - 200: Return count and country code per country
   - 500: Internal Server Error 
 
-  
+ For more information about API, refer this: [Doc](https://docs.google.com/document/d/11Y_E7dSwzooN6lTaS5ROtsU5Qge4SWvyZ0kYmn3yxBE/edit)
 
  ## Data Visualization
   
