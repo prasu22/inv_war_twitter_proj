@@ -10,6 +10,7 @@ class TestDonationDetails(unittest.TestCase):
         # checking currency in INR
         message = {'tweet': 'hi your total amount is 234 INR'}
         result = get_donation_amount(message)
+        print(result)
         self.assertEqual(result[DONATION_AMOUNT_KEY], float(234))
 
     def test_donation_amount_case_2(self):

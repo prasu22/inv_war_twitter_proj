@@ -16,20 +16,23 @@ def get_donation_amount(message):
         if re.compile('[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\s?)(\d[0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?').search(message[TWEET_KEY]):
             amount = re.compile('[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\s?)(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?').search(message[TWEET_KEY]).group(0)
             amount = amount.strip()
-            for idx,val in enumerate(amount[::-1]):
-                if val.isdigit():
-                    amount = amount[:-idx]
-                    break
+            if amount[:-1]=='.':
+                for idx,val in enumerate(amount[::-1]):
+                    if val.isdigit():
+                        amount = amount[:-idx]
+                        break
             value = float(re.sub(r'[^\d.]', '', amount))
             message[DONATION_AMOUNT_KEY] = value
             return message
-        elif re.compile(r"(\d[0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]):
-            amount = re.compile(r"(\d[0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
+        elif re.compile(r"(\d[0-9,.]+)(\s?)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]):
+            amount = re.compile(r"(\d[0-9,.]+)(\s?)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
             amount = amount[:-3].strip()
-            for idx, val in enumerate(amount[::-1]):
-                if val.isdigit():
-                    amount = amount[:-idx]
-                    break
+            if amount[:-1]=='.':
+                for idx, val in enumerate(amount[::-1]):
+                    print(idx,val)
+                    if val.isdigit():
+                        amount = amount[:-idx]
+                        break
             value = float(re.sub(r'[^\d.]', '', amount))
             message[DONATION_AMOUNT_KEY] = value
             return message
