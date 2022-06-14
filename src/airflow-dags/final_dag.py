@@ -1,17 +1,12 @@
-import json
 import logging
-from datetime import datetime
-
 from airflow import DAG
 from airflow.operators.empty import EmptyOperator
 from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 from kafka import KafkaConsumer
-
-from src.common.variable_files import GROUP_ID, TOPIC1, BOOTSTRAP_SERVER, TOTAL_TWEETS_BEFORE, TOTAL_TWEETS_AFTER, \
+from src.common.variable_files import GROUP_ID, BOOTSTRAP_SERVER, TOTAL_TWEETS_BEFORE, TOTAL_TWEETS_AFTER, \
     PREVENTION_BEFORE, PREVENTION_AFTER, TOPIC2
 from src.mongodb.insert_data_in_mongo import insert_preprocessed_data
-from src.mongodb.mongo_data_connector import mongodb_connection
 from src.pub_sub.data_analytics.overall_tweets_per_country import updated_list_total_tweets
 from src.pub_sub.data_analytics.top_100_words_overall import updated_list_top_words
 from src.pub_sub.data_analytics.top_10_precautions import updated_list_top_10_precautions
@@ -123,9 +118,6 @@ def insert_mongo(ti):
     #     pass
 
 
-# def helper()
-
-### now analytics part
 #########################################################################
 
 def total_tweets(ti):

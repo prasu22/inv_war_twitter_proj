@@ -13,13 +13,23 @@ DONATION_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'DONATION_KEYWO
 
 def get_donation_amount(message):
     try:
-        if re.compile('[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\s?)(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?').search(message[TWEET_KEY]):
+        if re.compile('[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\s?)(\d[0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?').search(message[TWEET_KEY]):
             amount = re.compile('[$¢£¤¥֏؋৲৳৻૱௹฿៛₹](\s?)(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?').search(message[TWEET_KEY]).group(0)
+            amount = amount.strip()
+            for idx,val in enumerate(amount[::-1]):
+                if val.isdigit():
+                    amount = amount[:-idx]
+                    break
             value = float(re.sub(r'[^\d.]', '', amount))
             message[DONATION_AMOUNT_KEY] = value
             return message
-        elif re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]):
-            amount = re.compile(r"(\d[ 0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
+        elif re.compile(r"(\d[0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]):
+            amount = re.compile(r"(\d[0-9,.]+)(k)?(m)?(b)?(M)?(B)?(cr)?(Cr)?(\s?)(USD\b|\bINR\b|\bGHS\b|\bEGP\b|\bJPY\b|\bTHB\b|\bEUR\b)", re.IGNORECASE).search(message[TWEET_KEY]).group(0)
+            amount = amount[:-3].strip()
+            for idx, val in enumerate(amount[::-1]):
+                if val.isdigit():
+                    amount = amount[:-idx]
+                    break
             value = float(re.sub(r'[^\d.]', '', amount))
             message[DONATION_AMOUNT_KEY] = value
             return message
@@ -29,7 +39,6 @@ def get_donation_amount(message):
             return message
     except Exception as e:
         LOGGER.error(f"ERROR:{e} ")
-
 
 def get_donation_currency(message):
     try:

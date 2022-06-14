@@ -37,8 +37,6 @@ def mongodb_connection():
 
 def fetch_data():
     conn = mongodb_connection()
-    # print("database name ",DATABASE_TWEET_NEW_DB)
-    # print("connect i",conn)
     # conn.drop_database(DATABASE_TWEET_NEW_DB)
     db = conn[DATABASE_TWEET_NEW_DB]
     print(db['tweet_processed_data'].count_documents({}))

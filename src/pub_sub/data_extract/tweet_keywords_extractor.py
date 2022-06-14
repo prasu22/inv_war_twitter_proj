@@ -14,7 +14,6 @@ LOGGER = logging.getLogger(__name__)
 
 stopword = nltk.corpus.stopwords.words('english')
 COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS')))
-# print("tweet_keyword_extractor")
 
 
 def get_tweet_keywords(message):
@@ -38,7 +37,6 @@ def get_tweet_keywords(message):
         tweet_without_numbers = re.sub("[0-9]", " ", tweet_without_emoji)
         tweet_without_punctuation = re.sub('[%s]' % re.escape(string.punctuation), ' ', tweet_without_numbers)
         tweet_without_stopwords = (" ").join([i for i in tweet_without_punctuation.split() if i.lower() not in stopword and len(i) > 3])
-        print(tweet_without_stopwords)
         n1=1
         n2=2
         n3=3
@@ -63,7 +61,6 @@ def get_tweet_keywords(message):
 #
 # message = {"tweet":"@nathan_cllr @StephenNolan It\u2019s when where how this that weren't a bit like their failed idea of Covid passports &amp; wanting to allow men to avail of free period products.  Also their failure to address the disaster of MOT centres and wanting to give every family more free money.\nThe SDLP would lead this country to absolute ruin."}
 # updated_message = get_tweet_keywords(message)
-# print(updated_message)
 
 
 

@@ -1,6 +1,4 @@
 import logging
-import sys
-
 from src.common.variable_files import COLL_OF_RAW_DATA, TWEET_KEY, ID_KEY, DATABASE_TWEET_NEW_DB
 from src.encryption_and_decryption_data.encrypt_and_decryption_data import encrypt_string
 

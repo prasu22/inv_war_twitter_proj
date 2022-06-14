@@ -4,7 +4,7 @@ from src.common.variable_files import DATABASE_TWEET_NEW_DB, COLL_OF_TOTAL_TWEET
     COLL_OF_DONATION_PER_COUNTRY, COLL_OF_IMPACT_ANALYSIS_ON_COVID_KEYS, COLL_OF_IMPACT_ANALYSIS_ON_ECONOMY_KEYS, \
     COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_COVID_KEYS, COLL_OF_RANKING_COUNTRY_BASED_ON_TWEET_WITH_ECONOMY_KEYS, \
     COUNT_KEY, COUNTRY_CODE_KEY
-
+import pandas as pd
 
 LOGGER = logging.getLogger(__name__)
 
@@ -202,62 +202,66 @@ def total_no_of_donations(country_code):
 #shubham query
 def impact_analysis_on_covid_keys_month(country_code):
     try:
-        start_datetime = datetime.now().strftime("%Y-%m")
 
-        start_month = datetime.strptime(start_datetime, '%Y-%m').month
-        start_year = datetime.strptime(start_datetime, "%Y-%m").year
-
+        start_date = datetime.now().strftime("%Y-%m-%d")
+        date_format = "%Y-%m-%d"
+        dtObj = datetime.strptime(start_date, date_format)
+        past_date = dtObj - pd.DateOffset(months=2)
+        end_date = past_date.strftime("%Y-%m-%d")
         answer = list(coll_ranking_impact_covid_keys.aggregate([
-            {'$project': {'date': {'$split': ["$created_at", "-"]}, '_id': 0, 'country_code': 1, 'count': 1}},
-            {"$project": {"year": {"$arrayElemAt": ["$date", 0]}, "month": {"$arrayElemAt": ["$date", 1]},
-                          'country_code': 1, 'count': 1}},
-            {"$project": {"mo": {"$convert": {"input": "$month", "to": "int", "onError": "An error occurred"}},
-                          "yr": {"$convert": {"input": "$year", "to": "int", "onError": "An error occurred"}},
-                          "country_code": 1, 'count': 1}},
-            {'$project': {'modiff': {'$subtract': [start_month, "$mo"]}, '_id': 0, 'country_code': 1, 'count': 1,
-                          'yr': 1}},
-            {"$match": {
-                "$and": [{"yr": {'$eq': start_year}}, {"modiff": {'$lte': 2}}, {'country_code': country_code}]}},
-            {'$project': {'country_code': 1, 'count': 1, '_id': 0, 'country': 1}},
-            {"$group": {"_id": {"country_code": "$country_code"}, "count": {"$sum": 1}}}
+            {"$match": {"created_at": {"$gte": end_date, "$lte": start_date}}},
+            {"$project": {'weekdata': {"$isoWeek": {"$dateFromString": {"dateString": "$created_at"}}},
+                          'year': {"$year": {"$dateFromString": {"dateString": "$created_at"}}},
+                          'month': {"$month": {"$dateFromString": {"dateString": "$created_at"}}}, 'country_code': 1,
+                          "count": 1}},
+            {"$group": {"_id": {"country_code": "$country_code", "week": "$weekdata", "year": "$year"},
+                        'month': {"$first": "$month"}, "count": {"$sum": "$count"}}},
+            {"$sort": {"_id.week": 1, "_id.country_code": 1}}
         ]))
         # print(answer)
         if answer:
-            return {"country_code":answer[0]["_id"]["country_code"],COUNT_KEY:answer[0]["count"]}
+            return answer
         else:
-            return {"country_code":country_code,COUNT_KEY:"No Record Found"}
+            return [{"country_code": country_code, COUNT_KEY: "No Record Found", "year": "none", "month": "none",
+                     "week": "none"}]
     except Exception as e:
         LOGGER.error(f"ERROR:{e}")
         return "error occurred"
+
 def impact_analysis_on_economy_keys_month(country_code):
     try:
-        start_datetime = datetime.now().strftime("%Y-%m")
+        start_date = datetime.now().strftime("%Y-%m-%d")
+        date_format = "%Y-%m-%d"
+        dtObj = datetime.strptime(start_date, date_format)
+        past_date = dtObj - pd.DateOffset(months=2)
+        end_date = past_date.strftime("%Y-%m-%d")
+        start_month = datetime.strptime(start_date, '%Y-%m-%d').month
+        start_year = datetime.strptime(start_date, "%Y-%m-%d").year
+        answer2 = list(coll_ranking_impact_economy_keys.aggregate([
+            {"$match":{"created_at":{"$gte":end_date,"$lte":start_date}}},
+            {"$project":{'weekdata':{"$isoWeek":{"$dateFromString":{"dateString":"$created_at"}}},'year':{"$year":{"$dateFromString":{"dateString":"$created_at"}}},'month':{"$month":{"$dateFromString":{"dateString":"$created_at"}}},'country_code':1,"count":1}},
+                                                                   {"$group":{"_id":{"country_code":"$country_code","week":"$weekdata","year":"$year"},'month':{"$first":"$month"},"count":{"$sum":"$count"}}},
+            {"$sort":{"_id.week":1,"_id.country_code":1}}
+            ]))
+        answer = []
 
-        start_month = datetime.strptime(start_datetime, '%Y-%m').month
-        start_year = datetime.strptime(start_datetime, "%Y-%m").year
-
-        answer = list(coll_ranking_impact_economy_keys.aggregate([
-            {'$project': {'date': {'$split': ["$created_at", "-"]}, '_id': 0, 'country_code': 1, 'count': 1}},
-            {"$project": {"year": {"$arrayElemAt": ["$date", 0]}, "month": {"$arrayElemAt": ["$date", 1]},
-                          'country_code': 1, 'count': 1}},
-            {"$project": {"mo": {"$convert": {"input": "$month", "to": "int", "onError": "An error occurred"}},
-                          "yr": {"$convert": {"input": "$year", "to": "int", "onError": "An error occurred"}},
-                          "country_code": 1, 'count': 1}},
-            {'$project': {'modiff': {'$subtract': [start_month, "$mo"]}, '_id': 0, 'country_code': 1, 'count': 1,
-                          'yr': 1}},
-            {"$match": {
-                "$and": [{"yr": {'$eq': start_year}}, {"modiff": {'$lte': 2}}, {'country_code': country_code}]}},
-            {'$project': {'country_code': 1, 'count': 1, '_id': 0, 'country': 1}},
-            {"$group": {"_id": {"country_code": "$country_code"}, "count": {"$sum": 1}}}
-        ]))
-        # print(answer)
+        for data in answer2:
+            value = {}
+            country_code=data['_id']['country_code']
+            week = data['_id']['week']
+            month = data['month']
+            year = data['_id']['year']
+            count = data['count']
+            value = {COUNTRY_CODE_KEY:country_code,"year":year,"week":week,"month":month,COUNT_KEY:count}
+            answer.append(value)
         if answer:
-            return {"country_code":answer[0]["_id"]["country_code"],COUNT_KEY:answer[0]["count"]}
+            return answer
         else:
-            return {"country_code":country_code,COUNT_KEY:"No Record Found"}
+            return [{"country_code":country_code,COUNT_KEY:"No Record Found","year":"none","month":"none","week":"none"}]
     except Exception as e:
         LOGGER.error(f"ERROR:{e}")
         return "error occurred"
+
 
 def impact_analysis_on_covid_keys(country_code):
     try:

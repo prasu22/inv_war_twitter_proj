@@ -9,7 +9,6 @@ from src.common.variable_files import COVID_KEYWORD_KEY, TWEET_KEY, IS_COVID_TWE
 
 COVID_KEYWORDS = list(map(str, APP_CONFIG.getlist('keywords', 'COVID_KEYWORDS')))
 
-print("covid_keywords_extractor")
 def get_covid_keywords(message):
     list_of_covid_keywords = []
     try:

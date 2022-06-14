@@ -36,7 +36,7 @@ RUN pip install --upgrade pip && \
 RUN chmod +x ./server_start.sh
 RUN chown -R restapi: ${API_HOME}
 RUN chown -R restapi: ${APP_DIR}
-
+RUN pip install pandas
 USER restapi
 WORKDIR ${API_HOME}
 EXPOSE 5056

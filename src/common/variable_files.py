@@ -13,7 +13,7 @@ DEFAULT_AMOUNT = 0
 # ======================================================================================================================
 
 
-# All collection names from data analytics directory
+# All collection names from data services directory
 DATABASE_TWEET_NEW_DB = "tweet_new_db"
 COLL_OF_RAW_DATA = "tweet_processed_data"
 COLL_METADATA = 'metadata_table'

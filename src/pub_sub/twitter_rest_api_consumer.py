@@ -113,12 +113,12 @@ for msgs in my_consumer:
             list_tweet_info.clear()
             # insert in mongodb
             insert_preprocessed_data(updated_list_tweet_info, db)
-            # now analytics start
+            # now services start
             print("next function is called", len(updated_list_tweet_info))
             if updated_list_tweet_info:
                 print("\n no duplicate record is present \n")
                 call_analystic_function(updated_list_tweet_info, db)
-            print("next function is called by call analytics")
+            print("next function is called by call services")
             updated_list_tweet_info.clear()
 
             print("check list_clear", updated_list_tweet_info)

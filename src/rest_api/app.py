@@ -1,6 +1,6 @@
 import json
 from flask import Flask
-from src.analytics.tweet_extracts import overall_tweet_per_country_in_last_n_month, top_100_words_tweeted_in_world, \
+from src.services.analytics_services import overall_tweet_per_country_in_last_n_month, top_100_words_tweeted_in_world, \
     total_tweet_per_country_on_daily_basis, top_10_prevention, top_100_word_occuring_with_country, \
     top_10_prevention_world_wide, total_no_of_donations, impact_analysis_on_economy_keys_month, \
     impact_analysis_on_covid_keys_month, impact_analysis_on_economy_keys, impact_analysis_on_covid_keys
