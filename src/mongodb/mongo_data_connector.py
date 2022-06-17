@@ -40,6 +40,7 @@ def fetch_data():
     # conn.drop_database(DATABASE_TWEET_NEW_DB)
     db = conn[DATABASE_TWEET_NEW_DB]
     print(db['tweet_processed_data'].count_documents({}))
-fetch_data()
+# fetch_data()
+
 
 # ======================================================================================================================

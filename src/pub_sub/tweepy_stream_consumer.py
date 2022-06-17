@@ -43,7 +43,6 @@ print("after import in consumer2 ")
 my_consumer = KafkaConsumer(
     TOPIC2,
     bootstrap_servers=[BOOTSTRAP_SERVER],
-    # consumer_timeout_ms=3000,
     auto_offset_reset='earliest',
     enable_auto_commit=True,
     group_id=GROUP_ID,
@@ -59,22 +58,24 @@ except Exception as e:
 
 
 def call_extractor_function(tweet_list):
-    updated_tweet_list = parse_country_codes(tweet_list)
-    updated_tweet_list = parse_covid_keywords(updated_tweet_list)
-    updated_tweet_list = parse_tweet_keywords(updated_tweet_list)
-    updated_tweet_list = parse_donation_keywords(updated_tweet_list)
-    updated_tweet_list = parse_donation_amount(updated_tweet_list)
-    updated_tweet_list = parse_donation_currency(updated_tweet_list)
-    updated_tweet_list = parse_who_keywords(updated_tweet_list)
-    updated_tweet_list = parse_prevention_keywords(updated_tweet_list)
-    updated_tweet_list = parse_trending_covid_keywords(updated_tweet_list)
-    updated_tweet_list = parse_trending_economy_keywords(updated_tweet_list)
-    return updated_tweet_list
+    try:
+        updated_tweet_list = parse_country_codes(tweet_list)
+        updated_tweet_list = parse_covid_keywords(updated_tweet_list)
+        updated_tweet_list = parse_tweet_keywords(updated_tweet_list)
+        updated_tweet_list = parse_donation_keywords(updated_tweet_list)
+        updated_tweet_list = parse_donation_amount(updated_tweet_list)
+        updated_tweet_list = parse_donation_currency(updated_tweet_list)
+        updated_tweet_list = parse_who_keywords(updated_tweet_list)
+        updated_tweet_list = parse_prevention_keywords(updated_tweet_list)
+        updated_tweet_list = parse_trending_covid_keywords(updated_tweet_list)
+        updated_tweet_list = parse_trending_economy_keywords(updated_tweet_list)
+        return updated_tweet_list
+    except Exception as e:
+        LOGGER.error(f"Error:{e}")
 
 
 def call_analystic_function(tweet_list, db):
     try:
-        print("\nfunction is called in analysis\n")
         updated_list_total_tweets(tweet_list, db)
         updated_list_daily_tweets(tweet_list, db)
         updated_list_top_words(tweet_list, db)
@@ -82,8 +83,8 @@ def call_analystic_function(tweet_list, db):
         updated_donation_list_total_tweets(tweet_list, db)
         updated_trend_list_total_tweets(tweet_list, db)
         updated_covid_list_total_tweets(tweet_list, db)
-        print("\nfunction is called in analysis end\n")
     except Exception as e:
+        LOGGER.error(f"Error:{e}")
         print("\nnew error ;", {e})
 
 
@@ -91,38 +92,30 @@ def consumer_processing():
     list_tweet_info = []
     for msgs in my_consumer:
         msg = msgs.value
-        # print("new list started",len(list_tweet_info))
         list_tweet_info.append(msg)
-        print("consumer", len(list_tweet_info))
         timeout = time.time() + 60
         count = 0
         try:
             if len(list_tweet_info) >= BATCH_SIZE:
-                print(list_tweet_info, len(list_tweet_info))
+                print(f"msg:{list_tweet_info}")
+                LOGGER.info(f"Massage Batch:{list_tweet_info}")
                 # extract data from the raw data
                 updated_list_tweet_info = call_extractor_function(list_tweet_info)
-                # print("final with all extracted",updated_list_tweet_info,len(updated_list_tweet_info))
                 list_tweet_info.clear()
                 # insert in mongodb
                 insert_preprocessed_data(updated_list_tweet_info, db)
                 # now services start
-                print("next function is called", len(updated_list_tweet_info))
                 if updated_list_tweet_info:
-                    print("\n no duplicate record is present \n")
                     call_analystic_function(updated_list_tweet_info, db)
-                print("next function is called by call services")
                 updated_list_tweet_info.clear()
-
-                print("check list_clear", updated_list_tweet_info)
-                print("check list_2", list_tweet_info)
                 if timeout == time.time():
-                    LOGGER.info(f"Batch size {BATCH_SIZE} and Total_Tweet_count_per_min:{count}")
                     count = 0
                     timeout = time.time() + 60
+                    LOGGER.info(f"Batch size {BATCH_SIZE} and Total_Tweet_count_per_min:{count}")
+
         except Exception as e:
             LOGGER.error(f"ERROR:{e}")
             pass
-    # my_consumer.close()
 
 
 consumer_processing()

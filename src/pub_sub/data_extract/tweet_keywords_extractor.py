@@ -8,7 +8,7 @@ import nltk as nltk
 from nltk import ngrams
 nltk.download('stopwords')
 nltk.download('punkt')
-# from nltk.corpus import stopwords
+
 
 LOGGER = logging.getLogger(__name__)
 
@@ -33,7 +33,9 @@ def get_tweet_keywords(message):
     """
     try:
         tweet = message[TWEET_KEY]
-        tweet_without_emoji = clean(tweet, no_emoji=True)
+        remove_urls = re.sub(r'http\S+', '', tweet)
+        print(remove_urls)
+        tweet_without_emoji = clean(remove_urls, no_emoji=True)
         tweet_without_numbers = re.sub("[0-9]", " ", tweet_without_emoji)
         tweet_without_punctuation = re.sub('[%s]' % re.escape(string.punctuation), ' ', tweet_without_numbers)
         tweet_without_stopwords = (" ").join([i for i in tweet_without_punctuation.split() if i.lower() not in stopword and len(i) > 3])
@@ -59,9 +61,9 @@ def get_tweet_keywords(message):
         LOGGER.error(f"ERROR:{e} ")
 
 #
-# message = {"tweet":"@nathan_cllr @StephenNolan It\u2019s when where how this that weren't a bit like their failed idea of Covid passports &amp; wanting to allow men to avail of free period products.  Also their failure to address the disaster of MOT centres and wanting to give every family more free money.\nThe SDLP would lead this country to absolute ruin."}
+# message = {"tweet":"@nathan_cllr https://www.wix.com/@StephenNolan https://stackoverflow.com/questions/11331982/how-to-remove-any-url-within-a-string-in-python It\u2019s when where how this that weren't a bit like their failed idea of Covid passports &amp; wanting to allow men to avail of free period products.  Also their failure to address the disaster of MOT centres and wanting to give every family more free money.\nThe SDLP would lead this country to absolute ruin."}
 # updated_message = get_tweet_keywords(message)
-
+# print(updated_message)
 
 
 def parse_tweet_keywords(tweet_list):

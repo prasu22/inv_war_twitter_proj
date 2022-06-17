@@ -5,7 +5,7 @@ from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 from kafka import KafkaConsumer
 from src.common.variable_files import GROUP_ID, BOOTSTRAP_SERVER, TOTAL_TWEETS_BEFORE, TOTAL_TWEETS_AFTER, \
-    PREVENTION_BEFORE, PREVENTION_AFTER, TOPIC2
+    PREVENTION_BEFORE, PREVENTION_AFTER, TOPIC2,TOPIC1
 from src.mongodb.insert_data_in_mongo import insert_preprocessed_data
 from src.pub_sub.data_analytics.overall_tweets_per_country import updated_list_total_tweets
 from src.pub_sub.data_analytics.top_100_words_overall import updated_list_top_words
@@ -34,7 +34,7 @@ coll_name = db[COLL_METADATA]
 LOGGER = logging.getLogger(__name__)
 
 my_consumer = KafkaConsumer(
-    TOPIC2,
+    TOPIC1,
     bootstrap_servers=[BOOTSTRAP_SERVER],
     auto_offset_reset='earliest',
     enable_auto_commit=True,

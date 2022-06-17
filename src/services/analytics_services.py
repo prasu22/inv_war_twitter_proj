@@ -219,8 +219,18 @@ def impact_analysis_on_covid_keys_month(country_code):
             {"$sort": {"_id.week": 1, "_id.country_code": 1}}
         ]))
         # print(answer)
+        answer2 = []
         if answer:
-            return answer
+            for data in answer:
+                value = {}
+                country_code = data['_id']['country_code']
+                week = data['_id']['week']
+                month = data['month']
+                year = data['_id']['year']
+                count = data['count']
+                value = {COUNTRY_CODE_KEY: country_code, "year": year, "week": week, "month": month, COUNT_KEY: count}
+                answer2.append(value)
+            return answer2
         else:
             return [{"country_code": country_code, COUNT_KEY: "No Record Found", "year": "none", "month": "none",
                      "week": "none"}]
@@ -235,8 +245,8 @@ def impact_analysis_on_economy_keys_month(country_code):
         dtObj = datetime.strptime(start_date, date_format)
         past_date = dtObj - pd.DateOffset(months=2)
         end_date = past_date.strftime("%Y-%m-%d")
-        start_month = datetime.strptime(start_date, '%Y-%m-%d').month
-        start_year = datetime.strptime(start_date, "%Y-%m-%d").year
+        # start_month = datetime.strptime(start_date, '%Y-%m-%d').month
+        # start_year = datetime.strptime(start_date, "%Y-%m-%d").year
         answer2 = list(coll_ranking_impact_economy_keys.aggregate([
             {"$match":{"created_at":{"$gte":end_date,"$lte":start_date}}},
             {"$project":{'weekdata':{"$isoWeek":{"$dateFromString":{"dateString":"$created_at"}}},'year':{"$year":{"$dateFromString":{"dateString":"$created_at"}}},'month':{"$month":{"$dateFromString":{"dateString":"$created_at"}}},'country_code':1,"count":1}},
@@ -244,17 +254,16 @@ def impact_analysis_on_economy_keys_month(country_code):
             {"$sort":{"_id.week":1,"_id.country_code":1}}
             ]))
         answer = []
-
-        for data in answer2:
-            value = {}
-            country_code=data['_id']['country_code']
-            week = data['_id']['week']
-            month = data['month']
-            year = data['_id']['year']
-            count = data['count']
-            value = {COUNTRY_CODE_KEY:country_code,"year":year,"week":week,"month":month,COUNT_KEY:count}
-            answer.append(value)
-        if answer:
+        if answer2:
+            for data in answer2:
+                value = {}
+                country_code=data['_id']['country_code']
+                week = data['_id']['week']
+                month = data['month']
+                year = data['_id']['year']
+                count = data['count']
+                value = {COUNTRY_CODE_KEY:country_code,"year":year,"week":week,"month":month,COUNT_KEY:count}
+                answer.append(value)
             return answer
         else:
             return [{"country_code":country_code,COUNT_KEY:"No Record Found","year":"none","month":"none","week":"none"}]
